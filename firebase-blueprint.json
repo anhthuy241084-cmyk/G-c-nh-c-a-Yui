@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "Character": {
+      "title": "Character",
+      "description": "Character definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "avatar": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "creator": { "type": "string" },
+        "chatUrl": { "type": "string" },
+        "chatUrl2": { "type": "string" },
+        "chatUrlLabel": { "type": "string" },
+        "chatUrl2Label": { "type": "string" },
+        "votes": { "type": "number" },
+        "likes": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "isFavorite": { "type": "boolean" },
+        "isDraft": { "type": "boolean" },
+        "isPrivate": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "password": { "type": "string" },
+        "story": { "type": "string" },
+        "firstMessage": { "type": "string" },
+        "decorativeItemSet": { "type": "string" }
+      },
+      "required": ["id", "name", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/characters/{characterId}": {
+      "schema": { "$ref": "#/entities/Character" },
+      "description": "Characters collection"
+    }
+  }
+}

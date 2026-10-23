@@ -1,0 +1,6 @@
+{
+  "name": "Thư viện Character AI - Góc nhỏ của Yui",
+  "description": "Thư viện lưu trữ và quản lý Character AI do Yui đăng tải với giao diện mượt mà, bộ lọc tag, hệ thống bình chọn và thông tin liên hệ.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,249 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Clean Typographic Hierarchy with Flawless Vietnamese & Hanzi Support */
+html, body, button, input, textarea, select {
+  font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+.font-serif {
+  font-family: 'Lora', 'Playfair Display', 'Be Vietnam Pro', serif !important;
+}
+
+.font-hanzi {
+  font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif !important;
+}
+
+.font-sans {
+  font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  overflow-x: hidden;
+  touch-action: manipulation;
+  background-color: #F5FCFC;
+  color: #49666A;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.dark body {
+  background-color: #20383C;
+  color: #EFFBFA;
+}
+
+/* 🌸 01 & 02. Pearl Ocean × Pastel Sea × Soft Watercolor Wallpaper */
+.website-wallpaper {
+  background-color: #F5FCFC;
+  background-image: 
+    radial-gradient(circle 800px at 85% -10%, rgba(255, 253, 244, 0.7), transparent 70%),
+    radial-gradient(circle 750px at 15% 20%, rgba(210, 240, 240, 0.65), transparent 70%),
+    radial-gradient(circle 650px at 80% 60%, rgba(200, 234, 227, 0.45), transparent 65%),
+    radial-gradient(circle 600px at 20% 85%, rgba(207, 232, 245, 0.5), transparent 70%),
+    radial-gradient(circle 500px at 50% 40%, rgba(243, 221, 225, 0.25), transparent 60%),
+    linear-gradient(180deg, #FFFDF9 0%, #F5FCFC 25%, #E9F8F8 50%, #DFF3F4 75%, #FFFDF9 100%);
+  background-attachment: fixed;
+}
+
+.dark .website-wallpaper {
+  background-color: #20383C;
+  background-image: 
+    radial-gradient(ellipse 90% 55% at 50% -10%, rgba(140, 207, 211, 0.18), transparent 80%),
+    radial-gradient(circle 700px at 15% 30%, rgba(35, 65, 70, 0.7), transparent 70%),
+    radial-gradient(circle 650px at 85% 75%, rgba(27, 50, 54, 0.85), transparent 70%),
+    linear-gradient(180deg, #20383C 0%, #1D3337 35%, #182B2E 70%, #142326 100%);
+  background-attachment: fixed;
+}
+
+/* 🌊 07. Soft Pearl Mist & Watercolor Texture */
+.ocean-noise-texture {
+  background-image: radial-gradient(rgba(142, 207, 211, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+.dark .ocean-noise-texture {
+  background-image: radial-gradient(rgba(167, 221, 224, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* Hardware-acceleration utility for GPU smooth animations */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* 🌊 Custom Smooth Pastel Oceanic Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(142, 207, 211, 0.35);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 191, 198, 0.65);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(167, 221, 224, 0.3);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 221, 224, 0.6);
+}
+
+/* 🪞 08 & 09. "Sea Glass" Card (Mảnh kính ngọc trai trong veo) */
+.ocean-card {
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(216, 238, 238, 0.85);
+  box-shadow: 0 8px 24px -4px rgba(77, 105, 109, 0.06), 0 2px 8px -2px rgba(142, 207, 211, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.ocean-card:hover {
+  border-color: rgba(140, 207, 211, 0.6);
+  box-shadow: 0 14px 32px -4px rgba(77, 105, 109, 0.1), 0 0 16px rgba(191, 231, 232, 0.3);
+  transform: translateY(-3px);
+}
+
+.dark .ocean-card {
+  background-color: rgba(45, 73, 76, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(167, 221, 224, 0.18);
+  box-shadow: 0 10px 30px -4px rgba(15, 27, 29, 0.4), 0 0 14px rgba(167, 221, 224, 0.05);
+}
+
+.dark .ocean-card:hover {
+  border-color: rgba(167, 221, 224, 0.45);
+  box-shadow: 0 16px 40px -4px rgba(15, 27, 29, 0.55), 0 0 20px rgba(167, 221, 224, 0.12);
+}
+
+/* Water Shimmer Highlight on hover */
+.ocean-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse 60% 40% at center, rgba(255, 255, 255, 0.35) 0%, rgba(210, 240, 240, 0.15) 40%, transparent 70%);
+  opacity: 0;
+  transform: rotate(-20deg) translateY(100%);
+  transition: opacity 0.5s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.dark .ocean-card::after {
+  background: radial-gradient(ellipse 60% 40% at center, rgba(167, 221, 224, 0.18) 0%, rgba(140, 207, 211, 0.08) 40%, transparent 70%);
+}
+
+.ocean-card:hover::after {
+  opacity: 1;
+  transform: rotate(-20deg) translateY(-25%);
+}
+
+/* 🌿 14. Seaweed Line Art Sway */
+@keyframes seaweedSwayLeft {
+  0%, 100% {
+    transform: rotate(-3deg) skewX(-1deg);
+  }
+  50% {
+    transform: rotate(4deg) skewX(3deg);
+  }
+}
+
+@keyframes seaweedSwayRight {
+  0%, 100% {
+    transform: rotate(4deg) skewX(2deg);
+  }
+  50% {
+    transform: rotate(-4deg) skewX(-2deg);
+  }
+}
+
+.animate-seaweed-left {
+  animation: seaweedSwayLeft 8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-seaweed-right {
+  animation: seaweedSwayRight 9.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* 🌊 16. Water Shimmer Slow Wave */
+@keyframes waterShimmerMove {
+  0% {
+    transform: translateX(-20%) translateY(-10%) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateX(20%) translateY(10%) rotate(3deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(-20%) translateY(-10%) rotate(0deg);
+    opacity: 0.2;
+  }
+}
+
+.animate-water-shimmer {
+  animation: waterShimmerMove 12s ease-in-out infinite;
+}
+
+/* 🌸 Pastel Button Styles */
+.btn-pastel-ocean {
+  background: linear-gradient(135deg, #71BFC6 0%, #4D9DA4 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px -2px rgba(77, 157, 164, 0.25);
+  transition: all 0.25s ease;
+}
+
+.btn-pastel-ocean:hover {
+  background: linear-gradient(135deg, #8CCFD3 0%, #5EA9AE 100%);
+  box-shadow: 0 6px 16px -2px rgba(77, 157, 164, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-pastel-ocean:active {
+  transform: scale(0.97);
+}
+
+/* 🐚 Shell Pink Accent Button */
+.btn-shell-pink {
+  background: linear-gradient(135deg, #F2DDE0 0%, #E8CAD0 100%);
+  color: #49666A;
+  box-shadow: 0 3px 10px -2px rgba(242, 221, 224, 0.5);
+  transition: all 0.25s ease;
+}
+
+.btn-shell-pink:hover {
+  background: linear-gradient(135deg, #F8E6E9 0%, #F1D5D7 100%);
+  box-shadow: 0 4px 14px -2px rgba(242, 221, 224, 0.7);
+  transform: translateY(-1px);
+}

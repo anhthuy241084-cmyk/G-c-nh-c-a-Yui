@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Character validation
+    function isValidCharacter(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100
+          && data.title is string && data.title.size() <= 200
+          && data.tags is list && data.tags.size() <= 20;
+    }
+
+    match /appSettings/{document=**} {
+      allow read: if true;
+    }
+
+    match /wishingBottles/{document=**} {
+      allow read: if true;
+    }
+
+    match /notifications/{document=**} {
+      allow read: if true;
+    }
+
+    match /boardNotes/{document=**} {
+      allow read: if true;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /characters/{characterId} {
+      allow get: if true; // Public read
+      allow list: if true; // Public list
+      allow create: if isSignedIn() && isValidId(characterId) && isValidCharacter(incoming())
+                     && incoming().creator == request.auth.uid
+                     && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidCharacter(incoming())
+                     && incoming().creator == request.auth.uid
+                     && incoming().createdAt == existing().createdAt
+                     && incoming().updatedAt == request.time;
+      allow delete: if isSignedIn() && existing().creator == request.auth.uid;
+    }
+  }
+}
+
