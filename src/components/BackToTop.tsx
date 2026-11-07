@@ -50,15 +50,15 @@ export const BackToTop: React.FC = () => {
         >
           <button
             onClick={scrollToTop}
-            className="group relative p-3 rounded-full bg-gradient-to-r from-[#3FAAB7] to-[#247C8C] hover:from-[#65C5CE] hover:to-[#3FAAB7] text-white shadow-lg hover:shadow-xl shadow-[#247C8C]/25 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center border border-[#65C5CE]/40"
+            className="group relative p-3 rounded-full bg-gradient-to-tr from-[#91A9BC] to-[#6E899E] hover:from-[#A2B9CB] hover:to-[#7E99AD] text-white shadow-lg hover:shadow-xl shadow-[#91A9BC]/30 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center border border-[#DCE7EF] dark:border-[#43576B]"
             title="Lên đầu trang"
             aria-label="Lên đầu trang"
           >
             <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
 
             {/* Hover Tooltip */}
-            <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-xl bg-[#081B22]/90 dark:bg-white text-white dark:text-[#081B22] text-xs font-semibold whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-md">
-              Lên đầu trang
+            <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-xl bg-[#172536]/90 dark:bg-white text-white dark:text-[#172536] text-xs font-serif font-semibold whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-md border border-[#DCE7EF]/30">
+              Lên đầu trang ❄
             </span>
           </button>
         </motion.div>

@@ -113,7 +113,7 @@ const ISLANDS: IslandInfo[] = [
     themeColor: '#34D399',
     bgGradient: 'from-[#ECFDF5] to-[#D1FAE5] dark:from-[#062D1F] dark:to-[#031710]',
     borderColor: 'border-[#34D399]/40',
-    description: 'Khu vịnh êm ả với cát trắng và rạn san hô rực rỡ, nơi mọi mệt mỏi được xoa dịu dịu dàng.',
+    description: 'Khu vịnh êm ả với tuyết trắng êm đềm và ánh nắng ấm áp, nơi mọi mệt mỏi được xoa dịu dịu dàng.',
     treasureQuote: '« Tuế nguyệt tĩnh hảo » · Chúc cậu luôn tìm thấy chốn bình yên ấm áp nơi góc nhỏ này.',
   },
 ];

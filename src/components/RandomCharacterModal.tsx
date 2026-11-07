@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Dices, RefreshCw, Heart, Sparkles, ExternalLink, Filter, Tag, Compass, Waves } from 'lucide-react';
+import { X, RefreshCw, Heart, Sparkles, ExternalLink, Tag, Compass, History, Trash2 } from 'lucide-react';
 import { Character, PRESET_TAGS } from '../types';
 import { CharacterCard } from './CharacterCard';
-import { playPopSfx, triggerSfx } from '../utils/sfx';
+import { triggerSfx } from '../utils/sfx';
+
+interface RandomHistoryItem {
+  id: string;
+  characterId: string;
+  characterName: string;
+  characterAvatar: string;
+  mode: string;
+  timestamp: string;
+}
 
 interface RandomCharacterModalProps {
   isOpen: boolean;
@@ -13,10 +22,11 @@ interface RandomCharacterModalProps {
   onVote: (characterId: string) => void;
   onToggleFavorite?: (characterId: string) => void;
   favoriteIds?: string[];
-  onSetTodayCharacter?: (character: Character) => void;
   isSfxOn?: boolean;
   sfxVolume?: number;
 }
+
+export type RandomMode = 'character' | 'world' | 'category' | 'memory';
 
 export const RandomCharacterModal: React.FC<RandomCharacterModalProps> = ({
   isOpen,
@@ -26,202 +36,293 @@ export const RandomCharacterModal: React.FC<RandomCharacterModalProps> = ({
   onVote,
   onToggleFavorite,
   favoriteIds = [],
-  onSetTodayCharacter,
   isSfxOn = true,
   sfxVolume = 0.5,
 }) => {
-  const [isRolling, setIsRolling] = useState(false);
+  const [activeMode, setActiveMode] = useState<RandomMode>('character');
+  const [selectedCategory, setSelectedCategory] = useState<string>('open world');
+  const [isOpeningBox, setIsOpeningBox] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [selectedTagFilter, setSelectedTagFilter] = useState<string>('all');
-  const [mascotQuote, setMascotQuote] = useState<string>('Tadaa! ✦');
   const [lastPickedId, setLastPickedId] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [saveHistoryEnabled, setSaveHistoryEnabled] = useState(true);
 
-  const mascotQuotesList = [
-    'Tadaa! Dòng hải lưu đã đưa bạn này tới nè ✦',
-    'Lần này gặp ai đây ta...? Làn sóng gợi ý nè ♡',
-    'Gợi ý ngẫu nhiên từ biển khơi cho bạn nè ✦',
-    'Duyên số đưa lối dưới làn nước trong veo ✨',
-    'Một sự kết hợp tuyệt vời hôm nay ♡',
-  ];
+  const [history, setHistory] = useState<RandomHistoryItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('yui_snow_random_history');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
 
-  // Tag options for filtering random pick
-  const availableTags = ['all', ...PRESET_TAGS];
+  const categories = ['BL', 'BG', 'TXVT', 'Showbiz', 'Hiện đại', 'Cổ trang', 'Fantasy', 'Open World'];
 
-  // Perform random roll
   const performRoll = () => {
     if (characters.length === 0) return;
 
-    setIsRolling(true);
+    setIsOpeningBox(true);
     setSelectedCharacter(null);
     if (isSfxOn) triggerSfx('chime', sfxVolume);
 
-    // Filter candidate list
-    const candidates = characters.filter((c) => {
-      if (selectedTagFilter === 'all') return true;
-      return c.tags.some((t) => t.toLowerCase() === selectedTagFilter.toLowerCase());
-    });
-
     setTimeout(() => {
-      if (candidates.length === 0) {
-        setIsRolling(false);
+      let pool = characters.filter((c) => !c.isDraft && !c.isPrivate);
+
+      if (activeMode === 'world') {
+        pool = pool.filter((c) => c.tags.some((t) => t.toLowerCase().includes('open world')));
+      } else if (activeMode === 'category') {
+        const catLow = selectedCategory.toLowerCase();
+        pool = pool.filter((c) => c.tags.some((t) => t.toLowerCase().includes(catLow)));
+      }
+
+      if (pool.length === 0) {
+        setIsOpeningBox(false);
         return;
       }
 
-      // Avoid immediate repeat if candidate size > 1
-      let pool = candidates;
-      if (candidates.length > 1 && lastPickedId) {
-        const filtered = candidates.filter((c) => c.id !== lastPickedId);
-        if (filtered.length > 0) pool = filtered;
+      // Avoid immediate repeat if pool > 1
+      let filteredPool = pool;
+      if (pool.length > 1 && lastPickedId) {
+        filteredPool = pool.filter((c) => c.id !== lastPickedId);
+        if (filteredPool.length === 0) filteredPool = pool;
       }
 
-      const picked = pool[Math.floor(Math.random() * pool.length)];
+      const picked = filteredPool[Math.floor(Math.random() * filteredPool.length)];
       setSelectedCharacter(picked);
       setLastPickedId(picked.id);
-      setIsRolling(false);
+      setIsOpeningBox(false);
 
-      if (onSetTodayCharacter) {
-        onSetTodayCharacter(picked);
+      // Save to history if enabled
+      if (saveHistoryEnabled) {
+        const newItem: RandomHistoryItem = {
+          id: `hist-${Date.now()}`,
+          characterId: picked.id,
+          characterName: picked.name,
+          characterAvatar: picked.avatar,
+          mode:
+            activeMode === 'character'
+              ? 'Gặp một người xa lạ'
+              : activeMode === 'world'
+              ? 'Lạc vào một thế giới'
+              : activeMode === 'category'
+              ? `Chủ đề: ${selectedCategory}`
+              : 'Ký ức bất chợt',
+          timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date().toLocaleDateString('vi-VN'),
+        };
+        const updated = [newItem, ...history.slice(0, 19)];
+        setHistory(updated);
+        localStorage.setItem('yui_snow_random_history', JSON.stringify(updated));
       }
-
-      const quote = mascotQuotesList[Math.floor(Math.random() * mascotQuotesList.length)];
-      setMascotQuote(quote);
-
-      if (isSfxOn) playPopSfx(sfxVolume);
-    }, 1000);
+    }, 850);
   };
 
   useEffect(() => {
     if (isOpen) {
       performRoll();
     }
-  }, [isOpen]);
+  }, [isOpen, activeMode, selectedCategory]);
+
+  const handleClearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem('yui_snow_random_history');
+  };
 
   if (!isOpen) return null;
 
-  const filteredCandidates = characters.filter((c) => {
-    if (selectedTagFilter === 'all') return true;
-    return c.tags.some((t) => t.toLowerCase() === selectedTagFilter.toLowerCase());
-  });
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#030D12]/75 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#172536]/75 backdrop-blur-md">
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          initial={{ opacity: 0, scale: 0.94, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 20 }}
-          className="relative w-full max-w-lg max-h-[90vh] flex flex-col bg-white/95 dark:bg-[#0E232E]/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-[#38CAD6]/30 dark:border-[#38CAD6]/20 overflow-hidden text-[#14303A] dark:text-[#E4F7F9]"
+          exit={{ opacity: 0, scale: 0.94, y: 15 }}
+          className="relative w-full max-w-lg max-h-[92vh] flex flex-col bg-[#F7FAFD] dark:bg-[#172536] rounded-3xl shadow-2xl border border-[#DCE7EF] dark:border-[#43576B] overflow-hidden text-[#526B80] dark:text-[#E5EDF5]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-[#38CAD6]/15 dark:border-[#132F3D] bg-gradient-to-r from-[#F0F9FB] via-[#E8F5F8] to-[#E0F2F5] dark:from-[#091C24] dark:via-[#0E232E] dark:to-[#132F3D] shrink-0">
+          <div className="flex items-center justify-between p-5 border-b border-[#DCE7EF] dark:border-[#43576B] bg-gradient-to-r from-white via-[#F7FAFD] to-[#E8F1F8] dark:from-[#202F42] dark:to-[#172536] shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center shadow-md shadow-[#1B6E7D]/20 text-xl font-serif">
-                🎲
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#91A9BC] to-[#6E899E] text-white flex items-center justify-center shadow-md text-lg font-serif">
+                ❄
               </div>
               <div>
-                <h2 className="text-base font-bold font-serif text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                  <span>Hôm nay gặp ai đây?</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#38CAD6]/15 text-[#1B6E7D] dark:text-[#48CCD6] font-medium font-sans">
-                    Random Character
-                  </span>
+                <h2 className="text-base font-bold font-serif text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-1.5">
+                  <span>Snow Random — Hộp Tuyết Ngẫu Nhiên</span>
+                  <span className="text-[10px] text-[#91A9BC]">୨୧</span>
                 </h2>
-                <p className="text-xs text-[#53737C] dark:text-[#88A9B3] font-serif">
-                  Để dòng hải lưu đại dương chọn một bạn cho hôm nay nhé ♡
+                <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-serif italic">
+                  &ldquo;Đôi khi, một cuộc gặp gỡ thú vị lại bắt đầu từ sự tình cờ.&rdquo;
                 </p>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 text-[#53737C] hover:text-[#14303A] dark:text-[#88A9B3] dark:hover:text-white rounded-full hover:bg-[#38CAD6]/10 dark:hover:bg-[#132F3D] transition-colors cursor-pointer"
+              className="p-2 text-[#91A9BC] hover:text-[#526B80] dark:hover:text-white rounded-full hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Tag Filter Selector */}
-          <div className="px-5 py-3 border-b border-[#38CAD6]/15 dark:border-[#132F3D] bg-[#F2FBFC]/60 dark:bg-[#07171F]/50 shrink-0 space-y-2">
-            <div className="text-[11px] font-bold text-[#1B6E7D] dark:text-[#48CCD6] flex items-center gap-1.5 font-serif">
-              <Tag className="w-3.5 h-3.5 text-[#38CAD6]" />
-              <span>Chọn chủ đề / Mood ngẫu nhiên:</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {availableTags.map((tag) => (
+          {/* 4 Mode Navigation Tabs */}
+          <div className="grid grid-cols-4 gap-1 p-2 bg-[#E8F1F8]/80 dark:bg-[#202F42]/80 border-b border-[#DCE7EF] dark:border-[#43576B] text-[11px] font-serif shrink-0">
+            <button
+              onClick={() => setActiveMode('character')}
+              className={`p-1.5 rounded-xl text-center transition-all cursor-pointer ${
+                activeMode === 'character'
+                  ? 'bg-white dark:bg-[#172536] font-bold text-[#526B80] dark:text-[#E5EDF5] shadow-xs'
+                  : 'text-[#91A9BC] hover:text-[#526B80]'
+              }`}
+            >
+              Người xa lạ
+            </button>
+            <button
+              onClick={() => setActiveMode('world')}
+              className={`p-1.5 rounded-xl text-center transition-all cursor-pointer ${
+                activeMode === 'world'
+                  ? 'bg-white dark:bg-[#172536] font-bold text-[#526B80] dark:text-[#E5EDF5] shadow-xs'
+                  : 'text-[#91A9BC] hover:text-[#526B80]'
+              }`}
+            >
+              Một thế giới
+            </button>
+            <button
+              onClick={() => setActiveMode('category')}
+              className={`p-1.5 rounded-xl text-center transition-all cursor-pointer ${
+                activeMode === 'category'
+                  ? 'bg-white dark:bg-[#172536] font-bold text-[#526B80] dark:text-[#E5EDF5] shadow-xs'
+                  : 'text-[#91A9BC] hover:text-[#526B80]'
+              }`}
+            >
+              Theo chủ đề
+            </button>
+            <button
+              onClick={() => setActiveMode('memory')}
+              className={`p-1.5 rounded-xl text-center transition-all cursor-pointer ${
+                activeMode === 'memory'
+                  ? 'bg-white dark:bg-[#172536] font-bold text-[#526B80] dark:text-[#E5EDF5] shadow-xs'
+                  : 'text-[#91A9BC] hover:text-[#526B80]'
+              }`}
+            >
+              Ký ức
+            </button>
+          </div>
+
+          {/* Category Selector if in category mode */}
+          {activeMode === 'category' && (
+            <div className="px-4 py-2.5 bg-white/60 dark:bg-[#172536]/60 border-b border-[#DCE7EF] dark:border-[#43576B] flex items-center gap-1.5 overflow-x-auto text-xs shrink-0 custom-scrollbar">
+              <span className="text-[10px] text-[#91A9BC] font-serif shrink-0">Chủ đề:</span>
+              {categories.map((cat) => (
                 <button
-                  key={tag}
-                  onClick={() => {
-                    setSelectedTagFilter(tag);
-                    setIsRolling(true);
-                    setTimeout(() => performRoll(), 80);
-                  }}
-                  className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedTagFilter === tag
-                      ? 'bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white shadow-sm'
-                      : 'bg-white/80 dark:bg-[#0B1E26] text-[#53737C] dark:text-[#88A9B3] border border-[#38CAD6]/25 dark:border-[#132F3D] hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D]'
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-2.5 py-0.5 rounded-lg text-xs font-serif shrink-0 cursor-pointer ${
+                    selectedCategory === cat
+                      ? 'bg-[#91A9BC] text-white shadow-xs'
+                      : 'bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5]'
                   }`}
                 >
-                  {tag === 'all' ? '🎲 Tất cả' : `#${tag}`}
+                  #{cat}
                 </button>
               ))}
             </div>
-          </div>
+          )}
 
-          {/* Modal Body: Rolling Animation or Selected Card */}
-          <div className="p-5 overflow-y-auto custom-scrollbar flex-1 flex flex-col items-center justify-center min-h-[300px]">
-            {isRolling ? (
-              /* Rolling Dice Oceanic Animation */
+          {/* Modal Body: Snow Box Animation or Revealed Card */}
+          <div className="p-5 overflow-y-auto custom-scrollbar flex-1 flex flex-col items-center justify-center min-h-[320px]">
+            {isOpeningBox ? (
+              /* Opening Snow Box Animation */
               <div className="py-12 text-center space-y-4">
                 <motion.div
-                  animate={{ rotate: [0, 90, 180, 270, 360], scale: [1, 1.25, 1] }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: 'easeInOut' }}
-                  className="text-6xl inline-block filter drop-shadow-md select-none"
+                  animate={{ scale: [0.95, 1.15, 0.98, 1.1, 1], rotate: [0, -5, 5, -2, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }}
+                  className="text-6xl inline-block select-none"
                 >
-                  🌊
+                  🎁
                 </motion.div>
                 <div className="space-y-1">
-                  <p className="text-sm font-bold font-serif text-[#1B6E7D] dark:text-[#48CCD6] animate-pulse">
-                    Đang cuộn sóng tìm nhân vật tương thích...
+                  <p className="text-sm font-bold font-serif text-[#526B80] dark:text-[#E5EDF5] animate-pulse">
+                    Đang mở hộp tuyết ký ức...
                   </p>
-                  <p className="text-xs text-[#53737C] dark:text-[#88A9B3] font-serif">
-                    ✦ Dòng hải lưu đang kết nối tâm hồn ✦
+                  <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-serif">
+                    ✦ Một bông tuyết đang dẫn lối bạn gặp một câu chuyện ✦
                   </p>
                 </div>
               </div>
-            ) : filteredCandidates.length === 0 ? (
+            ) : !selectedCharacter ? (
               /* Empty state */
-              <div className="py-12 text-center space-y-3">
-                <div className="text-5xl">🐚</div>
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-[#14303A] dark:text-[#E4F7F9] font-serif">
-                    Góc này chưa có nhân vật phù hợp (｡•́︿•̀｡)
-                  </h3>
-                  <p className="text-xs text-[#53737C] dark:text-[#88A9B3]">
-                    Hãy thử chọn chủ đề khác nhé!
-                  </p>
-                </div>
+              <div className="py-12 text-center space-y-2">
+                <div className="text-4xl">❄</div>
+                <h3 className="text-sm font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                  Chưa có nhân vật phù hợp trong danh mục này.
+                </h3>
+                <p className="text-xs text-[#91A9BC]">Hãy thử chọn một chủ đề khác nhé!</p>
               </div>
-            ) : selectedCharacter ? (
-              /* Selected Character Display */
+            ) : showHistory ? (
+              /* Snow Encounters History View */
+              <div className="w-full space-y-3">
+                <div className="flex items-center justify-between border-b border-[#DCE7EF] dark:border-[#43576B] pb-2 text-xs font-serif">
+                  <span className="font-bold">Snow Encounters — Những cuộc gặp gỡ</span>
+                  <button
+                    onClick={handleClearHistory}
+                    className="text-[10px] text-red-400 hover:text-red-500 underline cursor-pointer"
+                  >
+                    Xóa lịch sử
+                  </button>
+                </div>
+                {history.length === 0 ? (
+                  <p className="text-xs text-center text-[#91A9BC] py-6">Lịch sử trống.</p>
+                ) : (
+                  <div className="space-y-2 max-h-[260px] overflow-y-auto custom-scrollbar">
+                    {history.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => {
+                          const char = characters.find((c) => c.id === item.characterId);
+                          if (char) {
+                            onSelectCharacter(char);
+                            onClose();
+                          }
+                        }}
+                        className="p-2.5 rounded-xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-between text-xs cursor-pointer hover:border-[#91A9BC]"
+                      >
+                        <div className="flex items-center gap-2.5 truncate">
+                          <img src={item.characterAvatar} alt={item.characterName} className="w-8 h-8 rounded-lg object-cover" />
+                          <div className="truncate">
+                            <p className="font-bold truncate">{item.characterName}</p>
+                            <p className="text-[10px] text-[#91A9BC]">{item.mode}</p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] text-[#91A9BC] shrink-0">{item.timestamp}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Revealed Character Card */
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
                 className="w-full space-y-3"
               >
-                {/* Mascot Banner Dialogue */}
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#E0F3F5]/80 dark:bg-[#0B1E26] border border-[#38CAD6]/30 dark:border-[#38CAD6]/20">
-                  <span className="text-3xl shrink-0">🐾</span>
-                  <div className="space-y-0.5">
-                    <p className="text-xs font-bold font-serif text-[#1B6E7D] dark:text-[#48CCD6]">
-                      {mascotQuote}
+                {/* Mode intro quote */}
+                <div className="p-3 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] flex items-center gap-2.5 text-xs">
+                  <span className="text-xl">❄</span>
+                  <div className="leading-tight">
+                    <p className="font-serif font-bold text-[#526B80] dark:text-[#E5EDF5]">
+                      {activeMode === 'world'
+                        ? 'Khám phá thế giới mở'
+                        : activeMode === 'memory'
+                        ? 'Một ký ức bất chợt'
+                        : 'Hôm nay chiếc hộp tuyết gọi tên bạn này nè ♡'}
                     </p>
-                    <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3]">
-                      Hôm nay gợi ý bạn này cho bạn nè ♡
+                    <p className="text-[11px] text-[#91A9BC] dark:text-[#A9BDCE] italic font-serif">
+                      {selectedCharacter.title}
                     </p>
                   </div>
                 </div>
 
-                {/* Character Card Render */}
                 <CharacterCard
                   character={selectedCharacter}
                   onSelect={() => {
@@ -233,30 +334,42 @@ export const RandomCharacterModal: React.FC<RandomCharacterModalProps> = ({
                   isFavorite={favoriteIds.includes(selectedCharacter.id)}
                 />
               </motion.div>
-            ) : null}
+            )}
           </div>
 
-          {/* Footer Actions */}
-          <div className="p-4 bg-[#F2FBFC]/60 dark:bg-[#07171F] border-t border-[#38CAD6]/15 dark:border-[#132F3D] flex items-center justify-between gap-3 shrink-0">
-            <button
-              onClick={performRoll}
-              disabled={isRolling}
-              className="px-4 py-2 rounded-xl bg-white dark:bg-[#0E232E] hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] border border-[#38CAD6]/30 text-[#1B6E7D] dark:text-[#48CCD6] font-bold text-xs flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 font-serif"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRolling ? 'animate-spin' : ''}`} />
-              <span>🎲 Thử lại</span>
-            </button>
+          {/* Footer Controls */}
+          <div className="p-4 bg-white/70 dark:bg-[#172536] border-t border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-between gap-2 shrink-0">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={performRoll}
+                disabled={isOpeningBox}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-serif font-semibold border border-[#DCE7EF] dark:border-[#43576B] bg-white dark:bg-[#202F42] hover:bg-[#E8F1F8] text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isOpeningBox ? 'animate-spin' : ''}`} />
+                <span>Bốc thêm lần nữa</span>
+              </button>
 
-            {selectedCharacter && (
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className={`p-1.5 rounded-xl border border-[#DCE7EF] dark:border-[#43576B] cursor-pointer text-xs ${
+                  showHistory ? 'bg-[#91A9BC] text-white' : 'text-[#91A9BC] hover:bg-[#E8F1F8]'
+                }`}
+                title="Xem lịch sử bốc ngẫu nhiên"
+              >
+                <History className="w-4 h-4" />
+              </button>
+            </div>
+
+            {selectedCharacter && !showHistory && (
               <button
                 onClick={() => {
                   onSelectCharacter(selectedCharacter);
                   onClose();
                 }}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] hover:from-[#48CCD6] hover:to-[#38CAD6] text-white font-bold text-xs shadow-md shadow-[#1B6E7D]/20 flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95 cursor-pointer font-serif"
+                className="px-4 py-1.5 rounded-xl btn-winter-primary text-xs font-serif font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
-                <Heart className="w-3.5 h-3.5 fill-current" />
-                <span>♡ Xem Character</span>
+                <span>Ghé thăm hồ sơ</span>
+                <span className="text-xs">→</span>
               </button>
             )}
           </div>

@@ -51,58 +51,58 @@ const PAPER_STYLES: {
 }[] = [
   {
     id: 'pink',
-    name: 'Giấy hồng nhạt',
-    bgLight: 'bg-pink-50/95',
-    bgDark: 'dark:bg-pink-950/40',
-    borderLight: 'border-pink-200',
-    borderDark: 'dark:border-pink-800/60',
-    textLight: 'text-pink-950',
-    textDark: 'dark:text-pink-100',
-    tapeBg: 'bg-pink-200/80 dark:bg-pink-900/50',
+    name: 'Giấy phớt hồng',
+    bgLight: 'bg-[#FFF5F7]/95',
+    bgDark: 'dark:bg-[#2A1D25]/90',
+    borderLight: 'border-[#F0D5DF]',
+    borderDark: 'dark:border-[#5C3A48]',
+    textLight: 'text-[#8C5D6F]',
+    textDark: 'dark:text-[#F3D5E0]',
+    tapeBg: 'bg-[#DCE7EF]/90 dark:bg-[#43576B]/80',
   },
   {
     id: 'cream',
-    name: 'Giấy kem',
-    bgLight: 'bg-amber-50/95',
-    bgDark: 'dark:bg-amber-950/40',
-    borderLight: 'border-pink-200/80',
-    borderDark: 'dark:border-pink-800/60',
-    textLight: 'text-amber-950',
-    textDark: 'dark:text-amber-100',
-    tapeBg: 'bg-pink-200/60 dark:bg-pink-900/40',
+    name: 'Giấy kem mịn',
+    bgLight: 'bg-[#FFFDF7]/95',
+    bgDark: 'dark:bg-[#26241E]/90',
+    borderLight: 'border-[#EAE3D2]',
+    borderDark: 'dark:border-[#4D483D]',
+    textLight: 'text-[#5C5340]',
+    textDark: 'dark:text-[#EAE5D9]',
+    tapeBg: 'bg-[#DCE7EF]/90 dark:bg-[#43576B]/80',
   },
   {
     id: 'lavender',
-    name: 'Giấy tím nhạt',
-    bgLight: 'bg-purple-50/95',
-    bgDark: 'dark:bg-purple-950/40',
-    borderLight: 'border-pink-200/80',
-    borderDark: 'dark:border-pink-800/60',
-    textLight: 'text-purple-950',
-    textDark: 'dark:text-purple-100',
-    tapeBg: 'bg-pink-200/60 dark:bg-pink-900/40',
+    name: 'Giấy sương lam tím',
+    bgLight: 'bg-[#F2F4FA]/95',
+    bgDark: 'dark:bg-[#1C2536]/90',
+    borderLight: 'border-[#D5E0F2]',
+    borderDark: 'dark:border-[#384A66]',
+    textLight: 'text-[#485E7D]',
+    textDark: 'dark:text-[#D5E3F5]',
+    tapeBg: 'bg-[#DCE7EF]/90 dark:bg-[#43576B]/80',
   },
   {
     id: 'blue',
-    name: 'Giấy xanh nhạt',
-    bgLight: 'bg-sky-50/95',
-    bgDark: 'dark:bg-sky-950/40',
-    borderLight: 'border-pink-200/80',
-    borderDark: 'dark:border-pink-800/60',
-    textLight: 'text-sky-950',
-    textDark: 'dark:text-sky-100',
-    tapeBg: 'bg-pink-200/60 dark:bg-pink-900/40',
+    name: 'Giấy tuyết băng lam',
+    bgLight: 'bg-[#E8F1F8]/95',
+    bgDark: 'dark:bg-[#1A283B]/90',
+    borderLight: 'border-[#DCE7EF]',
+    borderDark: 'dark:border-[#43576B]',
+    textLight: 'text-[#526B80]',
+    textDark: 'dark:text-[#E5EDF5]',
+    tapeBg: 'bg-[#DCE7EF]/90 dark:bg-[#43576B]/80',
   },
   {
     id: 'white',
-    name: 'Giấy trắng mềm',
+    name: 'Giấy trắng tinh khôi',
     bgLight: 'bg-white/95',
-    bgDark: 'dark:bg-slate-800/90',
-    borderLight: 'border-pink-200/80',
-    borderDark: 'dark:border-pink-800/60',
-    textLight: 'text-slate-800',
-    textDark: 'dark:text-slate-100',
-    tapeBg: 'bg-pink-200/60 dark:bg-pink-900/40',
+    bgDark: 'dark:bg-[#1E2C3D]/95',
+    borderLight: 'border-[#DCE7EF]',
+    borderDark: 'dark:border-[#43576B]',
+    textLight: 'text-[#526B80]',
+    textDark: 'dark:text-[#E5EDF5]',
+    tapeBg: 'bg-[#DCE7EF]/90 dark:bg-[#43576B]/80',
   },
 ];
 
@@ -491,25 +491,24 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
     setTimeout(() => setNewNoteBanner(false), 4500);
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 dark:bg-black/75 backdrop-blur-md overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-5xl h-[92vh] max-h-[850px] bg-pink-50/95 dark:bg-slate-900/95 border-2 border-pink-200 dark:border-pink-800/80 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-800 dark:text-slate-100 ring-4 ring-pink-100/70 dark:ring-pink-950/40"
-        >
-          {/* Subtle Twinkling Stars in Dark Mode */}
-          <div className="absolute inset-0 pointer-events-none hidden dark:block opacity-30 overflow-hidden">
-            <span className="absolute top-6 left-12 text-xs text-pink-300 animate-pulse">✦</span>
-            <span className="absolute top-16 right-20 text-xs text-pink-200 animate-ping">˚</span>
-            <span className="absolute bottom-20 left-1/4 text-xs text-pink-300 animate-pulse">✦</span>
-            <span className="absolute bottom-10 right-12 text-xs text-pink-200">✦</span>
-            <span className="absolute top-1/3 right-1/3 text-xs text-pink-200 animate-pulse">˚</span>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 dark:bg-black/75 backdrop-blur-md overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-5xl h-[92vh] max-h-[850px] bg-[#F7FAFD]/98 dark:bg-[#172536]/98 border-2 border-[#DCE7EF] dark:border-[#43576B] rounded-3xl shadow-2xl flex flex-col overflow-hidden text-[#526B80] dark:text-[#E5EDF5] ring-4 ring-[#D5E4EF]/50 dark:ring-[#354A60]/30"
+          >
+          {/* Subtle Twinkling Snowflakes in Dark Mode */}
+          <div className="absolute inset-0 pointer-events-none hidden dark:block opacity-35 overflow-hidden">
+            <span className="absolute top-6 left-12 text-xs text-[#A9BDCE] animate-pulse">❄</span>
+            <span className="absolute top-16 right-20 text-xs text-white/50 animate-ping">✦</span>
+            <span className="absolute bottom-20 left-1/4 text-xs text-[#A9BDCE] animate-pulse">❄</span>
+            <span className="absolute bottom-10 right-12 text-xs text-white/60">✦</span>
+            <span className="absolute top-1/3 right-1/3 text-xs text-[#A9BDCE] animate-pulse">˚</span>
           </div>
 
           {/* Particle Explosions on Submit */}
@@ -522,7 +521,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1.5, ease: 'easeOut' }}
                 style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                className="absolute z-40 text-pink-400 font-bold text-lg pointer-events-none select-none drop-shadow-md"
+                className="absolute z-40 text-[#91A9BC] font-bold text-lg pointer-events-none select-none drop-shadow-md"
               >
                 {p.symbol}
               </motion.span>
@@ -530,15 +529,15 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
           </AnimatePresence>
 
           {/* Modal Header */}
-          <div className="relative px-5 py-4 sm:px-8 sm:py-5 border-b border-pink-200/80 dark:border-pink-900/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between gap-3 shrink-0 z-20">
+          <div className="relative px-5 py-4 sm:px-8 sm:py-5 border-b border-[#DCE7EF] dark:border-[#43576B] bg-white/85 dark:bg-[#172536]/85 backdrop-blur-md flex items-center justify-between gap-3 shrink-0 z-20">
             <div>
-              <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                <span className="text-pink-400">♡</span>
-                <span>Một chút lời để lại</span>
-                <span className="text-pink-400">♡</span>
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-2 font-serif">
+                <span className="text-[#91A9BC]">❄</span>
+                <span>Bảng Tin Mùa Đông</span>
+                <span className="text-[#91A9BC]">୨୧</span>
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
-                “Có điều gì muốn để lại cho góc nhỏ này không? Bạn có thể chỉnh sửa & xóa lời nhắn của mình bất cứ lúc nào ♡”
+              <p className="text-xs sm:text-sm text-[#91A9BC] dark:text-[#A9BDCE] mt-0.5 font-normal">
+                &ldquo;Có điều gì muốn gửi gắm vào chiếc hộp mùa đông này không? Bạn có thể chỉnh sửa &amp; xóa lời nhắn bất cứ lúc nào ❄&rdquo;
               </p>
             </div>
 
@@ -549,7 +548,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                   setIsFormOpen(true);
                   triggerSfx('pop');
                 }}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-pink-400 hover:bg-pink-500 text-white text-xs font-bold shadow-md shadow-pink-200/50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-full btn-winter-primary text-white text-xs font-bold shadow-md shadow-[#91A9BC]/25 hover:scale-105 active:scale-95 transition-all cursor-pointer font-serif"
               >
                 <Plus className="w-4 h-4 stroke-[2.5]" />
                 <span className="hidden sm:inline">Để lại một lời nhắn</span>
@@ -559,7 +558,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="p-2 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-pink-100/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-2 rounded-full text-[#91A9BC] hover:text-[#526B80] dark:hover:text-white hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] transition-colors cursor-pointer"
                 title="Đóng modal"
               >
                 <X className="w-5 h-5" />
@@ -574,11 +573,11 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mx-5 mt-3 sm:mx-8 px-4 py-2 bg-pink-400 text-white rounded-2xl text-xs font-bold shadow-md flex items-center justify-between gap-2 z-20"
+                className="mx-5 mt-3 sm:mx-8 px-4 py-2 bg-[#91A9BC] text-white rounded-2xl text-xs font-bold shadow-md flex items-center justify-between gap-2 z-20 font-serif"
               >
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 animate-spin" />
-                  <span>♡ Một lời nhắn mới vừa được để lại trên bảng. Bạn có thể sửa hoặc xóa bất cứ lúc nào!</span>
+                  <span>❄ Một lời nhắn mới vừa được gắn lên bảng tin mùa đông. Bạn có thể sửa hoặc xóa bất cứ lúc nào!</span>
                 </div>
                 <span className="text-[10px] opacity-90 font-normal">vừa xong</span>
               </motion.div>
@@ -586,19 +585,19 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
           </AnimatePresence>
 
           {/* Subheader Toolbar: Filter Tabs & Sorting */}
-          <div className="px-5 py-2.5 sm:px-8 bg-pink-100/60 dark:bg-slate-900/60 border-b border-pink-200/60 dark:border-pink-900/40 flex flex-wrap items-center justify-between gap-2 shrink-0 text-xs z-10">
+          <div className="px-5 py-2.5 sm:px-8 bg-[#E8F1F8]/70 dark:bg-[#202F42]/70 border-b border-[#DCE7EF] dark:border-[#43576B] flex flex-wrap items-center justify-between gap-2 shrink-0 text-xs z-10">
             {/* Filter Tabs: All vs Mine */}
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-1 bg-white/90 dark:bg-slate-800/80 p-0.5 rounded-full border border-pink-200 dark:border-slate-700">
+              <div className="flex items-center gap-1 bg-white/90 dark:bg-[#172536]/90 p-0.5 rounded-full border border-[#DCE7EF] dark:border-[#43576B]">
                 <button
                   onClick={() => {
                     setFilterView('all');
                     triggerSfx('pop');
                   }}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer font-serif ${
                     filterView === 'all'
-                      ? 'bg-pink-400 text-white shadow-xs'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-[#91A9BC] text-white shadow-xs'
+                      : 'text-[#526B80] dark:text-[#E5EDF5] hover:text-[#3B5264]'
                   }`}
                 >
                   Tất cả ({notes.filter((n) => effectiveIsAdmin || !n.isHidden).length})
@@ -608,17 +607,17 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                     setFilterView('mine');
                     triggerSfx('pop');
                   }}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer font-serif ${
                     filterView === 'mine'
-                      ? 'bg-pink-400 text-white shadow-xs'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-[#91A9BC] text-white shadow-xs'
+                      : 'text-[#526B80] dark:text-[#E5EDF5] hover:text-[#3B5264]'
                   }`}
                 >
                   <span>Lời nhắn của tôi</span>
                   {myNotesCount > 0 && (
                     <span
                       className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        filterView === 'mine' ? 'bg-white text-pink-500' : 'bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-300'
+                        filterView === 'mine' ? 'bg-white text-[#526B80]' : 'bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5]'
                       }`}
                     >
                       {myNotesCount}
@@ -629,64 +628,67 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
             </div>
 
             {/* Sorting Tabs */}
-            <div className="flex items-center gap-1 bg-white/90 dark:bg-slate-800/80 p-0.5 rounded-full border border-pink-200 dark:border-slate-700">
+            <div className="flex items-center gap-1 bg-white/90 dark:bg-[#172536]/90 p-0.5 rounded-full border border-[#DCE7EF] dark:border-[#43576B]">
               <button
                 onClick={() => setSortMode('newest')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer font-serif ${
                   sortMode === 'newest'
-                    ? 'bg-pink-400 text-white shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#91A9BC] text-white shadow-xs font-bold'
+                    : 'text-[#526B80] dark:text-[#E5EDF5] hover:text-[#3B5264]'
                 }`}
               >
                 Mới nhất
               </button>
               <button
                 onClick={() => setSortMode('oldest')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer font-serif ${
                   sortMode === 'oldest'
-                    ? 'bg-pink-400 text-white shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#91A9BC] text-white shadow-xs font-bold'
+                    : 'text-[#526B80] dark:text-[#E5EDF5] hover:text-[#3B5264]'
                 }`}
               >
                 Cũ nhất
               </button>
               <button
-                onClick={handleShuffleRandom}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer ${
+                onClick={() => {
+                  setSortMode('random');
+                  setRandomSeed(Date.now());
+                  triggerSfx('pop');
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1 cursor-pointer font-serif ${
                   sortMode === 'random'
-                    ? 'bg-pink-400 text-white shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#91A9BC] text-white shadow-xs font-bold'
+                    : 'text-[#526B80] dark:text-[#E5EDF5] hover:text-[#3B5264]'
                 }`}
-                title="Xáo trộn thứ tự ngẫu nhiên các lời nhắn đã có"
               >
                 <Shuffle className="w-3 h-3" />
-                <span>Ngẫu nhiên</span>
+                <span>Xáo trộn</span>
               </button>
             </div>
           </div>
 
           {/* Board Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-8 relative custom-scrollbar bg-gradient-to-b from-pink-50/50 via-pink-100/30 to-pink-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-8 relative custom-scrollbar bg-gradient-to-b from-[#F7FAFD]/80 via-[#E8F1F8]/50 to-[#F7FAFD]/80 dark:from-[#172536] dark:via-[#202F42] dark:to-[#172536]">
             {/* Soft Board Texture Lines */}
-            <div className="absolute inset-0 bg-[radial-gradient(#ec4899_0.75px,transparent_0.75px)] [background-size:24px_24px] opacity-10 dark:opacity-15 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(#91a9bc_0.75px,transparent_0.75px)] [background-size:24px_24px] opacity-15 dark:opacity-20 pointer-events-none" />
 
             {visibleNotes.length === 0 ? (
               /* Empty State */
-              <div className="h-full min-h-[350px] flex flex-col items-center justify-center text-center p-6 my-auto relative z-10">
+              <div className="h-full min-h-[350px] flex flex-col items-center justify-center text-center p-6 my-auto relative z-10 font-serif">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="w-20 h-20 rounded-full bg-pink-100 dark:bg-pink-950/60 border-2 border-dashed border-pink-300 dark:border-pink-800 flex items-center justify-center text-3xl mb-4 shadow-sm"
+                  className="w-20 h-20 rounded-full bg-[#E8F1F8] dark:bg-[#202F42] border-2 border-dashed border-[#91A9BC]/50 dark:border-[#43576B] flex items-center justify-center text-3xl mb-4 shadow-sm"
                 >
                   ✉️
                 </motion.div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">
-                  {filterView === 'mine' ? 'Bạn chưa để lại lời nhắn nào...' : 'Bảng vẫn còn trống... ♡'}
+                <h3 className="text-base sm:text-lg font-bold text-[#526B80] dark:text-[#E5EDF5]">
+                  {filterView === 'mine' ? 'Bạn chưa để lại lời nhắn nào...' : 'Bảng tin vẫn còn yên ắng... ❄'}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-5">
+                <p className="text-xs sm:text-sm text-[#91A9BC] dark:text-[#A9BDCE] max-w-sm mt-1 mb-5">
                   {filterView === 'mine'
-                    ? 'Hãy viết một lời nhắn để gửi vào góc nhỏ xinh xắn này nhé!'
-                    : 'Ai sẽ là người để lại lời nhắn đầu tiên cho góc nhỏ nhỉ?'}
+                    ? 'Hãy viết một lời nhắn gửi gắm vào chiếc hộp mùa đông này nhé!'
+                    : 'Ai sẽ là người để lại lời nhắn đầu tiên giữa mùa tuyết rơi này nhỉ?'}
                 </p>
                 <button
                   onClick={() => {
@@ -704,8 +706,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 {/* Pinned Notes Section */}
                 {pinnedNotes.length > 0 && filterView === 'all' && (
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-xs font-bold text-pink-600 dark:text-pink-300 border-b border-pink-200/80 dark:border-pink-900/60 pb-1.5">
-                      <span className="text-base">୨୧</span>
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#526B80] dark:text-[#E5EDF5] border-b border-[#DCE7EF] dark:border-[#43576B] pb-1.5 font-serif">
+                      <span className="text-base text-[#91A9BC]">❄</span>
                       <span>Lời nhắn được ghim lên đầu bảng</span>
                     </div>
 
@@ -722,6 +724,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                           onPin={() => handleRequestPin(note.id)}
                           onHide={() => handleRequestHide(note.id)}
                           isAdmin={effectiveIsAdmin}
+                          onZoomImage={(url) => setZoomedImageUrl(url)}
                         />
                       ))}
                     </div>
@@ -731,8 +734,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 {/* Main Notes Grid */}
                 <div className="space-y-3">
                   {pinnedNotes.length > 0 && filterView === 'all' && (
-                    <div className="text-xs font-bold text-slate-500 dark:text-slate-400 border-b border-pink-200/60 dark:border-slate-800 pb-1.5 flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-pink-400" />
+                    <div className="text-xs font-bold text-[#526B80] dark:text-[#E5EDF5] border-b border-[#DCE7EF] dark:border-[#43576B] pb-1.5 flex items-center gap-1.5 font-serif">
+                      <Sparkles className="w-3.5 h-3.5 text-[#91A9BC]" />
                       <span>Các lời nhắn từ bạn bè</span>
                     </div>
                   )}
@@ -1237,7 +1240,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
             </div>
           )}
         </AnimatePresence>
-      </div>
+        </div>
+      )}
     </AnimatePresence>
   );
 };

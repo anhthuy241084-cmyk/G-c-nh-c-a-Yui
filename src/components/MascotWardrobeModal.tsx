@@ -86,9 +86,9 @@ export const ACCESSORIES_LIST: AccessoryDef[] = [
   },
   {
     id: 'crown',
-    name: 'Vương miện san hô',
+    name: 'Vương miện pha lê tuyết',
     icon: '👑',
-    desc: 'Chiếc vương miện lấp lánh cho khách quý',
+    desc: 'Chiếc vương miện lấp lánh cho khách quý mùa đông',
     unlockHint: 'Đạt chuỗi 14 ngày ghé góc nhỏ ✦',
   },
   {

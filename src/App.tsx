@@ -6,6 +6,9 @@ import { INITIAL_CHARACTERS } from './data/characters';
 import { IntroLoadingScreen } from './components/IntroLoadingScreen';
 import { SplashScreen } from './components/SplashScreen';
 import { Header } from './components/Header';
+import { WinterWelcomeFrame } from './components/WinterWelcomeFrame';
+import { SnowBookmarkModal } from './components/SnowBookmarkModal';
+import { SnowfallBackground } from './components/SnowfallBackground';
 import { Bookshelf } from './components/Bookshelf';
 import { SearchBar } from './components/SearchBar';
 import { CharacterCard } from './components/CharacterCard';
@@ -31,7 +34,6 @@ import { HelpCenterModal } from './components/HelpCenterModal';
 import { WishingBottleModal } from './components/WishingBottleModal';
 import { OceanMusicBoxModal } from './components/OceanMusicBoxModal';
 import { OceanArchipelagoModal } from './components/OceanArchipelagoModal';
-import { OceanAtmosphere } from './components/OceanAtmosphere';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProfileModal } from './components/ProfileModal';
 import { BackToTop } from './components/BackToTop';
@@ -106,15 +108,8 @@ const INITIAL_NOTIFICATIONS: AppNotification[] = [
 ];
 
 export default function App() {
-  // First-time visitor Intro Loading screen state
-  const [showIntro, setShowIntro] = useState<boolean>(() => {
-    try {
-      const seen = localStorage.getItem('yui_intro_seen');
-      return seen !== 'true';
-    } catch (e) {
-      return false;
-    }
-  });
+  // Intro Page (Hộp Ký Ức Mùa Đông) full-screen state
+  const [showIntro, setShowIntro] = useState<boolean>(true);
 
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
 
@@ -179,6 +174,7 @@ export default function App() {
   const [isHelpCenterOpen, setIsHelpCenterOpen] = useState(false);
   const [isMusicBoxOpen, setIsMusicBoxOpen] = useState(false);
   const [isArchipelagoOpen, setIsArchipelagoOpen] = useState(false);
+  const [isSnowBookmarksOpen, setIsSnowBookmarksOpen] = useState(false);
 
   // Wishing Bottles state (Hải Lưu & Chai Ước Nguyện)
   const [wishingBottles, setWishingBottles] = useState<WishingBottle[]>([]);
@@ -334,13 +330,34 @@ export default function App() {
     return INITIAL_NOTIFICATIONS;
   });
 
+  // List of excluded characters requested to be deleted by user
+  const isExcludedCharacter = (char: Character): boolean => {
+    const terms = [
+      'harry potter',
+      'dược sư tự sự',
+      'showbiz hàn',
+      'steven universe',
+      '5 cánh hoa anh đào',
+      'f5 conan',
+      'văn hào lưu lạc',
+      'mộ dạ hàn',
+      'cedric von ravencrest',
+    ];
+    const name = (char.name || '').toLowerCase();
+    const id = (char.id || '').toLowerCase();
+    const title = (char.title || '').toLowerCase();
+    return terms.some((t) => name.includes(t) || id.includes(t) || title.includes(t));
+  };
+
   // Characters Data state
   const [characters, setCharacters] = useState<Character[]>(() => {
     const saved = localStorage.getItem('yui_characters');
     if (saved) {
       try {
         const parsed: Character[] = JSON.parse(saved);
-        return parsed;
+        const filtered = parsed.filter((c) => !isExcludedCharacter(c));
+        localStorage.setItem('yui_characters', JSON.stringify(filtered));
+        return filtered;
       } catch (e) {
         return INITIAL_CHARACTERS;
       }
@@ -1147,6 +1164,12 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Ambient Winter Snowfall throughout Homepage */}
+      <SnowfallBackground
+        settings={{ isEnabled: true, density: 'medium', speed: 'slow', opacity: 'medium' }}
+        themeMode={theme}
+      />
+
       {/* 2. Main Application Interface */}
       <div className="flex flex-col min-h-screen relative z-10">
         
@@ -1163,18 +1186,9 @@ export default function App() {
           onOpenNotifications={() => setIsNotificationsOpen(true)}
           noteCount={boardNotes.length}
           onOpenRandom={() => setIsRandomOpen(true)}
-          onOpenWishingBottle={() => setIsWishingBottleOpen(true)}
-          onOpenBakery={() => {
-            setIsBakeryOpen(true);
-            // Unlock hairpin accessory for mascot
-            const unlocked = new Set<MascotAccessoryId>(mascotSettings.unlockedAccessories || ['none', 'bow']);
-            if (!unlocked.has('hairpin')) {
-              unlocked.add('hairpin');
-              handleUpdateMascotSettings({ unlockedAccessories: Array.from(unlocked) as MascotAccessoryId[] });
-              showToast('🌸 Bạn vừa ghé Tiệm Bánh Nhỏ! Mở khóa phụ kiện: Kẹp hoa anh đào');
-            }
-          }}
-          onOpenMascotWardrobe={() => setIsWardrobeOpen(true)}
+          onOpenBookmarks={() => setIsSnowBookmarksOpen(true)}
+          onReopenIntro={() => setShowIntro(true)}
+          bookmarkCount={Object.keys(bookmarks).length}
           onTriggerEasterEgg={handleTriggerEasterEgg}
           isSfxOn={audioSettings.isSfxOn}
           sfxVolume={audioSettings.sfxVolume}
@@ -1186,186 +1200,18 @@ export default function App() {
           onOpenFortune={() => setIsFortuneOpen(true)}
           onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
           onOpenMusicBox={() => setIsMusicBoxOpen(true)}
-          onOpenArchipelago={() => setIsArchipelagoOpen(true)}
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-7">
           
-          {/* Pearl Ocean Coastal Dreamy Sanctuary Hero Banner */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#FFFDFC]/95 via-[#F3FAFA]/90 to-[#E8F7F6]/85 dark:from-[#0B2530]/95 dark:via-[#071C25]/90 dark:to-[#030E14]/85 border border-[#BFE7E8]/70 dark:border-[#38CAD6]/30 shadow-xl shadow-[#91CED2]/15 dark:shadow-black/50 space-y-5 relative overflow-hidden backdrop-blur-2xl transition-all">
-            {/* Luminous soft pastel ambient blobs & sunlight refraction */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#D2F0F0]/40 dark:bg-[#38CAD6]/15 rounded-full blur-3xl pointer-events-none -mr-24 -mt-24" />
-            <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-[#CFE8F5]/35 dark:bg-[#1B6E7D]/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute top-1/3 left-10 w-64 h-64 bg-[#F3DDE1]/30 dark:bg-[#E5E1F2]/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-10 right-1/3 w-72 h-72 bg-[#C8EAE3]/35 dark:bg-[#7DD8DE]/10 rounded-full blur-3xl pointer-events-none" />
-
-            {/* Sunlight beam overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent pointer-events-none" />
-
-            {/* Top Badge & Streak Counter */}
-            <div className="flex flex-wrap items-center justify-between gap-3 relative z-10 border-b border-[#BFE7E8]/50 dark:border-white/15 pb-3.5">
-              <div className="inline-flex items-center gap-2 text-xs font-serif text-[#49666A] dark:text-[#CFE8F5] font-semibold tracking-wide">
-                <span className="text-[#8CCFD3] dark:text-[#71BFC6] text-xs">✦</span>
-                <span className="uppercase tracking-widest text-[11px] font-bold text-[#49666A] dark:text-[#E9F8F8]">
-                  Hải Trình Cảm Xúc · Thư Viện Đại Dương
-                </span>
-                <span className="text-[#8CCFD3] dark:text-[#71BFC6] text-xs">✦</span>
-                <span className="hidden sm:inline-block text-[10px] text-[#71BFC6] font-normal">· ｡ ° ｡ · ﾟ</span>
-              </div>
-
-              {/* Streak Badge Button styled as a pearl pill */}
-              <button
-                onClick={() => setIsStreakOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFFDFC]/80 hover:bg-[#E9F8F8] dark:bg-white/15 dark:hover:bg-white/25 border border-[#BFE7E8] dark:border-white/30 text-[#49666A] dark:text-white text-xs font-bold hover:scale-105 transition-transform cursor-pointer shadow-xs font-serif"
-                title="Xem chuỗi ngày ghé góc nhỏ và mốc phần thưởng"
-              >
-                <Flame className="w-3.5 h-3.5 text-[#71BFC6] fill-current animate-pulse" />
-                <span>🔥 {currentStreak} ngày ghé thăm</span>
-              </button>
-            </div>
-
-            {/* Title & Romantic Poetic Subtitle */}
-            <div className="space-y-1.5 relative z-10">
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2D494C] dark:text-white font-serif leading-snug">
-                  Há lo, cảm ơn cậu đã ghé bến đỗ trong veo của Yui
-                </h2>
-                <span className="text-[#8CCFD3] text-xl">✦</span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#49666A] dark:text-[#CFE8F5] leading-relaxed font-serif">
-                « 愿随流水寄相思，莫道沧桑失故知 » <em>(Nguyện gửi tương tư theo dòng nước, Đừng than dâu bể lạc tri âm)</em> · Chúc bồ một ngày êm đềm tựa sóng biếc sớm mai ( ˘͈ ᵕ ˘͈ ♡)
-              </p>
-            </div>
-
-            {/* Quick Interactive Ocean Deck (6 Core Stations in Sea Glass Pastel Style) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1 relative z-10 font-serif">
-              {/* 1. Lời Nhắn Vỏ Sò Biển 🐚 */}
-              <button
-                onClick={() => setIsFortuneOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#BFE7E8]/70 dark:border-white/20 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F3DDE1] to-[#CFE8F5] text-[#49666A] dark:text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  🐚
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate">
-                    Lời Nhắn Vỏ Sò
-                  </span>
-                  <span className="text-[10px] text-[#63878B] dark:text-white/80 block truncate font-sans">
-                    Quẻ thơ biển cả
-                  </span>
-                </div>
-              </button>
-
-              {/* 2. Chai Thủy Tinh Ước Nguyện 🍾 */}
-              <button
-                onClick={() => setIsWishingBottleOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#BFE7E8]/70 dark:border-white/20 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#A9DDE2] to-[#71BFC6] text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  🍾
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate">
-                    Chai Ước Nguyện
-                  </span>
-                  <span className="text-[10px] text-[#63878B] dark:text-white/80 block truncate font-sans">
-                    Thả & vớt hải lưu
-                  </span>
-                </div>
-              </button>
-
-              {/* 3. Hộp Nhạc Sóng Biển 🎶 */}
-              <button
-                onClick={() => setIsMusicBoxOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#38CAD6]/40 dark:border-[#38CAD6]/30 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md ring-1 ring-[#38CAD6]/30"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  🎶
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate flex items-center gap-1">
-                    <span>Hộp Nhạc Biển</span>
-                  </span>
-                  <span className="text-[10px] text-[#1B6E7D] dark:text-[#48CCD6] block truncate font-sans font-semibold">
-                    Lo-Fi & Thư giãn
-                  </span>
-                </div>
-              </button>
-
-              {/* 4. Hải Đồ Thám Hiểm 🗺️ */}
-              <button
-                onClick={() => setIsArchipelagoOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#38CAD6]/40 dark:border-[#38CAD6]/30 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md ring-1 ring-[#38CAD6]/30"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1B6E7D] to-[#38CAD6] text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  🗺️
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate">
-                    Hải Đồ Kỳ Ảo
-                  </span>
-                  <span className="text-[10px] text-[#1B6E7D] dark:text-[#48CCD6] block truncate font-sans font-semibold">
-                    Bản đồ quần đảo
-                  </span>
-                </div>
-              </button>
-
-              {/* 5. Hôm Nay Gặp Ai Đây? 🎲 */}
-              <button
-                onClick={() => setIsRandomOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#BFE7E8]/70 dark:border-white/20 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#CFE8F5] to-[#8CCFD3] text-[#2D494C] dark:text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  🎲
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate">
-                    Hôm Nay Gặp Ai?
-                  </span>
-                  <span className="text-[10px] text-[#63878B] dark:text-white/80 block truncate font-sans">
-                    Gợi ý ngẫu nhiên
-                  </span>
-                </div>
-              </button>
-
-              {/* 6. Sổ Tay Trợ Giúp ❓ */}
-              <button
-                onClick={() => setIsHelpCenterOpen(true)}
-                className="p-3 rounded-2xl bg-[#FFFDFC]/85 hover:bg-[#E9F8F8] dark:bg-white/10 dark:hover:bg-white/20 border border-[#BFE7E8]/70 dark:border-white/20 shadow-xs hover:shadow-md flex items-center gap-2.5 text-left transition-all hover:-translate-y-0.5 active:scale-95 cursor-pointer group backdrop-blur-md"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E0F3F5] to-[#BFE7E8] text-[#1B6E7D] dark:text-white flex items-center justify-center text-lg shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                  ❓
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs font-bold text-[#2D494C] dark:text-white block truncate">
-                    Sổ Tay Trợ Giúp
-                  </span>
-                  <span className="text-[10px] text-[#63878B] dark:text-white/80 block truncate font-sans">
-                    Hướng dẫn & mẹo hay
-                  </span>
-                </div>
-              </button>
-            </div>
-
-            {/* Subtle Ocean Whisper Footnote Bar */}
-            <div className="pt-2 flex items-center justify-between text-[11px] text-[#63878B] dark:text-[#CFE8F5]/70 font-serif border-t border-[#BFE7E8]/40 dark:border-white/10">
-              <div className="flex items-center gap-1.5 truncate">
-                <span className="text-[#71BFC6]">🌊</span>
-                <span className="italic truncate">« 沧海月明珠有泪，蓝田日暖玉生烟 » (Thương hải nguyệt minh châu hữu lệ, Lam điền nhật noãn ngọc sinh yên) · Biển biếc trăng trong ngời giọt ngọc...</span>
-              </div>
-              <button
-                onClick={() => setIsAudioSettingsOpen(true)}
-                className="shrink-0 ml-2 inline-flex items-center gap-1 hover:text-[#2D494C] dark:hover:text-white transition-colors cursor-pointer text-[10px] font-semibold bg-[#E9F8F8] dark:bg-white/10 px-2.5 py-0.5 rounded-full"
-              >
-                <span>🎵 Âm thanh</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Feature: "Gõ cửa góc nhỏ" Interactive Little Door */}
-          <LittleDoor isAudioPlaying={audioSettings.isBgmOn} />
+          {/* ❄️ Khung giới thiệu Yui — Welcome Frame (Winter Letter / Snowy Diary) */}
+          <WinterWelcomeFrame
+            streakCount={currentStreak}
+            onOpenStreak={() => setIsStreakOpen(true)}
+            onOpenRandom={() => setIsRandomOpen(true)}
+            onOpenFortune={() => setIsFortuneOpen(true)}
+          />
 
           {/* Feature: "୨୧ Kệ sách của mình" Paper Bookshelf */}
           <Bookshelf
@@ -1410,7 +1256,7 @@ export default function App() {
           {/* Character Grid Cards List or Custom Empty State */}
           {filteredCharacters.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCharacters.map((char) => (
+              {filteredCharacters.map((char, idx) => (
                 <CharacterCard
                   key={char.id}
                   character={char}
@@ -1419,7 +1265,10 @@ export default function App() {
                   onVote={handleVote}
                   onToggleFavorite={handleToggleFavorite}
                   isFavorite={!!favorites[char.id] || !!char.isFavorite}
+                  isBookmarked={!!bookmarks[char.id]}
+                  onToggleBookmark={(id) => handleToggleBookmark(id)}
                   onTagClick={(tag) => handleSelectTag(tag)}
+                  orderIndex={idx}
                 />
               ))}
             </div>
@@ -1437,22 +1286,22 @@ export default function App() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-12 py-8 border-t border-[#65C5CE]/20 dark:border-[#143943] text-center text-xs text-[#6B858A] dark:text-[#8FB6BC]">
-          <div className="max-w-7xl mx-auto px-4 space-y-2">
-            <p className="font-medium text-[#29464C] dark:text-[#DDF5F6]">
-              Góc nhỏ (｡･ω･｡)ﾉ♡ • Thư viện Character AI Biển Cả
+        <footer className="mt-12 py-8 border-t border-[#DCE7EF] dark:border-[#43576B] text-center text-xs text-[#91A9BC] dark:text-[#A9BDCE]">
+          <div className="max-w-7xl mx-auto px-4 space-y-2 font-serif">
+            <p className="font-medium text-[#526B80] dark:text-[#E5EDF5]">
+              Hộp Ký Ức Mùa Đông (Winter Memory Box) · Yui ୨୧
             </p>
-            <p className="text-[11px] text-[#6B858A]">
-              Chỉ hiển thị các nhân vật chính thức được đăng tải • Tôn trọng bản quyền tác giả
+            <p className="text-[11px] text-[#91A9BC]">
+              Một góc nhỏ cất giữ những câu chuyện và nhân vật tưởng tượng giữa mùa đông yên bình
             </p>
             <div className="pt-2">
               <button
                 id="footer-admin-btn"
                 onClick={() => setIsAdminAuthOpen(true)}
-                className="text-[11px] text-[#6B858A]/80 hover:text-[#247C8C] dark:hover:text-[#78DCE0] transition-colors inline-flex items-center gap-1 cursor-pointer"
+                className="text-[11px] text-[#91A9BC] hover:text-[#526B80] dark:hover:text-white transition-colors inline-flex items-center gap-1 cursor-pointer"
                 title="Quản lý & Sáng tạo"
               >
-                <span>✦ Quản lý & Sáng tạo</span>
+                <span>❄ Quản lý &amp; Sáng tạo</span>
               </button>
             </div>
           </div>
@@ -1461,6 +1310,16 @@ export default function App() {
       </div>
 
       {/* 3. Dialog Modals */}
+      <SnowBookmarkModal
+        isOpen={isSnowBookmarksOpen}
+        onClose={() => setIsSnowBookmarksOpen(false)}
+        bookmarks={bookmarks}
+        characters={characters}
+        onSelectCharacter={(c) => handleSelectCharacter(c)}
+        onToggleBookmark={(id) => handleToggleBookmark(id)}
+        onVote={handleVote}
+      />
+
       <NotificationModal
         isOpen={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
@@ -1727,9 +1586,6 @@ export default function App() {
         sfxVolume={audioSettings.sfxVolume}
       />
 
-      <OceanAtmosphere
-        themeMode={theme}
-      />
 
       <AudioPlayer
         settings={audioSettings}

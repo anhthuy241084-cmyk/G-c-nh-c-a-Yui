@@ -12,11 +12,11 @@ interface StreakModalProps {
 }
 
 const STREAK_MILESTONES = [
-  { days: 1, icon: '🌊', title: 'Khởi đầu', desc: 'Chào mừng đến với vùng biển của Yui!', reward: 'Huy hiệu Khởi Hành' },
-  { days: 3, icon: '✦', title: 'Thân quen', desc: 'Bạn quay lại biển rồi nè!', reward: 'Huy hiệu Sao Biển' },
-  { days: 7, icon: '🐚', title: 'Khách quý', desc: 'Một tuần êm đềm trôi qua!', reward: 'Khăn choàng biển' },
-  { days: 14, icon: '🪼', title: 'Tri kỷ', desc: 'Góc biển luôn nhớ bạn.', reward: 'Vương miện san hô' },
-  { days: 30, icon: '🏆', title: 'Huyền thoại', desc: 'Nhà thám hiểm đại dương kỳ cựu!', reward: 'Danh hiệu VIP Đại Dương' },
+  { days: 1, icon: '❄️', title: 'Khởi đầu', desc: 'Chào mừng bạn đến với Hộp Ký Ức Mùa Đông!', reward: 'Bông Tuyết Đầu Mùa' },
+  { days: 3, icon: '✦', title: 'Thân quen', desc: 'Tuyết lại rơi khi bạn ghé thăm chiếc hộp!', reward: 'Khăn Len Mùa Đông' },
+  { days: 7, icon: '☕', title: 'Khách quý', desc: 'Một tuần ấm êm giữa những câu chuyện mùa đông!', reward: 'Tách Trà Ấm Áp' },
+  { days: 14, icon: '୨୧', title: 'Tri kỷ', desc: 'Chiếc hộp mùa đông luôn giữ một góc dịu dàng cho bạn.', reward: 'Quả Cầu Tuyết Kỷ Niệm' },
+  { days: 30, icon: '❄️', title: 'Huyền thoại', desc: 'Người thắp sáng ký ức qua muôn trùng tuyết trắng!', reward: 'Vương Miện Pha Lê Băng' },
 ];
 
 export const StreakModal: React.FC<StreakModalProps> = ({

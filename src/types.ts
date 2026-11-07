@@ -80,7 +80,7 @@ export type BookmarkPaperStyle =
   | 'ribbon'    // Bookmark nơ
   | 'vintage';  // Bookmark giấy cũ
 
-export type BookmarkTailDecor = '♡' | '୨୧' | '✦' | '〜' | '˚₊‧' | '꒰ა ໒꒱';
+export type BookmarkTailDecor = '♡' | '୨୧' | '✦' | '〜' | '˚₊‧' | '꒰ა ໒꒱' | '❄';
 
 export interface CharacterBookmark {
   characterId: string;
@@ -142,24 +142,24 @@ export interface DefaultBgmTrack {
 export const DEFAULT_BGM_TRACKS: DefaultBgmTrack[] = [
   {
     id: 'track-1',
-    youtubeId: 'KurOdyfsWRA',
-    url: 'https://youtu.be/KurOdyfsWRA',
-    title: 'Giai Điệu Thư Giãn 1',
-    subtitle: 'Nhạc mặc định trực tiếp 1',
+    youtubeId: 'aLZ32mQ_7TA',
+    url: 'https://youtu.be/aLZ32mQ_7TA?si=b6Bz9BZCG8QfX4nR',
+    title: 'Giai Điệu Mùa Đông 1',
+    subtitle: 'Hộp Ký Ức Mùa Đông · Bản nhạc 1',
   },
   {
     id: 'track-2',
-    youtubeId: 'Q5cuZL30iao',
-    url: 'https://youtu.be/Q5cuZL30iao',
-    title: 'Giai Điệu Thư Giãn 2',
-    subtitle: 'Nhạc mặc định trực tiếp 2',
+    youtubeId: 'JcZsPmeTJB8',
+    url: 'https://youtu.be/JcZsPmeTJB8?si=Ic5JL_yzSL0qZ7cG',
+    title: 'Giai Điệu Mùa Đông 2',
+    subtitle: 'Hộp Ký Ức Mùa Đông · Bản nhạc 2',
   },
   {
     id: 'track-3',
-    youtubeId: '5RdSua1R8c0',
-    url: 'https://youtu.be/5RdSua1R8c0',
-    title: 'Giai Điệu Thư Giãn 3',
-    subtitle: 'Nhạc mặc định trực tiếp 3',
+    youtubeId: 'xtvrEu1JknM',
+    url: 'https://youtu.be/xtvrEu1JknM?si=nV55C2erNoD63HCX',
+    title: 'Giai Điệu Mùa Đông 3',
+    subtitle: 'Hộp Ký Ức Mùa Đông · Bản nhạc 3',
   },
 ];
 

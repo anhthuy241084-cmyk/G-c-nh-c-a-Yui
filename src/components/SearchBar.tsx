@@ -20,11 +20,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   filteredCount,
 }) => {
   return (
-    <div id="search-section" className="w-full space-y-4 scroll-mt-24">
+    <div id="search-section" className="w-full space-y-3.5 scroll-mt-24 select-none">
       {/* Search Input Box */}
       <div className="relative w-full">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#6B858A] dark:text-[#8FB6BC]">
-          <Search className="w-5 h-5" />
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#91A9BC] dark:text-[#A9BDCE]">
+          <Search className="w-4 h-4" />
         </div>
 
         <input
@@ -32,14 +32,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           type="text"
           value={searchTerm || ''}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Tìm theo tên nhân vật, tag hoặc từ khóa liên quan..."
-          className="w-full pl-11 pr-10 py-3.5 bg-white/90 dark:bg-[#102F38]/90 text-[#29464C] dark:text-[#DDF5F6] placeholder-[#6B858A] dark:placeholder-[#8FB6BC] rounded-2xl border border-[#65C5CE]/40 dark:border-[#78DCE0]/25 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#3FAAB7]/40 focus:border-[#3FAAB7] transition-all text-sm sm:text-base font-serif"
+          placeholder="Tìm theo tên nhân vật, tag hoặc từ khóa..."
+          className="w-full pl-11 pr-10 py-3 bg-white/90 dark:bg-[#202F42]/90 text-[#526B80] dark:text-[#E5EDF5] placeholder-[#91A9BC] dark:placeholder-[#A9BDCE] rounded-2xl border border-[#DCE7EF] dark:border-[#43576B] shadow-xs focus:outline-none focus:border-[#91A9BC] transition-all text-sm font-serif"
         />
 
         {searchTerm && (
           <button
             onClick={() => onSearchChange('')}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#6B858A] hover:text-[#29464C] dark:hover:text-[#DDF5F6] cursor-pointer"
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#91A9BC] hover:text-[#526B80] dark:hover:text-[#E5EDF5] cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -48,25 +48,25 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
       {/* Preset Suggestion Tags */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-[#6B858A] dark:text-[#8FB6BC] px-1">
+        <div className="flex items-center justify-between text-xs font-semibold text-[#91A9BC] dark:text-[#A9BDCE] px-1 font-serif">
           <span className="flex items-center gap-1.5">
-            <Tag className="w-3.5 h-3.5 text-[#3FAAB7] dark:text-[#78DCE0]" />
+            <span>❄</span>
             <span>Chủ đề / Thẻ gợi ý:</span>
           </span>
 
-          <span className="text-[#6B858A] dark:text-[#8FB6BC] font-normal">
-            Hiển thị <strong className="text-[#247C8C] dark:text-[#78DCE0]">{filteredCount}</strong> / {totalCount} nhân vật
+          <span className="font-normal">
+            Hiển thị <strong className="text-[#526B80] dark:text-[#E5EDF5]">{filteredCount}</strong> / {totalCount} nhân vật
           </span>
         </div>
 
         {/* Active Filter Bar & Clear Filter Button */}
         {(selectedTag || searchTerm) && (
-          <div className="flex items-center justify-between bg-[#E5F5F7] dark:bg-[#102F38] px-3.5 py-2 rounded-2xl border border-[#65C5CE]/30 dark:border-[#78DCE0]/20 text-xs font-semibold text-[#247C8C] dark:text-[#78DCE0]">
+          <div className="flex items-center justify-between bg-[#E8F1F8] dark:bg-[#202F42] px-3.5 py-1.5 rounded-2xl border border-[#DCE7EF] dark:border-[#43576B] text-xs font-medium text-[#526B80] dark:text-[#E5EDF5]">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span>Đang lọc:</span>
               {selectedTag && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#3FAAB7] text-white font-bold shadow-xs">
-                  ✦ {selectedTag} ✧
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-xl bg-[#91A9BC] text-white text-[11px] font-bold shadow-xs">
+                  ❄ {selectedTag}
                   <button
                     onClick={() => onSelectTag(null)}
                     className="hover:opacity-80 p-0.5 cursor-pointer"
@@ -77,8 +77,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 </span>
               )}
               {searchTerm && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#DDF1F3] dark:bg-[#143943] text-[#29464C] dark:text-[#DDF5F6] font-bold">
-                  "{searchTerm}"
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-xl bg-white dark:bg-[#172536] text-[#526B80] dark:text-[#E5EDF5] text-[11px] font-bold border border-[#DCE7EF] dark:border-[#43576B]">
+                  &ldquo;{searchTerm}&rdquo;
                   <button
                     onClick={() => onSearchChange('')}
                     className="hover:opacity-80 p-0.5 cursor-pointer"
@@ -94,7 +94,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 onSelectTag(null);
                 onSearchChange('');
               }}
-              className="text-xs font-bold text-[#247C8C] dark:text-[#78DCE0] hover:underline flex items-center gap-1 shrink-0 ml-2 cursor-pointer"
+              className="text-xs font-bold text-[#6E899E] dark:text-[#A9BDCE] hover:underline flex items-center gap-1 shrink-0 ml-2 cursor-pointer font-serif"
             >
               ↻ Xóa bộ lọc
             </button>
@@ -102,14 +102,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         )}
 
         {/* Horizontal Scrollable Tag Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar font-serif">
           {/* 'Tất cả' Tag button */}
           <button
             onClick={() => onSelectTag(null)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all active:scale-95 hover:scale-105 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-medium shrink-0 transition-all active:scale-95 cursor-pointer ${
               selectedTag === null
-                ? 'bg-gradient-to-r from-[#3FAAB7] to-[#247C8C] text-white shadow-md shadow-[#247C8C]/20'
-                : 'bg-white/80 dark:bg-[#102F38] text-[#29464C] dark:text-[#DDF5F6] hover:bg-[#E5F5F7] dark:hover:bg-[#143943] border border-[#65C5CE]/30 dark:border-[#78DCE0]/20'
+                ? 'btn-winter-primary shadow-xs'
+                : 'bg-white/80 dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] hover:bg-[#E8F1F8] border border-[#DCE7EF] dark:border-[#43576B]'
             }`}
           >
             Tất cả
@@ -122,14 +122,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <button
                 key={tag}
                 onClick={() => onSelectTag(isSelected ? null : tag)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all flex items-center gap-1 hover:scale-105 active:scale-95 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium shrink-0 transition-all flex items-center gap-1 active:scale-95 cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-r from-[#3FAAB7] to-[#247C8C] text-white shadow-md shadow-[#247C8C]/20 scale-105 border border-[#65C5CE]'
-                    : 'bg-white/80 dark:bg-[#102F38] text-[#29464C] dark:text-[#DDF5F6] hover:bg-[#E5F5F7] dark:hover:bg-[#143943] border border-[#65C5CE]/30 dark:border-[#78DCE0]/20'
+                    ? 'btn-winter-primary shadow-xs scale-105'
+                    : 'bg-white/80 dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] hover:bg-[#E8F1F8] border border-[#DCE7EF] dark:border-[#43576B]'
                 }`}
               >
-                <span>✦ {tag}</span>
-                {isSelected && <Sparkles className="w-3 h-3 text-white" />}
+                <span>❄ #{tag}</span>
               </button>
             );
           })}

@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Sun,
   Moon,
-  Heart,
   Sparkles,
   ShieldCheck,
   Bell,
@@ -11,15 +10,13 @@ import {
   Menu,
   X,
   Dices,
-  Cake,
-  Mail,
+  Bookmark,
   Send,
-  Trophy,
+  Heart,
   ChevronRight,
-  Compass,
+  BookOpen,
 } from 'lucide-react';
 import { ThemeMode, UserProfile } from '../types';
-
 import { triggerSfx } from '../utils/sfx';
 
 interface HeaderProps {
@@ -34,21 +31,22 @@ interface HeaderProps {
   onOpenNotifications: () => void;
   noteCount?: number;
   onOpenRandom: () => void;
-  onOpenBakery?: () => void;
-  onOpenMascotWardrobe?: () => void;
+  onOpenBookmarks?: () => void;
+  onReopenIntro?: () => void;
   onTriggerEasterEgg?: (x: number, y: number) => void;
   isSfxOn?: boolean;
   sfxVolume?: number;
   onToast?: (msg: string) => void;
   userProfile?: UserProfile;
   onOpenProfile?: () => void;
-  onOpenWishingBottle: () => void;
+  onOpenWishingBottle?: () => void;
   onOpenCreatorRequest?: () => void;
   onOpenCommandLibrary?: () => void;
   onOpenFortune?: () => void;
   onOpenHelpCenter?: () => void;
   onOpenMusicBox?: () => void;
   onOpenArchipelago?: () => void;
+  bookmarkCount?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -63,8 +61,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenNotifications,
   noteCount = 0,
   onOpenRandom,
-  onOpenBakery,
-  onOpenMascotWardrobe,
+  onOpenBookmarks,
+  onReopenIntro,
   onTriggerEasterEgg,
   isSfxOn = true,
   sfxVolume = 0.5,
@@ -78,6 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHelpCenter,
   onOpenMusicBox,
   onOpenArchipelago,
+  bookmarkCount = 0,
 }) => {
   const [clickCount, setClickCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -116,31 +115,30 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#F6FBFC]/85 dark:bg-[#05131A]/85 border-b border-[#38CAD6]/25 dark:border-[#102B36] transition-colors duration-300">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#F7FAFD]/85 dark:bg-[#172536]/85 border-b border-[#DCE7EF] dark:border-[#43576B] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
         
-        {/* Left Side: Brand Title & Ocean Lantern 🏮 */}
+        {/* Left Side: Brand Title & Winter Memory Box Logo */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Ocean Lantern 🏮 */}
-
-
-          {/* Brand Title & Logo */}
           <button
-            onClick={handleTitleClick}
+            onClick={(e) => {
+              handleTitleClick(e);
+              if (onReopenIntro) onReopenIntro();
+            }}
             className="flex items-center gap-2.5 group text-left transition-transform active:scale-95 cursor-pointer"
-            title="Nhấn để xem màn hình chào mừng (Nhấn nhiều lần để mở hiệu ứng ánh sáng ngọc trai ✦)"
+            title="Nhấn để xem lại Intro toàn màn hình Hộp Ký Ức Mùa Đông ❄"
           >
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center shadow-md shadow-[#1B6E7D]/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#91A9BC] to-[#6E899E] dark:from-[#354A60] dark:to-[#A9BDCE] text-white flex items-center justify-center shadow-md shadow-[#91A9BC]/25 group-hover:scale-105 transition-transform text-base">
+              ❄
             </div>
 
             <div>
-              <h1 className="text-sm sm:text-base font-bold tracking-tight text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5 font-serif">
-                <span>Góc nhỏ</span>
-                <span className="text-xs text-[#38CAD6] dark:text-[#48CCD6] font-normal hidden sm:inline">(｡･ω･｡)ﾉ♡</span>
+              <h1 className="text-sm sm:text-base font-bold tracking-tight text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-1.5 font-serif">
+                <span>Hộp Ký Ức Mùa Đông</span>
+                <span className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-normal hidden sm:inline">୨୧</span>
               </h1>
-              <p className="text-[10px] sm:text-xs text-[#53737C] dark:text-[#88A9B3]">
-                Thư viện Character AI
+              <p className="text-[10px] sm:text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-serif">
+                Winter Memory Box · Yui
               </p>
             </div>
           </button>
@@ -149,35 +147,38 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right Toolbar Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           
-          {/* Fortune Shell Quick Button 🐚 */}
-          {onOpenFortune && (
+          {/* Snow Bookmark Quick Button 🔖 */}
+          {onOpenBookmarks && (
             <button
-              onClick={onOpenFortune}
-              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#1B6E7D] dark:text-[#48CCD6] bg-[#E8F7F9] dark:bg-[#0E2732] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 transition-all shadow-xs cursor-pointer active:scale-95 font-serif"
-              title="Rút lời nhắn vỏ sò biển hôm nay"
+              onClick={onOpenBookmarks}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] transition-all shadow-xs cursor-pointer active:scale-95 font-serif"
+              title="Mở Snow Bookmark — Dấu Trang Tuyết"
             >
-              <span className="text-sm">🐚</span>
-              <span>Lời nhắn biển</span>
+              <Bookmark className="w-3.5 h-3.5 text-[#91A9BC]" />
+              <span className="hidden sm:inline">Dấu Trang Tuyết</span>
+              {bookmarkCount > 0 && (
+                <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-[#91A9BC] text-white text-[10px] font-sans">
+                  {bookmarkCount}
+                </span>
+              )}
             </button>
           )}
 
-          {/* Ocean Music Box Quick Button 🎶 */}
-          {onOpenMusicBox && (
-            <button
-              onClick={onOpenMusicBox}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#1B6E7D] dark:text-[#48CCD6] bg-[#E8F7F9] dark:bg-[#0E2732] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 transition-all shadow-xs cursor-pointer active:scale-95 font-serif"
-              title="Mở Hộp Nhạc Sóng Biển (Lo-Fi & Thư giãn 🎶)"
-            >
-              <span className="text-sm">🎶</span>
-              <span className="hidden xl:inline">Hộp nhạc biển</span>
-            </button>
-          )}
+          {/* Snow Random Quick Button 🎲 */}
+          <button
+            onClick={onOpenRandom}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] transition-all shadow-xs cursor-pointer active:scale-95 font-serif"
+            title="Mở Snow Random — Hộp Tuyết Ngẫu Nhiên"
+          >
+            <span className="text-xs">🎲</span>
+            <span className="hidden md:inline">Snow Random</span>
+          </button>
 
-          {/* Sound Corner Button 🎵 */}
+          {/* Music Corner Button 🎵 */}
           <button
             onClick={onOpenAudioSettings}
-            className="hidden md:inline-flex p-2 rounded-full text-[#1B6E7D] dark:text-[#48CCD6] bg-[#E8F7F9] dark:bg-[#0E2732] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 dark:border-[#132F3D] transition-colors shadow-xs cursor-pointer"
-            title="Góc âm thanh (BGM & Hiệu ứng đại dương)"
+            className="hidden md:inline-flex p-2 rounded-full text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] transition-colors shadow-xs cursor-pointer"
+            title="Giai điệu mùa đông (BGM & Âm thanh)"
           >
             <Music className="w-4 h-4" />
           </button>
@@ -185,12 +186,12 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Notification Bell Button */}
           <button
             onClick={onOpenNotifications}
-            className="hidden sm:inline-flex relative p-2 rounded-full text-[#14303A] dark:text-[#E4F7F9] bg-[#E8F7F9]/80 dark:bg-[#0E2732] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 dark:border-[#132F3D] transition-colors cursor-pointer"
+            className="hidden sm:inline-flex relative p-2 rounded-full text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] transition-colors cursor-pointer"
             title="Thông báo mới"
           >
-            <Bell className="w-4 h-4 text-[#14303A] dark:text-[#E4F7F9]" />
+            <Bell className="w-4 h-4 text-[#526B80] dark:text-[#E5EDF5]" />
             {unreadNotificationCount > 0 && (
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#38CAD6] border-2 border-[#F6FBFC] dark:border-[#05131A] animate-pulse" />
+              <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#91A9BC] border-2 border-[#F7FAFD] dark:border-[#172536] animate-pulse" />
             )}
           </button>
 
@@ -198,10 +199,10 @@ export const Header: React.FC<HeaderProps> = ({
           {onOpenProfile && (
             <button
               onClick={onOpenProfile}
-              className="hidden sm:inline-flex flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1 rounded-full text-xs font-semibold bg-[#E8F7F9] dark:bg-[#0E2732] text-[#1B6E7D] dark:text-[#48CCD6] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 dark:border-[#132F3D] shadow-xs transition-all active:scale-95 group cursor-pointer"
+              className="hidden sm:inline-flex flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1 rounded-full text-xs font-semibold bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] shadow-xs transition-all active:scale-95 group cursor-pointer"
               title="Hồ sơ của bạn"
             >
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-[#DDF2F5] dark:bg-[#091D26] border border-[#38CAD6]/50 dark:border-[#48CCD6]/50 flex items-center justify-center text-xs text-[#1B6E7D] dark:text-[#48CCD6] font-serif">
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-white dark:bg-[#172536] border border-[#91A9BC] flex items-center justify-center text-xs text-[#526B80] dark:text-[#E5EDF5] font-serif">
                 {userProfile?.avatar ? (
                   <img
                     src={userProfile.avatar}
@@ -218,55 +219,50 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Theme Mode Toggle Button: Light <-> Dark */}
+          {/* ❄️ Theme Mode Toggle: ☀ Ánh sáng mùa đông <-> ☾ Đêm tuyết */}
           <button
             onClick={onToggleTheme}
-            className="p-2 rounded-full text-[#14303A] dark:text-[#E4F7F9] bg-[#E8F7F9]/80 dark:bg-[#0E2732] hover:bg-[#DDF2F5] dark:hover:bg-[#143943] border border-[#38CAD6]/35 dark:border-[#132F3D] transition-all cursor-pointer"
-            title={theme === 'light' ? 'Chìm vào Đáy biển ban đêm (Dark Mode)' : 'Trở về Mặt biển ban ngày (Light Mode)'}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-serif font-semibold text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#D5E4EF] dark:hover:bg-[#354A60] border border-[#DCE7EF] dark:border-[#43576B] transition-all cursor-pointer shadow-xs"
+            title={theme === 'light' ? 'Chuyển sang ☾ Đêm tuyết' : 'Chuyển sang ☀ Ánh sáng mùa đông'}
           >
             {theme === 'light' ? (
-              <Moon className="w-4 h-4 text-[#1B6E7D]" />
+              <>
+                <span className="text-xs">☀</span>
+                <span className="hidden md:inline text-[11px]">Ánh sáng mùa đông</span>
+              </>
             ) : (
-              <Sun className="w-4 h-4 text-[#38CAD6]" />
+              <>
+                <span className="text-xs">☾</span>
+                <span className="hidden md:inline text-[11px]">Đêm tuyết</span>
+              </>
             )}
           </button>
 
-          {/* Quản lý & Sáng tạo — Admin */}
+          {/* Admin Button */}
           <button
             id="btn-admin-manage"
             onClick={onOpenAdmin}
-            className="hidden sm:inline-flex p-2 rounded-full text-[#53737C] dark:text-[#88A9B3] hover:text-[#1B6E7D] dark:hover:text-[#48CCD6] hover:bg-[#E8F7F9] dark:hover:bg-[#0E2732] transition-colors cursor-pointer"
+            className="hidden sm:inline-flex p-2 rounded-full text-[#91A9BC] hover:text-[#526B80] dark:text-[#A9BDCE] dark:hover:text-white hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] transition-colors cursor-pointer"
             title="Quản lý & Sáng tạo"
           >
-            <ShieldCheck className="w-4 h-4 text-[#38CAD6] dark:text-[#48CCD6]" />
+            <ShieldCheck className="w-4 h-4" />
           </button>
 
-          {/* ================= ☰ UNIFIED MENU BUTTON ================= */}
+          {/* Menu Button */}
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => {
                 if (isSfxOn) triggerSfx('pop', sfxVolume);
                 setIsMenuOpen(!isMenuOpen);
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 shadow-md cursor-pointer ${
-                isMenuOpen
-                  ? 'bg-[#1B6E7D] text-white ring-2 ring-[#38CAD6]'
-                  : 'bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white hover:opacity-95 shadow-[#1B6E7D]/25'
-              }`}
-              title="Menu Góc Nhỏ"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold btn-winter-primary cursor-pointer shadow-sm"
+              title="Menu Hộp Ký Ức Mùa Đông"
             >
-              {isMenuOpen ? (
-                <X className="w-4 h-4" />
-              ) : (
-                <Menu className="w-4 h-4" />
-              )}
-              <span className="font-serif tracking-wide">Menu</span>
-              {noteCount > 0 && (
-                <span className="w-2 h-2 rounded-full bg-[#38CAD6] animate-ping" />
-              )}
+              {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              <span className="font-serif">Menu</span>
             </button>
 
-            {/* Menu Popover / Dropdown */}
+            {/* Menu Popover */}
             <AnimatePresence>
               {isMenuOpen && (
                 <motion.div
@@ -274,392 +270,138 @@ export const Header: React.FC<HeaderProps> = ({
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.92, y: 10 }}
                   transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute right-0 top-full mt-2.5 w-72 sm:w-80 max-w-[calc(100vw-24px)] rounded-3xl bg-white/95 dark:bg-[#0E232E]/95 backdrop-blur-2xl border border-[#38CAD6]/35 dark:border-[#38CAD6]/20 shadow-2xl shadow-[#1B6E7D]/15 dark:shadow-black/70 overflow-hidden z-50 p-2.5 space-y-1.5 font-sans"
+                  className="absolute right-0 top-full mt-2.5 w-72 sm:w-80 max-w-[calc(100vw-24px)] rounded-3xl bg-white/95 dark:bg-[#172536]/95 backdrop-blur-2xl border border-[#DCE7EF] dark:border-[#43576B] shadow-2xl overflow-hidden z-50 p-3 space-y-2 font-sans"
                 >
-                  {/* Menu Top Banner */}
-                  <div className="px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-[#E8F7F9] to-[#DFEFF2] dark:from-[#091D26] dark:to-[#0E2732] border border-[#38CAD6]/25 dark:border-[#132F3D] flex items-center justify-between">
+                  <div className="px-3.5 py-2 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-bold font-serif text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                        <span className="text-[#38CAD6]">🌊</span>
-                        <span>Menu Góc Nhỏ</span>
+                      <div className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-1.5">
+                        <span>❄</span>
+                        <span>Hộp Ký Ức Mùa Đông</span>
                       </div>
-                      <p className="text-[10px] text-[#53737C] dark:text-[#88A9B3]">
-                        Khám phá các góc tương tác đại dương
+                      <p className="text-[10px] text-[#91A9BC] dark:text-[#A9BDCE]">
+                        Góc nhỏ lưu giữ nhân vật và câu chuyện
                       </p>
                     </div>
-                    <span className="text-sm select-none">🌊</span>
                   </div>
 
-                  {/* Mobile Quick Action Buttons */}
-                  <div className="grid grid-cols-4 gap-1.5 p-1 sm:hidden border-b border-[#38CAD6]/20 dark:border-[#132F3D] pb-2">
-                    {/* Audio Settings Button 🎵 */}
-                    <button
-                      onClick={() => handleMenuItemClick(onOpenAudioSettings)}
-                      className="flex flex-col items-center justify-center p-1.5 rounded-2xl bg-[#E8F7F9] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] border border-[#38CAD6]/25 transition-all cursor-pointer"
-                      title="Góc âm thanh"
-                    >
-                      <Music className="w-4 h-4 mb-1" />
-                      <span className="text-[9px] font-bold">Âm thanh</span>
-                    </button>
-
-                    {/* Notifications Button 🔔 */}
-                    <button
-                      onClick={() => handleMenuItemClick(onOpenNotifications)}
-                      className="relative flex flex-col items-center justify-center p-1.5 rounded-2xl bg-[#E8F7F9] dark:bg-[#091D26] text-[#14303A] dark:text-[#E4F7F9] border border-[#38CAD6]/25 transition-all cursor-pointer"
-                      title="Thông báo mới"
-                    >
-                      <Bell className="w-4 h-4 mb-1" />
-                      <span className="text-[9px] font-bold">Thông báo</span>
-                      {unreadNotificationCount > 0 && (
-                        <span className="absolute top-1.5 right-1.5 px-1 min-w-[14px] h-3.5 rounded-full bg-[#38CAD6] text-[#05131A] text-[8px] font-extrabold flex items-center justify-center border border-white dark:border-[#0E232E]">
-                          {unreadNotificationCount}
-                        </span>
-                      )}
-                    </button>
-
-                    {/* Profile Button 👤 */}
-                    {onOpenProfile && (
+                  <div className="space-y-1 pt-1 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    {/* Reopen Intro */}
+                    {onReopenIntro && (
                       <button
-                        onClick={() => handleMenuItemClick(onOpenProfile)}
-                        className="flex flex-col items-center justify-center p-1.5 rounded-2xl bg-[#E8F7F9] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] border border-[#38CAD6]/25 transition-all cursor-pointer"
-                        title="Hồ sơ cá nhân"
+                        onClick={() => handleMenuItemClick(onReopenIntro)}
+                        className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
                       >
-                        <div className="w-4.5 h-4.5 rounded-full overflow-hidden border border-[#38CAD6] mb-0.5 flex items-center justify-center bg-white">
-                          {userProfile?.avatar ? (
-                            <img src={userProfile.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-[9px]">✦</span>
-                          )}
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#91A9BC] to-[#6E899E] text-white flex items-center justify-center text-sm shrink-0">
+                          ❄
                         </div>
-                        <span className="text-[9px] font-bold truncate max-w-full">Hồ sơ</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                            Intro — Hộp Ký Ức Mùa Đông
+                          </p>
+                          <p className="text-[11px] text-[#91A9BC] truncate">
+                            Mở lại màn hình video &amp; thông điệp ban đầu
+                          </p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
                       </button>
                     )}
 
-                    {/* Admin Button 🛡️ */}
+                    {/* Snow Bookmark */}
+                    {onOpenBookmarks && (
+                      <button
+                        onClick={() => handleMenuItemClick(onOpenBookmarks)}
+                        className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center text-sm shrink-0">
+                          🔖
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                            Snow Bookmark — Dấu Trang Tuyết
+                          </p>
+                          <p className="text-[11px] text-[#91A9BC] truncate">
+                            Bộ sưu tập nhân vật và thế giới bạn đã lưu
+                          </p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
+                      </button>
+                    )}
+
+                    {/* Snow Random */}
                     <button
-                      onClick={() => handleMenuItemClick(onOpenAdmin)}
-                      className="flex flex-col items-center justify-center p-1.5 rounded-2xl bg-[#E8F7F9] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] border border-[#38CAD6]/25 transition-all cursor-pointer"
-                      title="Quản trị viên"
+                      onClick={() => handleMenuItemClick(onOpenRandom)}
+                      className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
                     >
-                      <ShieldCheck className="w-4 h-4 mb-1" />
-                      <span className="text-[9px] font-bold">Quản lý</span>
+                      <div className="w-8 h-8 rounded-xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center text-sm shrink-0">
+                        🎲
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                          Snow Random — Hộp Tuyết Ngẫu Nhiên
+                        </p>
+                        <p className="text-[11px] text-[#91A9BC] truncate">
+                          Gặp một người xa lạ hoặc lạc vào thế giới mới
+                        </p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
                     </button>
-                  </div>
 
-                  {/* Menu Categorized List with Elegant Divider Connectors */}
-                  <div className="space-y-2 pt-1 max-h-[72vh] overflow-y-auto pr-0.5 custom-scrollbar">
-
-                    {/* ================= PHẦN 1: KHÁM PHÁ & TRẢI NGHIỆM ================= */}
-                    <div>
-                      <div className="px-2.5 py-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#1B6E7D] dark:text-[#7DD8DE] font-serif">
-                        <span>✦ Khám Phá & Trải Nghiệm</span>
-                        <div className="flex-1 h-[1px] bg-gradient-to-r from-[#38CAD6]/40 to-transparent" />
+                    {/* Message Board */}
+                    <button
+                      onClick={() => handleMenuItemClick(onOpenMessageBoard)}
+                      className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center text-sm shrink-0">
+                        💌
                       </div>
-
-                      <div className="space-y-0.5 mt-1">
-                        {/* 🎶 Hộp Nhạc Sóng Biển (Ocean Music Box) */}
-                        {onOpenMusicBox && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenMusicBox)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                              🎶
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Hộp Nhạc Sóng Biển</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Mới ✦
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Lo-Fi sóng biển, mưa đêm & hẹn giờ thư giãn
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-
-                        {/* 🗺️ Hải Đồ Thám Hiểm (Archipelago Map) */}
-                        {onOpenArchipelago && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenArchipelago)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1B6E7D] to-[#38CAD6] text-white flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                              🗺️
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Hải Đồ Thám Hiểm</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Bản đồ ✦
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Bản đồ quần đảo nhân vật & rương báu bí ẩn
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-
-                        {/* 🐚 Lời nhắn vỏ sò biển (Ocean Fortune) */}
-                        {onOpenFortune && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenFortune)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                              🐚
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Lời nhắn vỏ sò biển</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Mới
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Rút thông điệp biển khơi & gợi ý hôm nay
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-
-                        {/* ✦ Kho lệnh (Command Library) ✦ */}
-                        {onOpenCommandLibrary && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenCommandLibrary)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center text-sm font-serif shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                              ✦
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Kho thẻ lệnh & Prompts</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Hot ✦
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Kệ thẻ lệnh & prompt mẫu sáng tạo
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-
-                        {/* 🍾 Chai Thủy Tinh Ước Nguyện */}
-                        <button
-                          onClick={() => handleMenuItemClick(onOpenWishingBottle)}
-                          className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                            🍾
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                              <span>Chai Thủy Tinh Ước Nguyện</span>
-                              <span className="text-[10px] text-[#38CAD6] font-normal">✦</span>
-                            </div>
-                            <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                              Thả & vớt bức thư trôi dạt theo dòng hải lưu
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                        </button>
-
-                        {/* 🎲 Hôm nay gặp ai đây? */}
-                        <button
-                          onClick={() => handleMenuItemClick(onOpenRandom)}
-                          className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#38CAD6] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                            🎲
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                              <span>Hôm nay gặp ai đây?</span>
-                              <span className="text-[10px] font-normal text-[#38CAD6]">✦</span>
-                            </div>
-                            <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                              Gợi ý nhân vật ngẫu nhiên hôm nay
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                        </button>
-
-                        {/* 🍰 Tiệm bánh nhỏ (Bakery) */}
-                        {onOpenBakery && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenBakery)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                              🍰
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Góc chơi nhỏ (Tiệm bánh)</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Mini-game
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Tiệm bánh ngọt ngào dưới biển Bakery
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                          Bảng Tin Mùa Đông
+                        </p>
+                        <p className="text-[11px] text-[#91A9BC] truncate">
+                          Để lại lời nhắn và kỷ niệm cùng Yui
+                        </p>
                       </div>
-                    </div>
+                      <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
+                    </button>
 
-                    {/* ————— THANH NỐI PHÂN CÁCH NHẸ NHÀNG ————— */}
-                    <div className="py-1 px-2">
-                      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#38CAD6]/35 dark:via-[#38CAD6]/20 to-transparent" />
-                    </div>
-
-                    {/* ================= PHẦN 2: TƯƠNG TÁC & GỬI GẮM ================= */}
-                    <div>
-                      <div className="px-2.5 py-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#1B6E7D] dark:text-[#7DD8DE] font-serif">
-                        <span>💌 Tương Tác & Gửi Gắm</span>
-                        <div className="flex-1 h-[1px] bg-gradient-to-r from-[#38CAD6]/40 to-transparent" />
+                    {/* Voting */}
+                    <button
+                      onClick={() => handleMenuItemClick(onOpenVoting)}
+                      className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center text-sm shrink-0">
+                        ♡
                       </div>
-
-                      <div className="space-y-0.5 mt-1">
-                        {/* 💌 Khung lời nhắn */}
-                        <button
-                          onClick={() => handleMenuItemClick(onOpenMessageBoard)}
-                          className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                            💌
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                              <span>Khung lời nhắn</span>
-                              {noteCount > 0 && (
-                                <span className="px-1.5 py-0.2 rounded-full bg-[#38CAD6] text-white text-[10px] font-extrabold font-sans">
-                                  {noteCount}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                              Bảng lời nhắn công khai gửi gắm tâm tình
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                        </button>
-
-                        {/* 📮 Gửi đơn Creator (Request) */}
-                        {onOpenCreatorRequest && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenCreatorRequest)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center text-sm shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                              <Send className="w-4 h-4" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Gửi đơn Creator (Request)</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Hot
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Gửi yêu cầu nhân vật & nhận phản hồi
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
-
-                        {/* ❓ Sổ tay trợ giúp */}
-                        {onOpenHelpCenter && (
-                          <button
-                            onClick={() => handleMenuItemClick(onOpenHelpCenter)}
-                            className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#38CAD6] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                              ❓
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                                <span>Sổ tay trợ giúp</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#38CAD6]/20 text-[#1B6E7D] dark:text-[#48CCD6] font-semibold font-sans">
-                                  Guide
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                                Hướng dẫn khám phá, mẹo nhỏ & hỏi đáp
-                              </p>
-                            </div>
-                            <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                          Bình Chọn Thả Tim
+                        </p>
+                        <p className="text-[11px] text-[#91A9BC] truncate">
+                          Xếp hạng nhân vật được yêu mến nhất
+                        </p>
                       </div>
-                    </div>
+                      <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
+                    </button>
 
-                    {/* ————— THANH NỐI PHÂN CÁCH NHẸ NHÀNG ————— */}
-                    <div className="py-1 px-2">
-                      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#38CAD6]/35 dark:via-[#38CAD6]/20 to-transparent" />
-                    </div>
-
-                    {/* ================= PHẦN 3: KẾT NỐI & ĐÁNH GIÁ ================= */}
-                    <div>
-                      <div className="px-2.5 py-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#1B6E7D] dark:text-[#7DD8DE] font-serif">
-                        <span>♡ Kết Nối & Đánh Giá</span>
-                        <div className="flex-1 h-[1px] bg-gradient-to-r from-[#38CAD6]/40 to-transparent" />
+                    {/* Contact */}
+                    <button
+                      onClick={() => handleMenuItemClick(onOpenContact)}
+                      className="w-full p-2.5 rounded-2xl hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] flex items-center gap-3 text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center text-sm shrink-0">
+                        ❄
                       </div>
-
-                      <div className="space-y-0.5 mt-1">
-                        {/* 🐚 Liên hệ */}
-                        <button
-                          onClick={() => handleMenuItemClick(onOpenContact)}
-                          className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform">
-                            🐚
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                              <span>Liên hệ</span>
-                            </div>
-                            <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                              Page Facebook & NGL nhắn tin ẩn danh
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                        </button>
-
-                        {/* ♡ Bình chọn */}
-                        <button
-                          onClick={() => handleMenuItemClick(onOpenVoting)}
-                          className="w-full p-2.5 rounded-2xl hover:bg-[#E8F7F9] dark:hover:bg-[#132F3D] flex items-center gap-3 transition-colors text-left group cursor-pointer"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-[#38CAD6] text-white flex items-center justify-center text-sm shrink-0 group-hover:scale-110 transition-transform shadow-xs">
-                            <Heart className="w-4 h-4 fill-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                              <span>Bình chọn</span>
-                              <span className="text-[10px] text-[#38CAD6] font-normal">♡</span>
-                            </div>
-                            <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3] truncate">
-                              Bảng xếp hạng & Thả tim Character yêu thích
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#53737C] group-hover:translate-x-0.5 transition-transform" />
-                        </button>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold font-serif text-[#526B80] dark:text-[#E5EDF5]">
+                          Liên Hệ &amp; Nhắn Tin
+                        </p>
+                        <p className="text-[11px] text-[#91A9BC] truncate">
+                          Facebook Page &amp; Tin nhắn ẩn danh NGL
+                        </p>
                       </div>
-                    </div>
-
+                      <ChevronRight className="w-4 h-4 text-[#91A9BC]" />
+                    </button>
                   </div>
                 </motion.div>
               )}

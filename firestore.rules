@@ -31,21 +31,14 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    match /{document=**} {
-      allow read, write: if false;
+    match /characters/{characterId} {
+      allow get: if true;
+      allow list: if true;
+      allow write: if true;
     }
 
-    match /characters/{characterId} {
-      allow get: if true; // Public read
-      allow list: if true; // Public list
-      allow create: if isSignedIn() && isValidId(characterId) && isValidCharacter(incoming())
-                     && incoming().creator == request.auth.uid
-                     && incoming().createdAt == request.time;
-      allow update: if isSignedIn() && isValidCharacter(incoming())
-                     && incoming().creator == request.auth.uid
-                     && incoming().createdAt == existing().createdAt
-                     && incoming().updatedAt == request.time;
-      allow delete: if isSignedIn() && existing().creator == request.auth.uid;
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

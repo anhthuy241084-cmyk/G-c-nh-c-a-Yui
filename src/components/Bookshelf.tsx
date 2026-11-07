@@ -74,30 +74,30 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
   };
 
   return (
-    <div id="bookshelf-section" className="p-6 sm:p-8 rounded-3xl bg-[#E5F5F7]/80 dark:bg-[#102F38]/80 backdrop-blur-md border border-[#65C5CE]/30 dark:border-[#78DCE0]/20 shadow-md space-y-5 relative overflow-hidden text-[#29464C] dark:text-[#DDF5F6]">
+    <div id="bookshelf-section" className="p-6 sm:p-8 rounded-3xl bg-white/80 dark:bg-[#202F42]/80 backdrop-blur-md border border-[#DCE7EF] dark:border-[#43576B] shadow-sm space-y-5 relative overflow-hidden text-[#526B80] dark:text-[#E5EDF5]">
       {/* Shelf Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#65C5CE]/20 dark:border-[#143943] pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCE7EF] dark:border-[#43576B] pb-4">
         <div>
-          <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-[#29464C] dark:text-[#DDF5F6] flex items-center gap-2 font-serif">
-            <span className="text-[#3FAAB7] dark:text-[#78DCE0]">✦</span>
+          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-2 font-serif">
+            <span className="text-[#91A9BC]">❄</span>
             <span>Kệ sách của mình</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#DDF1F3] dark:bg-[#143943] text-[#247C8C] dark:text-[#78DCE0] font-bold ml-1">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#E8F1F8] dark:bg-[#172536] text-[#526B80] dark:text-[#E5EDF5] font-semibold ml-1">
               {validBookmarks.length}
             </span>
           </h3>
-          <p className="text-xs text-[#6B858A] dark:text-[#8FB6BC] mt-1 font-medium">
-            “Nơi lưu giữ những chiếc bookmark kẹp trang yêu thích dưới làn nước trong veo ♡”
+          <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] mt-1 font-serif italic">
+            &ldquo;Nơi cất giữ những dấu trang kỷ niệm giữa mùa đông yên bình ♡&rdquo;
           </p>
         </div>
 
         {/* Sorting Controls */}
-        <div className="flex items-center gap-1.5 bg-white/80 dark:bg-[#0D2730]/80 p-1 rounded-2xl border border-[#65C5CE]/30 dark:border-[#143943] text-xs">
+        <div className="flex items-center gap-1.5 bg-[#F7FAFD] dark:bg-[#172536] p-1 rounded-2xl border border-[#DCE7EF] dark:border-[#43576B] text-xs font-serif">
           <button
             onClick={() => setSortOption('newest')}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 ${
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
               sortOption === 'newest'
-                ? 'bg-[#3FAAB7] text-white shadow-xs'
-                : 'text-[#6B858A] dark:text-[#8FB6BC] hover:text-[#29464C]'
+                ? 'btn-winter-primary shadow-xs'
+                : 'text-[#91A9BC] hover:text-[#526B80]'
             }`}
             title="Mới đánh dấu"
           >
@@ -107,10 +107,10 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
 
           <button
             onClick={() => setSortOption('oldest')}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all ${
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
               sortOption === 'oldest'
-                ? 'bg-[#3FAAB7] text-white shadow-xs'
-                : 'text-[#6B858A] dark:text-[#8FB6BC] hover:text-[#29464C]'
+                ? 'btn-winter-primary shadow-xs'
+                : 'text-[#91A9BC] hover:text-[#526B80]'
             }`}
             title="Cũ nhất"
           >
@@ -119,10 +119,10 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
 
           <button
             onClick={() => setSortOption('az')}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 ${
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
               sortOption === 'az'
-                ? 'bg-[#3FAAB7] text-white shadow-xs'
-                : 'text-[#6B858A] dark:text-[#8FB6BC] hover:text-[#29464C]'
+                ? 'btn-winter-primary shadow-xs'
+                : 'text-[#91A9BC] hover:text-[#526B80]'
             }`}
             title="A–Z"
           >
@@ -132,10 +132,10 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
 
           <button
             onClick={() => setSortOption('reading')}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 ${
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
               sortOption === 'reading'
-                ? 'bg-[#3FAAB7] text-white shadow-xs'
-                : 'text-[#6B858A] dark:text-[#8FB6BC] hover:text-[#29464C]'
+                ? 'btn-winter-primary shadow-xs'
+                : 'text-[#91A9BC] hover:text-[#526B80]'
             }`}
             title="Đang đọc (Ưu tiên character có tiến độ Story)"
           >
@@ -149,21 +149,21 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
       {validBookmarks.length === 0 ? (
         /* Empty Shelf State */
         <div className="py-10 text-center space-y-2">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#DDF1F3] dark:bg-[#0D2730] border-2 border-dashed border-[#65C5CE]/50 dark:border-[#78DCE0]/30 flex items-center justify-center text-2xl text-[#3FAAB7]">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#E8F1F8] dark:bg-[#172536] border-2 border-dashed border-[#91A9BC]/40 flex items-center justify-center text-2xl text-[#91A9BC]">
             📖
           </div>
-          <p className="text-xs sm:text-sm font-bold text-[#29464C] dark:text-[#DDF5F6] pt-1">
+          <p className="text-xs sm:text-sm font-bold font-serif text-[#526B80] dark:text-[#E5EDF5] pt-1">
             Kệ sách vẫn còn trống...
           </p>
-          <p className="text-xs text-[#3FAAB7] dark:text-[#78DCE0] font-serif italic">
-            “Đặt một chiếc bookmark vào đây nhé ♡”
+          <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-serif italic">
+            &ldquo;Đặt một chiếc bookmark vào đây nhé ♡&rdquo;
           </p>
         </div>
       ) : (
         /* Bookshelf Rack Grid */
         <div className="relative pt-2 pb-6">
-          {/* Oceanic Glass Shelf Base Line */}
-          <div className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-r from-[#65C5CE]/30 via-[#3FAAB7]/50 to-[#65C5CE]/30 dark:from-[#246B7A]/40 dark:via-[#57C8D1]/40 dark:to-[#246B7A]/40 rounded-full shadow-inner" />
+          {/* Silver Blue Winter Shelf Base Line */}
+          <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#D5E4EF] via-[#91A9BC] to-[#D5E4EF] dark:from-[#354A60] dark:via-[#43576B] dark:to-[#354A60] rounded-full shadow-inner opacity-70" />
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 relative z-10 pb-2">
             <AnimatePresence>

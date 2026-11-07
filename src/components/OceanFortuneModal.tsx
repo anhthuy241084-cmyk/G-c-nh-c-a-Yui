@@ -47,9 +47,9 @@ const FORTUNE_LIST: FortuneCard[] = [
     quote: 'Khi tâm hồn rộng mở tựa chân trời, muôn trùng cảnh sắc nhân gian đều trở thành nguồn cảm hứng vô tận.',
     theme: 'Ráng Chiều Thu Thủy · Khoáng Đạt',
     blessing: 'Mọi vướng bận trong lòng đều tan biến theo làn gió mát, nhường chỗ cho niềm an yên tự tại và tầm nhìn khoáng đạt.',
-    luckyColor: 'Hồng San Hô & Vàng Nắng (Sunset Coral)',
+    luckyColor: 'Hồng Phấn Mùa Đông & Ánh Dương (Winter Rosy)',
     luckyColorHex: '#F3DDE1',
-    seaElement: 'Vỏ Ốc Hát Khúc Hoàng Hôn',
+    seaElement: 'Khúc Ca Mùa Đông Dưới Nắng',
     omen: 'Cát Tường (Thư Thái Tự Tại)',
   },
   {

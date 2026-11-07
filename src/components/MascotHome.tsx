@@ -358,7 +358,7 @@ export const MascotHome: React.FC<MascotHomeProps> = ({
                 activeSpot === 'window' ? '🪟 Mép cửa sổ ngắm sóng biển' :
                 activeSpot === 'books' ? '📚 Chồng sách đại dương' :
                 activeSpot === 'table' ? '🪵 Bàn trà biển ấm cúng' :
-                '🌱 Cạnh rạn san hô / chậu cây xanh'
+                '🌱 Cạnh cửa sổ ngắm tuyết / chậu cây xanh'
               }
             </span>
           </div>
