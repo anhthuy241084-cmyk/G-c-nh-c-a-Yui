@@ -5,35 +5,123 @@
       "description": "Character definition",
       "type": "object",
       "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "title": { "type": "string" },
-        "avatar": { "type": "string" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "title": { "type": "string", "maxLength": 1500 },
+        "avatar": { "type": "string", "maxLength": 900000 },
         "tags": { "type": "array", "items": { "type": "string" } },
-        "creator": { "type": "string" },
-        "chatUrl": { "type": "string" },
-        "chatUrl2": { "type": "string" },
-        "chatUrlLabel": { "type": "string" },
-        "chatUrl2Label": { "type": "string" },
+        "creator": { "type": "string", "maxLength": 100 },
+        "chatUrl": { "type": "string", "maxLength": 2000 },
+        "chatUrl2": { "type": "string", "maxLength": 2000 },
+        "chatUrlLabel": { "type": "string", "maxLength": 100 },
+        "chatUrl2Label": { "type": "string", "maxLength": 100 },
         "votes": { "type": "number" },
         "likes": { "type": "number" },
         "createdAt": { "type": "string", "format": "date-time" },
         "isFavorite": { "type": "boolean" },
         "isDraft": { "type": "boolean" },
         "isPrivate": { "type": "boolean" },
-        "notes": { "type": "string" },
-        "password": { "type": "string" },
-        "story": { "type": "string" },
-        "firstMessage": { "type": "string" },
-        "decorativeItemSet": { "type": "string" }
+        "notes": { "type": "string", "maxLength": 10000 },
+        "password": { "type": "string", "maxLength": 200 },
+        "story": { "type": "string", "maxLength": 300000 },
+        "firstMessage": { "type": "string", "maxLength": 50000 },
+        "decorativeItemSet": { "type": "string", "maxLength": 60 }
       },
       "required": ["id", "name", "createdAt"]
+    },
+    "WinterLetter": {
+      "title": "WinterLetter",
+      "description": "Private thank-you and message letter submitted via Hòm Thư Mùa Đông",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "senderName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "preferredDisplayName": { "type": "string", "maxLength": 80 },
+        "donateNote": { "type": "string", "maxLength": 160 },
+        "contactMethod": { "type": "string", "enum": ["none", "facebook", "discord", "email", "other"] },
+        "contactPlatformName": { "type": "string", "maxLength": 60 },
+        "contactValue": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 10000 },
+        "allowContactThanks": { "type": "boolean" },
+        "silentGift": { "type": "boolean" },
+        "hideIdentity": { "type": "boolean" },
+        "allowPublicNickname": { "type": "boolean" },
+        "isRead": { "type": "boolean" },
+        "isThanked": { "type": "boolean" },
+        "internalNote": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "senderName",
+        "contactMethod",
+        "allowContactThanks",
+        "silentGift",
+        "hideIdentity",
+        "allowPublicNickname",
+        "isRead",
+        "isThanked",
+        "createdAt"
+      ]
+    },
+    "MemoryGalleryPost": {
+      "title": "MemoryGalleryPost",
+      "description": "Community archive of chat snippets, fanart, and moments with interactive replies",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "category": { "type": "string", "enum": ["chat", "fanart", "moment"] },
+        "author": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "isAnonymous": { "type": "boolean" },
+        "characterName": { "type": "string", "maxLength": 120 },
+        "content": { "type": "string", "maxLength": 20000 },
+        "imageUrl": { "type": "string", "maxLength": 900000 },
+        "sourceCredit": { "type": "string", "maxLength": 200 },
+        "likes": { "type": "number" },
+        "replies": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "creatorToken": { "type": "string", "maxLength": 120 }
+      },
+      "required": ["id", "title", "category", "author", "isAnonymous", "likes", "replies", "createdAt"]
+    },
+    "WhisperPost": {
+      "title": "WhisperPost",
+      "description": "Admin-curated spontaneous quotes, short excerpts, and images with community comments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "category": { "type": "string", "enum": ["quote", "excerpt", "snapshot"] },
+        "subtitleOrMood": { "type": "string", "maxLength": 160 },
+        "content": { "type": "string", "minLength": 1, "maxLength": 30000 },
+        "imageUrl": { "type": "string", "maxLength": 900000 },
+        "author": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "likes": { "type": "number" },
+        "comments": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "category", "content", "author", "likes", "comments", "createdAt"]
     }
   },
   "firestore": {
     "/characters/{characterId}": {
       "schema": { "$ref": "#/entities/Character" },
       "description": "Characters collection"
+    },
+    "/winterLetters/{letterId}": {
+      "schema": { "$ref": "#/entities/WinterLetter" },
+      "description": "Private winter letters sent by supporters to Yui"
+    },
+    "/memoryGalleryPosts/{postId}": {
+      "schema": { "$ref": "#/entities/MemoryGalleryPost" },
+      "description": "Shared archive of chat logs, fanart, and moments with replies"
+    },
+    "/whispersOfSnow/{postId}": {
+      "schema": { "$ref": "#/entities/WhisperPost" },
+      "description": "Curated quotes, short writings, and images shared by admin with comments"
     }
   }
 }

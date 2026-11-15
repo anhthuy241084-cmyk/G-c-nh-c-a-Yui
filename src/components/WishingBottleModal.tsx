@@ -2,19 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
-  Sparkles,
   Heart,
   Send,
   RefreshCw,
-  Anchor,
-  Compass,
   Check,
-  Share2,
-  Waves,
-  Feather,
   Plus,
   Loader2,
-  Flame,
 } from 'lucide-react';
 import { WishingBottle, BottleStyle, BottleSeal, Character } from '../types';
 import {
@@ -41,9 +34,6 @@ export interface BottleStyleConfig {
   icon: string;
   subtitle: string;
   accentColor: string;
-  bg: string;
-  border: string;
-  glow: string;
   cardBg: string;
   cardBorder: string;
   cardGlow: string;
@@ -59,83 +49,71 @@ export interface BottleStyleConfig {
 const BOTTLE_STYLES: BottleStyleConfig[] = [
   {
     id: 'pearl',
-    name: 'Lọ Ngọc Trai Biển Sâu',
+    name: 'Lọ Ngọc Tuyết Tinh Khôi',
     icon: '💎',
     subtitle: 'Thuần khiết & lấp lánh',
-    accentColor: '#93C5FD',
-    bg: 'from-[#93C5FD]/20 to-[#60A5FA]/25',
-    border: 'border-[#93C5FD]/40',
-    glow: 'shadow-[#93C5FD]/30',
-    cardBg: 'bg-gradient-to-br from-[#0F172A]/95 via-[#1E293B]/90 to-[#0A161E]/95',
-    cardBorder: 'border-[#93C5FD]/45',
-    cardGlow: 'shadow-[0_0_30px_rgba(147,197,253,0.22)]',
-    badge: 'bg-[#93C5FD]/20 text-[#BFDBFE] border-[#93C5FD]/40',
-    letterBg: 'bg-[#93C5FD]/10',
-    letterBorder: 'border-[#93C5FD]/25',
-    letterText: 'text-[#F1F5F9]',
-    activeBtn: 'bg-gradient-to-br from-[#93C5FD]/25 via-[#60A5FA]/20 to-[#3B82F6]/25 border-[#93C5FD] text-[#3B82F6] dark:text-[#BFDBFE] shadow-md shadow-[#93C5FD]/25',
-    itemBg: 'bg-[#F1F5F9] dark:bg-[#0F172A]/70',
-    itemBorder: 'border-[#93C5FD]/35',
+    accentColor: '#91A9BC',
+    cardBg: 'bg-gradient-to-br from-[#172536]/95 via-[#202F42]/90 to-[#142030]/95',
+    cardBorder: 'border-[#91A9BC]/45',
+    cardGlow: 'shadow-[0_0_30px_rgba(145,169,188,0.22)]',
+    badge: 'bg-[#91A9BC]/20 text-[#E5EDF5] border-[#91A9BC]/40',
+    letterBg: 'bg-[#91A9BC]/10',
+    letterBorder: 'border-[#91A9BC]/25',
+    letterText: 'text-[#F7FAFD]',
+    activeBtn: 'bg-gradient-to-br from-[#D5E4EF]/60 to-[#91A9BC]/35 border-[#526B80] text-[#172536] dark:text-[#E5EDF5] shadow-md shadow-[#526B80]/20',
+    itemBg: 'bg-white dark:bg-[#202F42]',
+    itemBorder: 'border-[#DCE7EF] dark:border-[#354A60]',
   },
   {
     id: 'crystal',
-    name: 'Pha Lê Ánh Sao',
-    icon: '🍾',
-    subtitle: 'Thanh khiết & lấp lánh',
-    accentColor: '#38CAD6',
-    bg: 'from-[#38CAD6]/20 to-[#1B6E7D]/30',
-    border: 'border-[#38CAD6]/40',
-    glow: 'shadow-[#38CAD6]/30',
-    cardBg: 'bg-gradient-to-br from-[#091F28]/95 via-[#0C2A35]/90 to-[#061820]/95',
-    cardBorder: 'border-[#38CAD6]/40',
-    cardGlow: 'shadow-[0_0_30px_rgba(56,202,214,0.22)]',
-    badge: 'bg-[#38CAD6]/20 text-[#7DD8DE] border-[#38CAD6]/40',
-    letterBg: 'bg-[#38CAD6]/10',
-    letterBorder: 'border-[#38CAD6]/20',
+    name: 'Pha Lê Ánh Sao Đông',
+    icon: '❄️',
+    subtitle: 'Trong trẻo & ấm áp',
+    accentColor: '#A9BDCE',
+    cardBg: 'bg-gradient-to-br from-[#1A283A]/95 via-[#243448]/90 to-[#142030]/95',
+    cardBorder: 'border-[#A9BDCE]/40',
+    cardGlow: 'shadow-[0_0_30px_rgba(169,189,206,0.22)]',
+    badge: 'bg-[#A9BDCE]/20 text-[#E5EDF5] border-[#A9BDCE]/40',
+    letterBg: 'bg-[#A9BDCE]/10',
+    letterBorder: 'border-[#A9BDCE]/25',
     letterText: 'text-white/95',
-    activeBtn: 'bg-gradient-to-br from-[#38CAD6]/25 to-[#1B6E7D]/25 border-[#38CAD6] text-[#1B6E7D] dark:text-[#48CCD6] shadow-md shadow-[#38CAD6]/25',
-    itemBg: 'bg-[#F2FBFC]/70 dark:bg-[#0B1E26]',
-    itemBorder: 'border-[#38CAD6]/25',
+    activeBtn: 'bg-gradient-to-br from-[#E8F1F8] to-[#D5E4EF] dark:from-[#354A60] dark:to-[#202F42] border-[#526B80] text-[#172536] dark:text-[#E5EDF5] shadow-md shadow-[#526B80]/20',
+    itemBg: 'bg-[#F7FAFD] dark:bg-[#202F42]',
+    itemBorder: 'border-[#DCE7EF] dark:border-[#354A60]',
   },
   {
     id: 'azure',
-    name: 'Bình Hải Lưu Xanh Biếc',
+    name: 'Bình Băng Giá Xanh Phấn',
     icon: '🏺',
-    subtitle: 'Sâu thẳm & trầm tĩnh',
-    accentColor: '#0EA5E9',
-    bg: 'from-[#0EA5E9]/30 to-[#0369A1]/40',
-    border: 'border-[#0EA5E9]/50',
-    glow: 'shadow-[#0EA5E9]/30',
-    cardBg: 'bg-gradient-to-br from-[#071E28]/95 via-[#0C4A6E]/90 to-[#031018]/95',
-    cardBorder: 'border-[#0EA5E9]/55',
-    cardGlow: 'shadow-[0_0_30px_rgba(14,165,233,0.25)]',
-    badge: 'bg-[#0EA5E9]/30 text-[#BAE6FD] border-[#0EA5E9]/50',
-    letterBg: 'bg-[#0EA5E9]/15',
-    letterBorder: 'border-[#0EA5E9]/30',
+    subtitle: 'Sâu lắng & trầm tĩnh',
+    accentColor: '#526B80',
+    cardBg: 'bg-gradient-to-br from-[#162333]/95 via-[#1F3044]/90 to-[#111B28]/95',
+    cardBorder: 'border-[#91A9BC]/50',
+    cardGlow: 'shadow-[0_0_30px_rgba(82,107,128,0.25)]',
+    badge: 'bg-[#526B80]/30 text-[#E5EDF5] border-[#91A9BC]/50',
+    letterBg: 'bg-[#91A9BC]/15',
+    letterBorder: 'border-[#91A9BC]/30',
     letterText: 'text-white/95',
-    activeBtn: 'bg-gradient-to-br from-[#0EA5E9]/30 to-[#0369A1]/40 border-[#38BDF8] text-[#0369A1] dark:text-[#7DD3FC] shadow-md shadow-[#0EA5E9]/25',
-    itemBg: 'bg-[#F0F9FF] dark:bg-[#082F49]',
-    itemBorder: 'border-[#0EA5E9]/30',
+    activeBtn: 'bg-gradient-to-br from-[#D5E4EF] to-[#91A9BC]/40 dark:from-[#354A60] dark:to-[#202F42] border-[#526B80] text-[#172536] dark:text-[#E5EDF5] shadow-md shadow-[#526B80]/20',
+    itemBg: 'bg-[#E8F1F8] dark:bg-[#202F42]',
+    itemBorder: 'border-[#91A9BC]/40 dark:border-[#354A60]',
   },
   {
     id: 'luminous',
-    name: 'Chai Dạ Quang Huyền Bí',
+    name: 'Lọ Đom Đóm Đêm Tuyết',
     icon: '✨',
     subtitle: 'Bừng sáng màn đêm',
-    accentColor: '#7DD3FC',
-    bg: 'from-[#7DD3FC]/20 to-[#0369A1]/40',
-    border: 'border-[#7DD3FC]/40',
-    glow: 'shadow-[#7DD3FC]/30',
-    cardBg: 'bg-gradient-to-br from-[#0C4A6E]/95 via-[#075985]/90 to-[#031518]/95',
-    cardBorder: 'border-[#7DD3FC]/50',
-    cardGlow: 'shadow-[0_0_30px_rgba(125,211,252,0.25)]',
-    badge: 'bg-[#7DD3FC]/20 text-[#E0F2FE] border-[#7DD3FC]/40',
-    letterBg: 'bg-[#7DD3FC]/10',
-    letterBorder: 'border-[#7DD3FC]/25',
+    accentColor: '#A9BDCE',
+    cardBg: 'bg-gradient-to-br from-[#1C2C3F]/95 via-[#26384E]/90 to-[#142030]/95',
+    cardBorder: 'border-[#A9BDCE]/50',
+    cardGlow: 'shadow-[0_0_30px_rgba(169,189,206,0.25)]',
+    badge: 'bg-[#A9BDCE]/20 text-[#E5EDF5] border-[#A9BDCE]/40',
+    letterBg: 'bg-[#A9BDCE]/10',
+    letterBorder: 'border-[#A9BDCE]/25',
     letterText: 'text-white/95',
-    activeBtn: 'bg-gradient-to-br from-[#7DD3FC]/25 to-[#0369A1]/30 border-[#7DD3FC] text-[#0369A1] dark:text-[#7DD3FC] shadow-md shadow-[#7DD3FC]/25',
-    itemBg: 'bg-[#F0F9FF] dark:bg-[#0C4A6E]',
-    itemBorder: 'border-[#7DD3FC]/30',
+    activeBtn: 'bg-gradient-to-br from-[#E8F1F8] to-[#D5E4EF] dark:from-[#354A60] dark:to-[#202F42] border-[#526B80] text-[#172536] dark:text-[#E5EDF5] shadow-md shadow-[#526B80]/20',
+    itemBg: 'bg-[#F7FAFD] dark:bg-[#202F42]',
+    itemBorder: 'border-[#DCE7EF] dark:border-[#354A60]',
   },
 ];
 
@@ -160,18 +138,18 @@ const formatDate = (dateStr?: string) => {
 };
 
 const SEALS: { id: BottleSeal; name: string; icon: string }[] = [
-  { id: 'star', name: 'Sao Biển', icon: '✦' },
-  { id: 'heart', name: 'Trái Tim Biển', icon: '💖' },
-  { id: 'shell', name: 'Vỏ Sò Ngọc', icon: '🐚' },
-  { id: 'wave', name: 'Sóng Biển', icon: '🌊' },
+  { id: 'star', name: 'Ánh Sao Đông', icon: '✦' },
+  { id: 'heart', name: 'Trái Tim Ấm', icon: '💖' },
+  { id: 'shell', name: 'Bông Tuyết', icon: '❄️' },
+  { id: 'wave', name: 'Cây Thông', icon: '🎄' },
 ];
 
 const WISH_INTENTS = [
-  { id: 'peace', name: 'Bình An & Thư Thái', icon: '🕊️', blessing: 'Mong tâm hồn bạn luôn phẳng lặng và dịu êm như mặt hồ mùa thu.', charTag: 'Chữa lành' },
+  { id: 'peace', name: 'Bình An & Thư Thái', icon: '🕊️', blessing: 'Mong tâm hồn bạn luôn phẳng lặng và dịu êm như mặt hồ tuyết phủ mùa đông.', charTag: 'Chữa lành' },
   { id: 'luck', name: 'May Mắn Bất Ngờ', icon: '🍀', blessing: 'Những cơ duyên ngọt ngào và điều may lành đang trên đường tìm đến bạn.', charTag: 'Ngọt ngào' },
   { id: 'love', name: 'Tri Kỷ & Thấu Hiểu', icon: '💞', blessing: 'Bạn sẽ sớm gặp được người lắng nghe và thấu hiểu mọi suy tư trong lòng.', charTag: 'Fantasy' },
-  { id: 'creativity', name: 'Cảm Hứng Sáng Tạo', icon: '✨', blessing: 'Trực giác và trí tưởng tượng của bạn đang dâng trào như sóng triều.', charTag: 'Hiện đại' },
-  { id: 'courage', name: 'Can Đảm & Vững Vàng', icon: '⚡', blessing: 'Bạn sở hữu sức mạnh nội tâm lớn hơn bất kỳ cơn bão nào ngoài khơi.', charTag: 'Hành động' },
+  { id: 'creativity', name: 'Cảm Hứng Sáng Tạo', icon: '✨', blessing: 'Trực giác và trí tưởng tượng của bạn đang tỏa sáng rực rỡ giữa trời đông.', charTag: 'Hiện đại' },
+  { id: 'courage', name: 'Can Đảm & Vững Vàng', icon: '⚡', blessing: 'Bạn sở hữu sức mạnh nội tâm ấm áp vượt qua mọi ngày gió rét.', charTag: 'Hành động' },
 ];
 
 export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
@@ -185,7 +163,6 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'fish' | 'cast' | 'pond' | 'my_bottles'>('fish');
 
-  // Fish bottle state
   const [fishedBottle, setFishedBottle] = useState<WishingBottle | null>(null);
   const [isFishing, setIsFishing] = useState(false);
   const [likedBottles, setLikedBottles] = useState<Set<string>>(() => {
@@ -197,7 +174,6 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
     }
   });
 
-  // Cast form state
   const [formAuthor, setFormAuthor] = useState('');
   const [formMessage, setFormMessage] = useState('');
   const [formStyle, setFormStyle] = useState<BottleStyle>('crystal');
@@ -206,7 +182,6 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
   const [isCasting, setIsCasting] = useState(false);
   const [castSuccess, setCastSuccess] = useState(false);
 
-  // My casted bottle IDs
   const [myBottleIds, setMyBottleIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('yui_my_bottles');
@@ -216,12 +191,10 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
     }
   });
 
-  // Wishing pond state
   const [selectedIntentId, setSelectedIntentId] = useState<string>('peace');
   const [isTossingPearl, setIsTossingPearl] = useState(false);
   const [pondBlessingRevealed, setPondBlessingRevealed] = useState(false);
 
-  // Pick an initial random bottle if in fish tab
   useEffect(() => {
     if (isOpen && activeTab === 'fish' && !fishedBottle && bottles.length > 0) {
       const random = bottles[Math.floor(Math.random() * bottles.length)];
@@ -236,11 +209,11 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
     if (isSfxOn) playSparkleSfx(0.4);
 
     setTimeout(() => {
-      // Pick a random bottle different from current if possible
       const available = bottles.filter((b) => b.id !== fishedBottle?.id);
-      const chosen = available.length > 0 
-        ? available[Math.floor(Math.random() * available.length)] 
-        : bottles[0];
+      const chosen =
+        available.length > 0
+          ? available[Math.floor(Math.random() * available.length)]
+          : bottles[0];
 
       setFishedBottle(chosen);
       setIsFishing(false);
@@ -259,7 +232,7 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
       await likeWishingBottle(bottleId);
       triggerHeartConfetti();
       if (isSfxOn) playPopSfx(0.6);
-      if (onToast) onToast('💖 Đã gửi một trái tim ngọc trai vào chai thủy tinh!');
+      if (onToast) onToast('💖 Đã gửi một trái tim ấm áp vào lọ ước nguyện!');
     } catch (err) {
       console.warn('Like bottle notice:', err);
     }
@@ -274,7 +247,7 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
 
     try {
       setIsCasting(true);
-      const mySenderId = localStorage.getItem('yui_user_unique_id') || ('user_' + Date.now());
+      const mySenderId = localStorage.getItem('yui_user_unique_id') || 'user_' + Date.now();
       localStorage.setItem('yui_user_unique_id', mySenderId);
 
       const created = await castWishingBottle({
@@ -300,12 +273,12 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
         setFormMessage('');
         setActiveTab('fish');
         setFishedBottle(created);
-        if (onToast) onToast('🌊 Chiếc chai thủy tinh của bạn đã bắt đầu trôi theo hải lưu!');
+        if (onToast) onToast('❄️ Chiếc lọ ước nguyện của bạn đã được cất vào hộp ký ức!');
       }, 1500);
     } catch (err) {
       console.error(err);
       setIsCasting(false);
-      if (onToast) onToast('❌ Không thể thả chai lúc này. Vui lòng thử lại!');
+      if (onToast) onToast('❌ Không thể gửi lọ lúc này. Vui lòng thử lại!');
     }
   };
 
@@ -322,39 +295,40 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
   };
 
   const currentIntent = WISH_INTENTS.find((i) => i.id === selectedIntentId) || WISH_INTENTS[0];
-  const pondMatchingChar = characters.find((c) =>
-    c.tags.some((t) => t.toLowerCase().includes(currentIntent.charTag.toLowerCase()))
-  ) || characters[0];
+  const pondMatchingChar =
+    characters.find((c) =>
+      c.tags.some((t) => t.toLowerCase().includes(currentIntent.charTag.toLowerCase()))
+    ) || characters[0];
 
   const myBottlesList = bottles.filter((b) => myBottleIds.includes(b.id));
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#030D12]/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#172536]/80 backdrop-blur-md">
           <motion.div
             initial={{ scale: 0.94, opacity: 0, y: 15 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.94, opacity: 0, y: 15 }}
-            className="relative w-full max-w-2xl max-h-[90vh] bg-white/95 dark:bg-[#0E232E]/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-[#38CAD6]/30 dark:border-[#38CAD6]/25 overflow-hidden flex flex-col font-sans text-[#14303A] dark:text-[#E4F7F9]"
+            className="relative w-full max-w-2xl max-h-[90vh] bg-[#F7FAFD]/95 dark:bg-[#172536]/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-[#DCE7EF] dark:border-[#354A60] overflow-hidden flex flex-col font-sans text-[#172536] dark:text-[#E5EDF5]"
           >
             {/* Header */}
-            <div className="p-5 border-b border-[#38CAD6]/15 dark:border-[#132F3D] bg-gradient-to-r from-[#0F3543] via-[#0C2A35] to-[#071921] text-white flex items-center justify-between shrink-0 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#38CAD6]/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="p-5 border-b border-[#354A60] bg-gradient-to-r from-[#202F42] via-[#1B2A3B] to-[#172536] text-white flex items-center justify-between shrink-0 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#91A9BC]/15 rounded-full blur-3xl pointer-events-none" />
 
               <div className="flex items-center gap-3 relative z-10">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center shadow-lg shadow-[#38CAD6]/25 shrink-0 text-xl">
-                  🍾
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#91A9BC] to-[#526B80] text-white flex items-center justify-center shadow-lg shadow-black/25 shrink-0 text-xl">
+                  ❄️
                 </div>
                 <div>
                   <h3 className="text-base font-bold font-serif text-white flex items-center gap-2">
-                    <span>Chai Thủy Tinh Ước Nguyện & Hải Lưu</span>
+                    <span>Lọ Thủy Tinh Ước Nguyện Mùa Đông</span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 text-white font-medium font-sans">
-                      {bottles.length} bức thư trôi dạt
+                      {bottles.length} bức thư ký ức
                     </span>
                   </h3>
-                  <p className="text-xs text-[#B2E4EC] font-serif">
-                    Gửi gắm tâm tình vào đại dương và vớt lên những thông điệp chữa lành
+                  <p className="text-xs text-[#D5E4EF] font-serif">
+                    Gửi gắm tâm tình vào tuyết trắng và mở ra những thông điệp chữa lành
                   </p>
                 </div>
               </div>
@@ -368,20 +342,20 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
             </div>
 
             {/* Navigation Tabs */}
-            <div className="px-5 pt-3 border-b border-[#38CAD6]/15 dark:border-[#132F3D] flex items-center gap-2 overflow-x-auto custom-scrollbar shrink-0 bg-[#F2FBFC]/50 dark:bg-[#07171F]/40 font-serif">
+            <div className="px-5 pt-3 border-b border-[#DCE7EF] dark:border-[#354A60] flex items-center gap-2 overflow-x-auto custom-scrollbar shrink-0 bg-[#E8F1F8]/60 dark:bg-[#202F42]/50 font-serif">
               {[
-                { id: 'fish', label: '🎣 Vớt Chai Trôi Dạt', key: 'fish' },
-                { id: 'cast', label: '🍾 Thả Chai Xuống Biển', key: 'cast' },
-                { id: 'pond', label: '✨ Hồ Ngọc Ước Nguyện', key: 'pond' },
-                { id: 'my_bottles', label: `🗃️ Chai Của Tôi (${myBottlesList.length})`, key: 'my_bottles' },
+                { id: 'fish', label: '✨ Mở Lọ Ký Ức', key: 'fish' },
+                { id: 'cast', label: '🫙 Gửi Lọ Ước Nguyện', key: 'cast' },
+                { id: 'pond', label: '❄️ Quả Cầu Ước Nguyện', key: 'pond' },
+                { id: 'my_bottles', label: `🗃️ Lọ Của Tôi (${myBottlesList.length})`, key: 'my_bottles' },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.key as any)}
                   className={`pb-2.5 px-3 text-xs font-bold border-b-2 transition-all shrink-0 cursor-pointer ${
                     activeTab === tab.key
-                      ? 'border-[#38CAD6] text-[#1B6E7D] dark:text-[#48CCD6]'
-                      : 'border-transparent text-[#53737C] dark:text-[#88A9B3] hover:text-[#1B6E7D]'
+                      ? 'border-[#526B80] dark:border-[#91A9BC] text-[#172536] dark:text-[#E5EDF5]'
+                      : 'border-transparent text-[#43576B] dark:text-[#A9BDCE] hover:text-[#172536]'
                   }`}
                 >
                   {tab.label}
@@ -391,23 +365,20 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4">
-              {/* TAB 1: VỚT CHAI TRÔI DẠT */}
               {activeTab === 'fish' && (
                 <div className="space-y-4">
-                  {/* Oceanic Water Waves Animation Canvas */}
-                  <div className="p-5 rounded-3xl bg-gradient-to-br from-[#0F3543] via-[#0B2530] to-[#061820] text-white border border-[#38CAD6]/30 shadow-xl space-y-4 relative overflow-hidden text-center">
-                    <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#38CAD6_1px,transparent_1px)] [background-size:16px_16px]" />
+                  <div className="p-5 rounded-3xl bg-gradient-to-br from-[#202F42] via-[#1B2A3B] to-[#172536] text-white border border-[#354A60] shadow-xl space-y-4 relative overflow-hidden text-center">
+                    <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#A9BDCE_1px,transparent_1px)] [background-size:16px_16px]" />
 
                     <div className="relative z-10 space-y-1">
-                      <span className="text-[11px] font-bold text-[#7DD8DE] uppercase tracking-widest font-mono">
-                        ✦ Dòng Hải Lưu Ký Ức ✦
+                      <span className="text-[11px] font-bold text-[#A9BDCE] uppercase tracking-widest font-mono">
+                        ✦ Hộp Ký Ức Tuyết Trắng ✦
                       </span>
                       <h4 className="text-base font-bold font-serif text-white">
-                        Vớt một chiếc chai thủy tinh trôi dạt từ ngoài khơi xa
+                        Mở ngẫu nhiên một chiếc lọ ước nguyện giữa trời đông
                       </h4>
                     </div>
 
-                    {/* Fished Bottle Display */}
                     <AnimatePresence mode="wait">
                       {isFishing ? (
                         <motion.div
@@ -417,11 +388,11 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                           exit={{ opacity: 0, scale: 0.8 }}
                           className="py-12 flex flex-col items-center justify-center gap-3"
                         >
-                          <div className="w-16 h-16 rounded-full bg-[#38CAD6]/20 border border-[#38CAD6]/40 flex items-center justify-center text-3xl animate-bounce">
-                            🌊
+                          <div className="w-16 h-16 rounded-full bg-[#91A9BC]/20 border border-[#91A9BC]/40 flex items-center justify-center text-3xl animate-bounce">
+                            ❄️
                           </div>
-                          <p className="text-xs text-[#B2E4EC] font-serif animate-pulse">
-                            Đang vớt một bức thư trôi dạt từ dòng hải lưu...
+                          <p className="text-xs text-[#D5E4EF] font-serif animate-pulse">
+                            Đang chọn một bức thư từ hộp ký ức mùa đông...
                           </p>
                         </motion.div>
                       ) : fishedBottle ? (() => {
@@ -433,7 +404,6 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                             animate={{ opacity: 1, y: 0 }}
                             className={`p-5 rounded-2xl ${currentStyle.cardBg} ${currentStyle.cardBorder} border ${currentStyle.cardGlow} backdrop-blur-md text-left space-y-3.5 font-serif relative overflow-hidden`}
                           >
-                            {/* Bottle Tag, Style & Seal */}
                             <div className="flex items-center justify-between border-b border-white/10 pb-3 gap-2">
                               <div className="flex items-center gap-2.5 min-w-0">
                                 <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-2xl shrink-0 shadow-inner">
@@ -454,23 +424,21 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                                       </span>
                                     )}
                                   </div>
-                                  <span className="text-[10px] text-[#A6C9D1] font-sans block mt-0.5">
-                                    Thả trôi {formatDate(fishedBottle.createdAt)} • Đã được vớt {fishedBottle.fishedCount || 1} lần
+                                  <span className="text-[10px] text-[#A9BDCE] font-sans block mt-0.5">
+                                    Gửi ngày {formatDate(fishedBottle.createdAt)} • Đã mở {fishedBottle.fishedCount || 1} lần
                                   </span>
                                 </div>
                               </div>
 
-                              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm shadow-xs shrink-0" title={`Con dấu sáp: ${SEALS.find((s) => s.id === fishedBottle.seal)?.name || 'Hải lưu'}`}>
+                              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm shadow-xs shrink-0" title={`Con dấu sáp: ${SEALS.find((s) => s.id === fishedBottle.seal)?.name || 'Mùa đông'}`}>
                                 {SEALS.find((s) => s.id === fishedBottle.seal)?.icon || '✦'}
                               </div>
                             </div>
 
-                            {/* Letter Scroll Content */}
                             <div className={`p-4 rounded-xl ${currentStyle.letterBg} ${currentStyle.letterBorder} border ${currentStyle.letterText} text-xs sm:text-sm leading-relaxed italic whitespace-pre-line shadow-inner break-words`}>
                               "{fishedBottle.message}"
                             </div>
 
-                            {/* Action Row */}
                             <div className="flex items-center justify-between pt-1">
                               <button
                                 onClick={() => handleLikeBottle(fishedBottle.id)}
@@ -486,17 +454,17 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
 
                               <button
                                 onClick={handleFishRandomBottle}
-                                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white text-xs font-bold hover:shadow-md flex items-center gap-1.5 transition-all cursor-pointer font-sans"
+                                className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#91A9BC] to-[#526B80] text-white text-xs font-bold hover:shadow-md flex items-center gap-1.5 transition-all cursor-pointer font-sans"
                               >
                                 <RefreshCw className="w-3.5 h-3.5" />
-                                <span>Vớt chai khác</span>
+                                <span>Mở lọ khác</span>
                               </button>
                             </div>
                           </motion.div>
                         );
                       })() : (
-                        <div className="py-8 text-xs text-[#B2E4EC]">
-                          Chưa có chai thủy tinh nào trong tầm mắt. Hãy thử vớt một chiếc nhé!
+                        <div className="py-8 text-xs text-[#D5E4EF]">
+                          Chưa có lọ thủy tinh nào trong tầm mắt. Hãy thử mở một chiếc nhé!
                         </div>
                       )}
                     </AnimatePresence>
@@ -504,30 +472,28 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                     {!fishedBottle && !isFishing && (
                       <button
                         onClick={handleFishRandomBottle}
-                        className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white text-xs font-bold hover:shadow-lg transition-all cursor-pointer font-serif"
+                        className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#91A9BC] to-[#526B80] text-white text-xs font-bold hover:shadow-lg transition-all cursor-pointer font-serif"
                       >
-                        🎣 Vớt một chiếc chai từ hải lưu
+                        ✨ Mở một chiếc lọ ký ức
                       </button>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* TAB 2: THẢ CHAI XUỐNG BIỂN */}
               {activeTab === 'cast' && (
                 <form onSubmit={handleCastSubmit} className="space-y-4 font-serif">
-                  <div className="p-4 rounded-2xl bg-[#F0F9FB] dark:bg-[#091C24] border border-[#38CAD6]/25 space-y-1">
-                    <h4 className="text-sm font-bold text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                      <span>🍾 Gửi Một Chiếc Chai Trôi Vào Dòng Hải Lưu</span>
+                  <div className="p-4 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#354A60] space-y-1">
+                    <h4 className="text-sm font-bold text-[#172536] dark:text-[#E5EDF5] flex items-center gap-1.5">
+                      <span>🫙 Gửi Một Lọ Ước Nguyện Vào Hộp Ký Ức</span>
                     </h4>
-                    <p className="text-xs text-[#53737C] dark:text-[#88A9B3] font-sans">
-                      Những dòng tâm sự, lời chúc hay ước nguyện của bạn sẽ được niêm phong trong chai thủy tinh và trôi dạt đến những lữ khách khác.
+                    <p className="text-xs text-[#43576B] dark:text-[#A9BDCE] font-sans">
+                      Những dòng tâm sự, lời chúc hay ước nguyện của bạn sẽ được niêm phong trong lọ pha lê và gửi tới những người bạn ghé thăm.
                     </p>
                   </div>
 
-                  {/* Message Input */}
                   <div>
-                    <label className="block text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] mb-1">
+                    <label className="block text-xs font-bold text-[#172536] dark:text-[#E5EDF5] mb-1">
                       Nội dung thông điệp / Lời chúc ước nguyện *
                     </label>
                     <textarea
@@ -535,34 +501,33 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                       rows={4}
                       value={formMessage}
                       onChange={(e) => setFormMessage(e.target.value)}
-                      placeholder="Viết đôi dòng chữa lành, một ước nguyện nhỏ, hoặc câu chuyện bạn muốn gửi vào sóng biển..."
-                      className="w-full px-4 py-3 bg-white dark:bg-[#0B1E26] rounded-2xl border border-[#38CAD6]/30 text-xs text-[#14303A] dark:text-[#E4F7F9] placeholder:text-[#53737C]/60 leading-relaxed resize-none focus:outline-hidden focus:border-[#38CAD6]"
+                      placeholder="Viết đôi dòng chữa lành, một ước nguyện nhỏ, hoặc câu chuyện bạn muốn gửi gắm giữa mùa đông..."
+                      className="w-full px-4 py-3 bg-white dark:bg-[#202F42] rounded-2xl border border-[#DCE7EF] dark:border-[#354A60] text-xs text-[#172536] dark:text-[#E5EDF5] placeholder:text-[#526B80]/60 leading-relaxed resize-none focus:outline-hidden focus:border-[#526B80]"
                     />
                   </div>
 
-                  {/* Author & Tag */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] mb-1">
+                      <label className="block text-xs font-bold text-[#172536] dark:text-[#E5EDF5] mb-1">
                         Tên / Bút danh người gửi (Tùy chọn)
                       </label>
                       <input
                         type="text"
                         value={formAuthor}
                         onChange={(e) => setFormAuthor(e.target.value)}
-                        placeholder="VD: Hải Âu Nhỏ, Lữ Khách Đêm Trăng..."
-                        className="w-full px-3.5 py-2 bg-white dark:bg-[#0B1E26] rounded-xl border border-[#38CAD6]/30 text-xs text-[#14303A] dark:text-[#E4F7F9] focus:outline-hidden focus:border-[#38CAD6]"
+                        placeholder="VD: Bông Tuyết Nhỏ, Lữ Khách Đêm Trăng..."
+                        className="w-full px-3.5 py-2 bg-white dark:bg-[#202F42] rounded-xl border border-[#DCE7EF] dark:border-[#354A60] text-xs text-[#172536] dark:text-[#E5EDF5] focus:outline-hidden focus:border-[#526B80]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#14303A] dark:text-[#E4F7F9] mb-1">
+                      <label className="block text-xs font-bold text-[#172536] dark:text-[#E5EDF5] mb-1">
                         Chủ đề thông điệp
                       </label>
                       <select
                         value={formTag}
                         onChange={(e) => setFormTag(e.target.value)}
-                        className="w-full px-3.5 py-2 bg-white dark:bg-[#0B1E26] rounded-xl border border-[#38CAD6]/30 text-xs text-[#14303A] dark:text-[#E4F7F9] focus:outline-hidden focus:border-[#38CAD6]"
+                        className="w-full px-3.5 py-2 bg-white dark:bg-[#202F42] rounded-xl border border-[#DCE7EF] dark:border-[#354A60] text-xs text-[#172536] dark:text-[#E5EDF5] focus:outline-hidden focus:border-[#526B80]"
                       >
                         <option value="Chữa lành">Chữa lành</option>
                         <option value="Ước nguyện">Ước nguyện</option>
@@ -574,10 +539,9 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                     </div>
                   </div>
 
-                  {/* Bottle Style Picker */}
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-[#14303A] dark:text-[#E4F7F9]">
-                      Chọn kiểu dáng chai thủy tinh:
+                    <label className="block text-xs font-bold text-[#172536] dark:text-[#E5EDF5]">
+                      Chọn kiểu dáng lọ thủy tinh:
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                       {BOTTLE_STYLES.map((st) => {
@@ -590,14 +554,14 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                             className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
                               isSelected
                                 ? st.activeBtn
-                                : 'bg-white dark:bg-[#0B1E26] border-[#38CAD6]/20 hover:border-[#38CAD6]/40 text-[#14303A] dark:text-[#E4F7F9]'
+                                : 'bg-white dark:bg-[#202F42] border-[#DCE7EF] dark:border-[#354A60] hover:border-[#91A9BC] text-[#172536] dark:text-[#E5EDF5]'
                             }`}
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-xl shrink-0">{st.icon}</span>
                               <span className="text-xs font-bold leading-tight break-words line-clamp-1">{st.name}</span>
                             </div>
-                            <span className="text-[10px] text-[#53737C] dark:text-[#88A9B3] line-clamp-1">
+                            <span className="text-[10px] text-[#43576B] dark:text-[#A9BDCE] line-clamp-1">
                               {st.subtitle}
                             </span>
                           </button>
@@ -606,12 +570,11 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                     </div>
                   </div>
 
-                  {/* Seal Picker */}
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-[#14303A] dark:text-[#E4F7F9]">
-                      Con dấu sáp niêm phong nắp chai:
+                    <label className="block text-xs font-bold text-[#172536] dark:text-[#E5EDF5]">
+                      Con dấu sáp niêm phong nắp lọ:
                     </label>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {SEALS.map((s) => (
                         <button
                           key={s.id}
@@ -619,8 +582,8 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                           onClick={() => setFormSeal(s.id)}
                           className={`px-3 py-1.5 rounded-xl border text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
                             formSeal === s.id
-                              ? 'bg-[#1B6E7D] text-white border-[#1B6E7D] shadow-sm font-bold'
-                              : 'bg-white dark:bg-[#0B1E26] text-[#53737C] dark:text-[#88A9B3] border-[#38CAD6]/20'
+                              ? 'bg-[#526B80] text-white border-[#526B80] shadow-sm font-bold'
+                              : 'bg-white dark:bg-[#202F42] text-[#43576B] dark:text-[#A9BDCE] border-[#DCE7EF] dark:border-[#354A60]'
                           }`}
                         >
                           <span>{s.icon}</span>
@@ -630,27 +593,26 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                     </div>
                   </div>
 
-                  {/* Submit Button */}
                   <div className="flex justify-end pt-2">
                     <button
                       type="submit"
                       disabled={isCasting || castSuccess}
-                      className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white text-xs font-bold flex items-center gap-2 hover:shadow-lg transition-all cursor-pointer"
+                      className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#91A9BC] to-[#526B80] text-white text-xs font-bold flex items-center gap-2 hover:shadow-lg transition-all cursor-pointer"
                     >
                       {isCasting ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Đang niêm phong chai...</span>
+                          <span>Đang niêm phong lọ...</span>
                         </>
                       ) : castSuccess ? (
                         <>
                           <Check className="w-4 h-4 text-white" />
-                          <span>Đã thả trôi thành công! 🌊</span>
+                          <span>Đã gửi thành công! ❄️</span>
                         </>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          <span>Thả chai vào dòng hải lưu ♡</span>
+                          <span>Gửi vào Hộp Ký Ức ♡</span>
                         </>
                       )}
                     </button>
@@ -658,22 +620,20 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                 </form>
               )}
 
-              {/* TAB 3: HỒ NGỌC ƯỚC NGUYỆN */}
               {activeTab === 'pond' && (
                 <div className="space-y-4 font-serif">
                   <div className="text-center space-y-1">
-                    <span className="text-[11px] font-bold text-[#1B6E7D] dark:text-[#48CCD6] uppercase tracking-widest font-mono">
-                      ✦ Wishing Pearl Sanctuary ✦
+                    <span className="text-[11px] font-bold text-[#526B80] dark:text-[#A9BDCE] uppercase tracking-widest font-mono">
+                      ✦ Winter Crystal Sanctuary ✦
                     </span>
-                    <h4 className="text-base font-bold text-[#14303A] dark:text-[#E4F7F9]">
-                      Thả một viên ngọc ước nguyện xuống hồ nước biển sâu
+                    <h4 className="text-base font-bold text-[#172536] dark:text-[#E5EDF5]">
+                      Gửi một tinh thể ước nguyện vào quả cầu tuyết
                     </h4>
-                    <p className="text-xs text-[#53737C] dark:text-[#88A9B3]">
+                    <p className="text-xs text-[#43576B] dark:text-[#A9BDCE]">
                       Chọn một nguyện vọng chân thành trong lòng bạn:
                     </p>
                   </div>
 
-                  {/* Intent Selection */}
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     {WISH_INTENTS.map((intent) => (
                       <button
@@ -685,36 +645,35 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                         }}
                         className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
                           selectedIntentId === intent.id
-                            ? 'bg-gradient-to-b from-[#38CAD6]/20 to-[#1B6E7D]/25 border-[#38CAD6] shadow-sm font-bold scale-102'
-                            : 'bg-[#F2FBFC]/60 dark:bg-[#0B1E26] border-[#38CAD6]/20'
+                            ? 'bg-gradient-to-b from-[#E8F1F8] to-[#D5E4EF] dark:from-[#354A60] dark:to-[#202F42] border-[#526B80] shadow-sm font-bold scale-102'
+                            : 'bg-white dark:bg-[#202F42] border-[#DCE7EF] dark:border-[#354A60]'
                         }`}
                       >
                         <span className="text-2xl">{intent.icon}</span>
-                        <span className="text-xs text-[#14303A] dark:text-[#E4F7F9] leading-tight">
+                        <span className="text-xs text-[#172536] dark:text-[#E5EDF5] leading-tight">
                           {intent.name}
                         </span>
                       </button>
                     ))}
                   </div>
 
-                  {/* Pond Interactive Area */}
-                  <div className="p-6 rounded-3xl bg-gradient-to-br from-[#0F3543] via-[#0C2A35] to-[#071921] text-white border border-[#38CAD6]/40 shadow-xl text-center space-y-4 relative overflow-hidden">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-[#38CAD6] to-[#7DD8DE] p-1 shadow-lg shadow-[#38CAD6]/30 flex items-center justify-center">
-                      <div className="w-full h-full rounded-full bg-[#091D26] flex items-center justify-center text-3xl animate-pulse">
-                        🦪
+                  <div className="p-6 rounded-3xl bg-gradient-to-br from-[#202F42] via-[#1B2A3B] to-[#172536] text-white border border-[#354A60] shadow-xl text-center space-y-4 relative overflow-hidden">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-[#91A9BC] to-[#D5E4EF] p-1 shadow-lg shadow-[#91A9BC]/25 flex items-center justify-center">
+                      <div className="w-full h-full rounded-full bg-[#172536] flex items-center justify-center text-3xl animate-pulse">
+                        🔮
                       </div>
                     </div>
 
                     {!pondBlessingRevealed && !isTossingPearl && (
                       <div className="space-y-2">
-                        <p className="text-xs text-[#B2E4EC]">
+                        <p className="text-xs text-[#D5E4EF]">
                           Tâm nguyện: <strong className="text-white">{currentIntent.name}</strong>
                         </p>
                         <button
                           onClick={handleTossPearl}
-                          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white text-xs font-bold hover:shadow-lg transition-all cursor-pointer"
+                          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#91A9BC] to-[#526B80] text-white text-xs font-bold hover:shadow-lg transition-all cursor-pointer"
                         >
-                          ✨ Thả viên ngọc ước nguyện
+                          ✨ Lắc quả cầu tuyết ước nguyện
                         </button>
                       </div>
                     )}
@@ -722,8 +681,8 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                     {isTossingPearl && (
                       <div className="py-4 space-y-2">
                         <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
-                        <p className="text-xs text-[#B2E4EC] animate-pulse">
-                          Viên ngọc đang chìm dần vào hồ nước thiêng...
+                        <p className="text-xs text-[#D5E4EF] animate-pulse">
+                          Những bông tuyết đang xoay nhẹ trong quả cầu pha lê...
                         </p>
                       </div>
                     )}
@@ -737,16 +696,15 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                         <div className="flex items-center justify-between border-b border-white/15 pb-2">
                           <span className="text-xs font-bold text-white flex items-center gap-1.5">
                             <span>{currentIntent.icon}</span>
-                            <span>Lời Chúc Biển Cả Cho Bạn:</span>
+                            <span>Lời Chúc Mùa Đông Dành Cho Bạn:</span>
                           </span>
-                          <span className="text-[10px] text-[#7DD8DE] font-sans">✦ Diệu Kỷ Đại Dương ✦</span>
+                          <span className="text-[10px] text-[#A9BDCE] font-sans">✦ Phép Màu Tuyết Trắng ✦</span>
                         </div>
 
                         <p className="text-xs sm:text-sm text-white italic leading-relaxed">
                           "{currentIntent.blessing}"
                         </p>
 
-                        {/* Matching character */}
                         {pondMatchingChar && (
                           <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-3 font-sans">
                             <div className="flex items-center gap-2">
@@ -784,35 +742,34 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 4: CHAI CỦA TÔI */}
               {activeTab === 'my_bottles' && (
                 <div className="space-y-3 font-serif">
-                  <div className="p-4 rounded-2xl bg-[#F0F9FB] dark:bg-[#091C24] border border-[#38CAD6]/25 flex items-center justify-between">
+                  <div className="p-4 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#354A60] flex items-center justify-between">
                     <div>
-                      <h4 className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9]">
-                        Bộ Sưu Tập Chai Của Bạn
+                      <h4 className="text-xs font-bold text-[#172536] dark:text-[#E5EDF5]">
+                        Bộ Sưu Tập Lọ Của Bạn
                       </h4>
-                      <p className="text-[11px] text-[#53737C] dark:text-[#88A9B3]">
-                        Theo dõi những bức thư bạn đã thả trôi ngoài khơi xa
+                      <p className="text-[11px] text-[#43576B] dark:text-[#A9BDCE]">
+                        Theo dõi những bức thư bạn đã gửi vào hộp ký ức
                       </p>
                     </div>
                     <button
                       onClick={() => setActiveTab('cast')}
-                      className="px-3 py-1.5 rounded-xl bg-[#38CAD6] text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-[#526B80] text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
-                      <span>Thả chai mới</span>
+                      <span>Gửi lọ mới</span>
                     </button>
                   </div>
 
                   {myBottlesList.length === 0 ? (
-                    <div className="text-center py-12 text-xs text-[#53737C] dark:text-[#88A9B3] space-y-2">
-                      <p>Bạn chưa thả bức thư chai thủy tinh nào xuống biển.</p>
+                    <div className="text-center py-12 text-xs text-[#43576B] dark:text-[#A9BDCE] space-y-2">
+                      <p>Bạn chưa gửi bức thư lọ thủy tinh nào vào hộp ký ức.</p>
                       <button
                         onClick={() => setActiveTab('cast')}
-                        className="px-4 py-2 rounded-xl bg-[#1B6E7D] text-white font-bold cursor-pointer"
+                        className="px-4 py-2 rounded-xl bg-[#526B80] text-white font-bold cursor-pointer"
                       >
-                        Thả chiếc chai đầu tiên ngay ♡
+                        Gửi chiếc lọ đầu tiên ngay ♡
                       </button>
                     </div>
                   ) : (
@@ -827,33 +784,33 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
                             <div className="flex items-center justify-between gap-2 flex-wrap">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span className="text-lg">{bStyle.icon}</span>
-                                <span className="text-xs font-bold text-[#14303A] dark:text-[#E4F7F9]">
+                                <span className="text-xs font-bold text-[#172536] dark:text-[#E5EDF5]">
                                   {bottle.author}
                                 </span>
                                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-sans font-semibold border ${bStyle.badge}`}>
                                   {bStyle.name}
                                 </span>
                                 {bottle.tag && (
-                                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#38CAD6]/15 text-[#1B6E7D] dark:text-[#48CCD6] font-sans">
+                                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#E8F1F8] dark:bg-[#354A60] text-[#526B80] dark:text-[#A9BDCE] font-sans">
                                     #{bottle.tag}
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[10px] text-[#53737C] dark:text-[#88A9B3] font-sans">
+                              <span className="text-[10px] text-[#43576B] dark:text-[#A9BDCE] font-sans">
                                 {formatDate(bottle.createdAt)}
                               </span>
                             </div>
 
-                            <p className="text-xs text-[#53737C] dark:text-[#B2CFD7] leading-relaxed italic whitespace-pre-line break-words">
+                            <p className="text-xs text-[#43576B] dark:text-[#A9BDCE] leading-relaxed italic whitespace-pre-line break-words">
                               "{bottle.message}"
                             </p>
 
-                            <div className="flex items-center justify-between pt-1 text-[11px] font-sans text-[#1B6E7D] dark:text-[#7DD8DE]">
+                            <div className="flex items-center justify-between pt-1 text-[11px] font-sans text-[#526B80] dark:text-[#A9BDCE]">
                               <span className="flex items-center gap-1 font-bold">
                                 <Heart className="w-3.5 h-3.5 fill-current text-rose-500" />
                                 <span>{bottle.hearts} lượt yêu thích</span>
                               </span>
-                              <span>Đã được vớt: {bottle.fishedCount || 0} lần</span>
+                              <span>Đã được mở: {bottle.fishedCount || 0} lần</span>
                             </div>
                           </div>
                         );
@@ -865,13 +822,13 @@ export const WishingBottleModal: React.FC<WishingBottleModalProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-[#38CAD6]/15 dark:border-[#132F3D] bg-[#F0F9FB]/60 dark:bg-[#091C24]/60 flex items-center justify-between shrink-0 font-serif">
-              <span className="text-xs text-[#53737C] dark:text-[#88A9B3]">
-                ✦ Lắng nghe đại dương trong từng lời ước nguyện
+            <div className="p-4 border-t border-[#DCE7EF] dark:border-[#354A60] bg-[#E8F1F8]/70 dark:bg-[#202F42]/70 flex items-center justify-between shrink-0 font-serif">
+              <span className="text-xs text-[#43576B] dark:text-[#A9BDCE]">
+                ✦ Lắng nghe mùa đông trong từng lời ước nguyện
               </span>
               <button
                 onClick={onClose}
-                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white text-xs font-bold hover:shadow-md transition-all cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#91A9BC] to-[#526B80] text-white text-xs font-bold hover:shadow-md transition-all cursor-pointer"
               >
                 Khép lại ♡
               </button>

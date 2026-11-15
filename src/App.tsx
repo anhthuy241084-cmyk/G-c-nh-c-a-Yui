@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Heart, Sparkles, AlertCircle, BookOpen, MessageSquare, ExternalLink, ShieldCheck, Check, Flame } from 'lucide-react';
-import { Character, GenreTag, ThemeMode, AppNotification, AudioSettings, BoardNote, CharacterBookmark, BookmarkPaperStyle, BookmarkTailDecor, MascotSettings, MascotAccessoryId, UserProfile, DEFAULT_USER_PROFILE, Feature, FeatureBoardConfig, PromptCommand, ContactLink, HeroPresentationConfig, DEFAULT_HERO_PRESENTATION, HelpCenterConfig, DEFAULT_HELP_CENTER_CONFIG, WishingBottle } from './types';
+import { Character, GenreTag, ThemeMode, AppNotification, AudioSettings, BoardNote, CharacterBookmark, BookmarkPaperStyle, BookmarkTailDecor, UserProfile, DEFAULT_USER_PROFILE, BadgeId, ACHIEVEMENT_REWARDS, PromptCommand, ContactLink, HelpCenterConfig, DEFAULT_HELP_CENTER_CONFIG, WishingBottle, MemoryGalleryPost, WhisperPost } from './types';
 import { INITIAL_CHARACTERS } from './data/characters';
 import { IntroLoadingScreen } from './components/IntroLoadingScreen';
 import { SplashScreen } from './components/SplashScreen';
 import { Header } from './components/Header';
+import { WinterAnnouncementBanner } from './components/WinterAnnouncementBanner';
 import { WinterWelcomeFrame } from './components/WinterWelcomeFrame';
 import { SnowBookmarkModal } from './components/SnowBookmarkModal';
 import { SnowfallBackground } from './components/SnowfallBackground';
@@ -32,13 +33,18 @@ import { CommandLibraryModal } from './components/CommandLibraryModal';
 import { OceanFortuneModal } from './components/OceanFortuneModal';
 import { HelpCenterModal } from './components/HelpCenterModal';
 import { WishingBottleModal } from './components/WishingBottleModal';
-import { OceanMusicBoxModal } from './components/OceanMusicBoxModal';
+import { WinterMusicBoxModal } from './components/WinterMusicBoxModal';
+import { SnowGameModal } from './components/SnowGameModal';
 import { OceanArchipelagoModal } from './components/OceanArchipelagoModal';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProfileModal } from './components/ProfileModal';
 import { BackToTop } from './components/BackToTop';
 import { EasterEggParticles, Particle } from './components/EasterEggParticles';
 import { StarPageTransition } from './components/StarPageTransition';
+import { SnowCursorEffect } from './components/SnowCursorEffect';
+import { DonateMailboxModal } from './components/DonateMailboxModal';
+import { MemoryGalleryModal } from './components/MemoryGalleryModal';
+import { WhisperQuotesModal } from './components/WhisperQuotesModal';
 import { triggerSfx } from './utils/sfx';
 import { triggerHeartConfetti } from './utils/confetti';
 import { testFirestoreConnection } from './firebase';
@@ -65,23 +71,11 @@ import {
   deleteNotificationFromFirestore,
 } from './services/notificationService';
 import {
-  subscribeHeroPresentation,
-  saveHeroPresentationToFirestore,
-} from './services/appSettingsService';
-import {
   subscribeHelpCenterConfig,
-  saveHelpCenterConfigToFirestore,
 } from './services/helpCenterService';
 import {
   subscribeWishingBottles,
 } from './services/wishingBottleService';
-import {
-  subscribeFeatures,
-  saveFeatureToFirestore,
-  deleteFeatureFromFirestore,
-  subscribeFeatureBoardConfig,
-  saveFeatureBoardConfigToFirestore,
-} from './services/featureService';
 import {
   subscribeCommands,
   saveCommandToFirestore,
@@ -95,12 +89,14 @@ import {
   reorderContactsInFirestore,
   getLocalContacts,
 } from './services/contactService';
+import { subscribeMemoryGalleryPosts } from './services/memoryGalleryService';
+import { subscribeWhisperPosts } from './services/whisperService';
 
 const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'notif-welcome',
-    title: 'Chào mừng bạn đến với Góc nhỏ! 💖',
-    content: 'Tất cả character AI đều được sáng tạo và kiểm duyệt kỹ lưỡng. Nhấn vào chuông để xem thông báo hoặc cập nhật mới nhất nhé!',
+    title: 'Chào mừng bạn đến với Hộp Ký Ức Mùa Đông! ❄️',
+    content: 'Tất cả character AI đều được Yui sáng tạo và chăm chút kỹ lưỡng. Hãy khám phá danh sách nhân vật, gửi request hoặc ghé Góc Cập Nhật Mới ở đầu trang để theo dõi tin mới nhất nhé!',
     createdAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date().toLocaleDateString('vi-VN'),
     isRead: false,
     type: 'announcement',
@@ -167,7 +163,6 @@ export default function App() {
   const [isAudioSettingsOpen, setIsAudioSettingsOpen] = useState(false);
   const [isRandomOpen, setIsRandomOpen] = useState(false);
   const [isBakeryOpen, setIsBakeryOpen] = useState(false);
-  const [isWardrobeOpen, setIsWardrobeOpen] = useState(false);
   const [isWishingBottleOpen, setIsWishingBottleOpen] = useState(false);
   const [isCommandLibraryOpen, setIsCommandLibraryOpen] = useState(false);
   const [isFortuneOpen, setIsFortuneOpen] = useState(false);
@@ -175,6 +170,10 @@ export default function App() {
   const [isMusicBoxOpen, setIsMusicBoxOpen] = useState(false);
   const [isArchipelagoOpen, setIsArchipelagoOpen] = useState(false);
   const [isSnowBookmarksOpen, setIsSnowBookmarksOpen] = useState(false);
+  const [isDonateMailboxOpen, setIsDonateMailboxOpen] = useState(false);
+  const [isMemoryGalleryOpen, setIsMemoryGalleryOpen] = useState(false);
+  const [isWhisperQuotesOpen, setIsWhisperQuotesOpen] = useState(false);
+  const [adminAuthTarget, setAdminAuthTarget] = useState<'admin_panel' | 'inline_unlock'>('admin_panel');
 
   // Wishing Bottles state (Hải Lưu & Chai Ước Nguyện)
   const [wishingBottles, setWishingBottles] = useState<WishingBottle[]>([]);
@@ -185,15 +184,12 @@ export default function App() {
   // Commands Library states
   const [commands, setCommands] = useState<PromptCommand[]>([]);
 
-  // Hero Presentation Video Layer state
-  const [heroPresentation, setHeroPresentation] = useState<HeroPresentationConfig>(DEFAULT_HERO_PRESENTATION);
-
   // Contacts states
   const [contacts, setContacts] = useState<ContactLink[]>([]);
 
-  // Features summary board states
-  const [features, setFeatures] = useState<Feature[]>([]);
-  const [featureBoardConfig, setFeatureBoardConfig] = useState<FeatureBoardConfig>({ description: '' });
+  // Lầu Tuyết Họa Ký & Nhặt Cánh Tuyết Rơi states
+  const [memoryGalleryPosts, setMemoryGalleryPosts] = useState<MemoryGalleryPost[]>([]);
+  const [whisperPosts, setWhisperPosts] = useState<WhisperPost[]>([]);
 
   // Message Board Notes state
   const [boardNotes, setBoardNotes] = useState<BoardNote[]>(() => {
@@ -230,66 +226,75 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [isStreakOpen, setIsStreakOpen] = useState(false);
-
-  // Mascot Settings & Wardrobe state
-  const [mascotSettings, setMascotSettings] = useState<MascotSettings>(() => {
-    const saved = localStorage.getItem('yui_mascot_settings');
-    const defaultSettings: MascotSettings = {
-      displayMode: 'always',
-      currentSpot: 'window',
-      currentAccessory: 'none',
-      showInReader: true,
-      unlockedAccessories: ['none', 'bow'],
-      foundCount: 0,
-    };
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        return { ...defaultSettings, ...parsed };
-      } catch (e) {
-        return defaultSettings;
-      }
+  const [isSnowGameOpen, setIsSnowGameOpen] = useState(false);
+  const [claimedStreakRewards, setClaimedStreakRewards] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('yui_claimed_streak_rewards');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
     }
-    return defaultSettings;
   });
 
-  // Sync mascot settings to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('yui_mascot_settings', JSON.stringify(mascotSettings));
-    } catch (e) {}
-  }, [mascotSettings]);
+  const handleClaimStreakReward = (rewardName: string) => {
+    const isAlreadyClaimed = claimedStreakRewards.includes(rewardName);
+    if (!isAlreadyClaimed) {
+      const updated = [...claimedStreakRewards, rewardName];
+      setClaimedStreakRewards(updated);
+      try {
+        localStorage.setItem('yui_claimed_streak_rewards', JSON.stringify(updated));
+      } catch (e) {}
 
-  const handleUpdateMascotSettings = (newPartial: Partial<MascotSettings>) => {
-    setMascotSettings((prev) => ({ ...prev, ...newPartial }));
+      // Grant real profile customizations matching the milestone or snow game reward
+      let nextFrame = userProfile.avatarFrame;
+      let nextDecoration = userProfile.decoration;
+
+      if (rewardName === 'Bông Tuyết Đầu Mùa') {
+        if (nextFrame === 'none') nextFrame = 'winter';
+      } else if (rewardName === 'Khăn Len Mùa Đông') {
+        if (nextFrame === 'none') nextFrame = 'cozy_room';
+      } else if (rewardName === 'Quả Cầu Tuyết Kỷ Niệm') {
+        nextDecoration = 'snow';
+      } else if (rewardName === 'Quả Cầu Pha Lê Mùa Đông') {
+        nextDecoration = 'sparkles';
+        if (nextFrame === 'none') nextFrame = 'winter';
+      }
+
+      const updatedGifts = Array.from(new Set([...(userProfile.claimedGifts || []), rewardName]));
+      handleSaveUserProfile({
+        ...userProfile,
+        avatarFrame: nextFrame,
+        decoration: nextDecoration,
+        claimedGifts: updatedGifts,
+        updatedAt: new Date().toISOString(),
+      });
+
+      showToast(`🎁 Đã nhận phần thưởng "${rewardName}" vào Hồ Sơ của bạn!`);
+    }
   };
 
-  // Check and unlock accessories based on streak and user activities
-  useEffect(() => {
-    const unlocked = new Set<MascotAccessoryId>(mascotSettings.unlockedAccessories || ['none', 'bow']);
-    let updated = false;
+  const handleClaimAchievementReward = (badgeId: BadgeId) => {
+    const reward = ACHIEVEMENT_REWARDS[badgeId];
+    if (!reward) return;
 
-    if (currentStreak >= 3 && !unlocked.has('beanie')) {
-      unlocked.add('beanie');
-      updated = true;
-    }
-    if (currentStreak >= 7 && !unlocked.has('scarf')) {
-      unlocked.add('scarf');
-      updated = true;
-    }
-    if (currentStreak >= 14 && !unlocked.has('crown')) {
-      unlocked.add('crown');
-      updated = true;
-    }
-    if (theme === 'dark' && !unlocked.has('nightcap')) {
-      unlocked.add('nightcap');
-      updated = true;
-    }
+    const alreadyClaimed = (userProfile.claimedAchievements || []).includes(badgeId);
+    if (alreadyClaimed) return;
 
-    if (updated) {
-      handleUpdateMascotSettings({ unlockedAccessories: Array.from(unlocked) as MascotAccessoryId[] });
-    }
-  }, [currentStreak, theme, mascotSettings.unlockedAccessories]);
+    const updatedAchievements = Array.from(new Set([...(userProfile.claimedAchievements || []), badgeId]));
+    const updatedGifts = Array.from(new Set([...(userProfile.claimedGifts || []), reward.giftName]));
+    const nextFrame = reward.frameId && userProfile.avatarFrame === 'none' ? reward.frameId : userProfile.avatarFrame;
+    const nextDecoration = reward.decoration && userProfile.decoration === 'none' ? reward.decoration : userProfile.decoration;
+
+    handleSaveUserProfile({
+      ...userProfile,
+      avatarFrame: nextFrame,
+      decoration: nextDecoration,
+      claimedAchievements: updatedAchievements,
+      claimedGifts: updatedGifts,
+      updatedAt: new Date().toISOString(),
+    });
+    showToast(`🎁 Đã nhận quà thành tựu "${reward.giftName}" vào Hồ Sơ của bạn!`);
+  };
 
   // User Profile State (Hồ sơ người dùng ୨୧)
   const [userProfile, setUserProfile] = useState<UserProfile>(() => {
@@ -436,14 +441,6 @@ export default function App() {
     progress: number,
     chapterIndex: number
   ) => {
-    // Unlock glasses accessory when reading story
-    const unlocked = new Set<MascotAccessoryId>(mascotSettings.unlockedAccessories || ['none', 'bow']);
-    if (!unlocked.has('glasses')) {
-      unlocked.add('glasses');
-      handleUpdateMascotSettings({ unlockedAccessories: Array.from(unlocked) as MascotAccessoryId[] });
-      showToast('👓 Bạn vừa đọc một câu chuyện! Mở khóa phụ kiện: Kính tròn tri thức');
-    }
-
     setBookmarks((prev) => {
       const existing = prev[characterId];
       if (!existing) return prev;
@@ -500,7 +497,7 @@ export default function App() {
   };
 
   // Modals state
-  const [notificationTab, setNotificationTab] = useState<'notifications' | 'favorites'>('notifications');
+  const [notificationTab, setNotificationTab] = useState<'notifications' | 'favorites'>('favorites');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [selectedCharacterOpenStory, setSelectedCharacterOpenStory] = useState(false);
   const [passwordPromptChar, setPasswordPromptChar] = useState<Character | null>(null);
@@ -534,19 +531,21 @@ export default function App() {
   useEffect(() => {
     testFirestoreConnection();
 
-    // 1. Subscribe to Characters in Firestore
+    // 1. Subscribe to Characters in Firestore (auto-seeds INITIAL_CHARACTERS if empty & sorts newest first)
     const unsubChars = subscribeCharacters(
       (remoteChars) => {
         if (remoteChars) {
-          setCharacters(remoteChars);
+          const cleanChars = remoteChars.filter((c) => !isExcludedCharacter(c));
+          setCharacters(cleanChars);
           try {
-            localStorage.setItem('yui_characters', JSON.stringify(remoteChars));
+            localStorage.setItem('yui_characters', JSON.stringify(cleanChars));
           } catch (e) {
             console.warn('LocalStorage save character notice:', e);
           }
         }
       },
-      (err) => console.warn('Firestore characters subscription notice:', err)
+      (err) => console.warn('Firestore characters subscription notice:', err),
+      INITIAL_CHARACTERS
     );
 
     // 2. Subscribe to Message Board Notes in Firestore
@@ -585,14 +584,6 @@ export default function App() {
        (err) => console.warn('Firestore help center config subscription notice:', err)
      );
 
-    // 7. Subscribe to Feature Board Config in Firestore (legacy)
-    const unsubFeatureBoardConfig = subscribeFeatureBoardConfig(
-      (remoteConfig) => {
-        setFeatureBoardConfig(remoteConfig);
-      },
-      (err) => console.warn('Firestore feature board config subscription notice:', err)
-    );
-
     // 7. Subscribe to Prompt Commands (Kho Lệnh) in Firestore
     const unsubCommands = subscribeCommands(
       (remoteCommands) => {
@@ -609,13 +600,20 @@ export default function App() {
       (err) => console.warn('Firestore contacts subscription notice:', err)
     );
 
-    // 9. Subscribe to Hero Presentation Video Layer in Firestore
-    const unsubHeroPres = subscribeHeroPresentation(
-      DEFAULT_HERO_PRESENTATION,
-      (remoteConfig) => {
-        setHeroPresentation(remoteConfig);
+    // 9. Subscribe to Lầu Tuyết Họa Ký (Memory Gallery Posts)
+    const unsubMemoryGallery = subscribeMemoryGalleryPosts(
+      (remotePosts) => {
+        setMemoryGalleryPosts(remotePosts);
       },
-      (err) => console.warn('Firestore hero presentation subscription notice:', err)
+      (err) => console.warn('Firestore memory gallery subscription notice:', err)
+    );
+
+    // 10. Subscribe to Nhặt Cánh Tuyết Rơi (Whisper Quotes)
+    const unsubWhispers = subscribeWhisperPosts(
+      (remoteWhispers) => {
+        setWhisperPosts(remoteWhispers);
+      },
+      (err) => console.warn('Firestore whispers subscription notice:', err)
     );
 
     return () => {
@@ -627,7 +625,8 @@ export default function App() {
       unsubWishingBottles();
       unsubCommands();
       unsubContacts();
-      unsubHeroPres();
+      unsubMemoryGallery();
+      unsubWhispers();
     };
   }, []);
 
@@ -753,10 +752,10 @@ export default function App() {
   };
 
 
-  // Trigger Easter Egg Particles (Ocean Pearls, Aqua Stars & Shells)
+  // Trigger Easter Egg Particles (Winter Snowflakes & Crystal Stars)
   const handleTriggerEasterEgg = (x: number, y: number) => {
-    const symbols = ['✦', '🐚', '✧', '🌊', '🪼', '🦪', '💎', '⋆'];
-    const colors = ['#65C5CE', '#3FAAB7', '#78DCE0', '#BDEBE5', '#F5F3EA', '#D8D4EE', '#6BDDE5'];
+    const symbols = ['❄', '✦', '✧', '˚₊‧', '୨୧', '💎', '❅', '⋆'];
+    const colors = ['#91A9BC', '#526B80', '#D5E4EF', '#E8F1F8', '#F7FAFD', '#A9BDCE', '#C7D2FE'];
     const newParticles: Particle[] = Array.from({ length: 14 }).map((_, i) => ({
       id: `p-${Date.now()}-${i}`,
       x: x + (Math.random() - 0.5) * 60,
@@ -772,8 +771,18 @@ export default function App() {
     }, 1500);
   };
 
+  // Persistent dismissed announcement IDs so read/acknowledged alerts never reappear on reload
+  const [dismissedNotifIds, setDismissedNotifIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('yui_dismissed_notif_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   // Notification handlers
-  const handleSendNotification = (
+  const handleSendNotification = async (
     title: string,
     content: string,
     type: 'announcement' | 'new_character' = 'announcement',
@@ -789,7 +798,12 @@ export default function App() {
       characterId,
     };
     setNotifications((prev) => [newNotif, ...prev]);
-    addNotificationToFirestore(newNotif);
+    try {
+      await addNotificationToFirestore(newNotif);
+    } catch (e) {
+      console.error('Error syncing notification to Firestore:', e);
+      showToast('⚠️ Thông báo đã hiển thị cục bộ nhưng chưa đồng bộ được lên Cloud.');
+    }
   };
 
   const handleMarkAsRead = (id: string) => {
@@ -808,14 +822,43 @@ export default function App() {
     });
   };
 
+  const handleDismissBannerNotification = (id: string) => {
+    setDismissedNotifIds((prev) => {
+      const updated = Array.from(new Set([...prev, id]));
+      try {
+        localStorage.setItem('yui_dismissed_notif_ids', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+    handleMarkAsRead(id);
+  };
+
+  const unreadBannerAnnouncements = useMemo(
+    () => notifications.filter((n) => !dismissedNotifIds.includes(n.id) && !n.isRead),
+    [notifications, dismissedNotifIds]
+  );
+
+  const handleDismissAllBannerNotifications = () => {
+    const idsToDismiss = unreadBannerAnnouncements.map((n) => n.id);
+    if (idsToDismiss.length === 0) return;
+    setDismissedNotifIds((prev) => {
+      const updated = Array.from(new Set([...prev, ...idsToDismiss]));
+      try {
+        localStorage.setItem('yui_dismissed_notif_ids', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+    handleMarkAllAsRead();
+  };
+
   const handleDeleteNotification = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
     deleteNotificationFromFirestore(id);
   };
 
   const unreadNotificationCount = useMemo(
-    () => notifications.filter((n) => !n.isRead).length,
-    [notifications]
+    () => unreadBannerAnnouncements.length,
+    [unreadBannerAnnouncements]
   );
 
   // Message Board Handlers
@@ -978,15 +1021,15 @@ export default function App() {
       id: `char-${Date.now()}`,
       votes: 0,
       likes: 0,
-      createdAt: new Date().toISOString().slice(0, 10),
+      createdAt: new Date().toISOString(),
     };
     setCharacters((prev) => [newChar, ...prev]);
     try {
       await saveCharacterToFirestore(newChar);
-      showToast('🎉 Đã đồng bộ nhân vật lên đám mây công khai cho mọi tài khoản!');
+      showToast('🎉 Đã đồng bộ nhân vật lên đám mây công khai cho mọi người!');
     } catch (e) {
       console.error('Error saving character to Firestore:', e);
-      showToast('⚠️ Có lỗi khi tải lên Firestore. Đã lưu tạm bộ nhớ máy.');
+      showToast('⚠️ Chưa lưu được lên Cloud Firestore (kiểm tra kích thước ảnh hoặc kết nối).');
     }
   };
 
@@ -1145,6 +1188,9 @@ export default function App() {
         : 'text-slate-100'
     }`}>
       
+      {/* Custom Winter Crystal Pointer & Frost Trail */}
+      <SnowCursorEffect />
+
       {/* Easter Egg Floating Particles Container */}
       <EasterEggParticles particles={particles} />
 
@@ -1179,16 +1225,27 @@ export default function App() {
           onToggleTheme={handleToggleTheme}
           onOpenContact={() => setIsContactOpen(true)}
           onOpenVoting={() => setIsVotingOpen(true)}
-          onOpenAdmin={() => setIsAdminAuthOpen(true)}
+          onOpenAdmin={() => {
+            setAdminAuthTarget('admin_panel');
+            if (isAdminLoggedIn) {
+              setIsAdminOpen(true);
+            } else {
+              setIsAdminAuthOpen(true);
+            }
+          }}
           onOpenMessageBoard={() => setIsMessageBoardOpen(true)}
           onOpenAudioSettings={() => setIsAudioSettingsOpen(true)}
           unreadNotificationCount={unreadNotificationCount}
-          onOpenNotifications={() => setIsNotificationsOpen(true)}
+          onOpenNotifications={() => {
+            setNotificationTab('favorites');
+            setIsNotificationsOpen(true);
+          }}
           noteCount={boardNotes.length}
           onOpenRandom={() => setIsRandomOpen(true)}
           onOpenBookmarks={() => setIsSnowBookmarksOpen(true)}
           onReopenIntro={() => setShowIntro(true)}
           bookmarkCount={Object.keys(bookmarks).length}
+          favoriteCount={activeFavoriteCharacterIds.length}
           onTriggerEasterEgg={handleTriggerEasterEgg}
           isSfxOn={audioSettings.isSfxOn}
           sfxVolume={audioSettings.sfxVolume}
@@ -1200,17 +1257,49 @@ export default function App() {
           onOpenFortune={() => setIsFortuneOpen(true)}
           onOpenHelpCenter={() => setIsHelpCenterOpen(true)}
           onOpenMusicBox={() => setIsMusicBoxOpen(true)}
+          onOpenSnowGame={() => setIsSnowGameOpen(true)}
+          onOpenDonateMailbox={() => setIsDonateMailboxOpen(true)}
+          onOpenMemoryGallery={() => setIsMemoryGalleryOpen(true)}
+          onOpenWhisperQuotes={() => setIsWhisperQuotesOpen(true)}
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-7">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-6 space-y-4 sm:space-y-7">
           
-          {/* ❄️ Khung giới thiệu Yui — Welcome Frame (Winter Letter / Snowy Diary) */}
+          {/* 🔔 Góc Cập Nhật Mới của Yui (tự ẩn vĩnh viễn sau khi đã xem cho tới khi có tin mới) */}
+          <WinterAnnouncementBanner
+            unreadAnnouncements={unreadBannerAnnouncements}
+            totalAnnouncementsCount={notifications.length}
+            onDismissNotification={handleDismissBannerNotification}
+            onDismissAll={handleDismissAllBannerNotifications}
+            onSelectCharacterById={(characterId) => {
+              const found = publicCharacters.find((c) => c.id === characterId);
+              if (found) handleSelectCharacter(found);
+            }}
+            isSfxOn={audioSettings.isSfxOn}
+            sfxVolume={audioSettings.sfxVolume}
+          />
+
+          {/* ❄️ Khung giới thiệu Yui — Unboxed Editorial Winter Masthead */}
           <WinterWelcomeFrame
+            characters={publicCharacters}
+            onSelectCharacter={(char, openStory) => {
+              setSelectedCharacterOpenStory(!!openStory);
+              handleSelectCharacter(char);
+            }}
+            onGoToGgai={(char, url) => handleGoToGgai(char, url)}
+            onSelectTag={handleSelectTag}
             streakCount={currentStreak}
             onOpenStreak={() => setIsStreakOpen(true)}
             onOpenRandom={() => setIsRandomOpen(true)}
             onOpenFortune={() => setIsFortuneOpen(true)}
+            onOpenDonateMailbox={() => setIsDonateMailboxOpen(true)}
+            onOpenCreatorRequest={() => setIsCreatorRequestOpen(true)}
+            onOpenVoting={() => setIsVotingOpen(true)}
+            onOpenMessageBoard={() => setIsMessageBoardOpen(true)}
+            onOpenSnowGame={() => setIsSnowGameOpen(true)}
+            audioSettings={audioSettings}
+            onUpdateAudioSettings={handleUpdateAudioSettings}
           />
 
           {/* Feature: "୨୧ Kệ sách của mình" Paper Bookshelf */}
@@ -1242,10 +1331,10 @@ export default function App() {
                 initial={{ opacity: 0, y: -20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-2xl bg-[#09222E]/95 text-white text-xs font-bold shadow-2xl backdrop-blur-xl flex items-center gap-2 border border-[#38CAD6]/40 font-serif"
+                className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-24px)] px-4 sm:px-5 py-2.5 rounded-2xl bg-[#172536]/95 text-white text-xs font-bold shadow-2xl backdrop-blur-xl flex items-center gap-2 border border-[#91A9BC]/40 font-serif"
               >
-                <Check className="w-4 h-4 text-[#38CAD6] shrink-0" />
-                <span className="text-white">{toastMessage}</span>
+                <Check className="w-4 h-4 text-[#A9BDCE] shrink-0" />
+                <span className="text-white truncate">{toastMessage}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -1255,7 +1344,7 @@ export default function App() {
 
           {/* Character Grid Cards List or Custom Empty State */}
           {filteredCharacters.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-[368px] mx-auto sm:max-w-none">
               {filteredCharacters.map((char, idx) => (
                 <CharacterCard
                   key={char.id}
@@ -1362,6 +1451,9 @@ export default function App() {
         characters={publicCharacters}
         onVote={handleVote}
         votedMap={votedMap}
+        onSelectCharacter={(c) => handleSelectCharacter(c)}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
       />
 
       <CharacterDetailModal
@@ -1407,7 +1499,12 @@ export default function App() {
         onClose={() => setIsAdminAuthOpen(false)}
         onSuccess={() => {
           setIsAdminLoggedIn(true);
-          setIsAdminOpen(true);
+          if (adminAuthTarget === 'admin_panel') {
+            setIsAdminOpen(true);
+          } else {
+            showToast('✨ Đã xác thực quyền Quản trị viên (Yui)!');
+          }
+          setAdminAuthTarget('admin_panel');
         }}
       />
 
@@ -1422,13 +1519,6 @@ export default function App() {
         onSelectCharacter={(c) => handleSelectCharacter(c)}
         onToast={showToast}
         onResetAllVotes={handleResetAllVotes}
-        helpCenterConfig={helpCenterConfig}
-        onSaveHelpCenterConfig={saveHelpCenterConfigToFirestore}
-        features={features}
-        boardConfig={featureBoardConfig}
-        onSaveFeature={saveFeatureToFirestore}
-        onDeleteFeature={deleteFeatureFromFirestore}
-        onSaveBoardConfig={saveFeatureBoardConfigToFirestore}
         onOpenCommandLibrary={() => setIsCommandLibraryOpen(true)}
         contacts={contacts}
         onSaveContact={async (c) => {
@@ -1443,8 +1533,6 @@ export default function App() {
           await reorderContactsInFirestore(ordered);
           setContacts(getLocalContacts());
         }}
-        heroPresentation={heroPresentation}
-        onSaveHeroPresentation={saveHeroPresentationToFirestore}
       />
 
       {/* Feature: ✦ Kho Lệnh (Command Library) */}
@@ -1483,12 +1571,23 @@ export default function App() {
         onToast={showToast}
       />
 
-      {/* Feature: 🎶 Hộp Nhạc Sóng Biển & Trạm Thư Giãn */}
-      <OceanMusicBoxModal
+      {/* Feature: 🎶 Hộp Nhạc Tuyết & Không Gian Mùa Đông */}
+      <WinterMusicBoxModal
         isOpen={isMusicBoxOpen}
         onClose={() => setIsMusicBoxOpen(false)}
         isSfxOn={audioSettings.isSfxOn}
         sfxVolume={audioSettings.sfxVolume}
+      />
+
+      {/* Trò chơi: Săn Ký Ức Tuyết Rơi */}
+      <SnowGameModal
+        isOpen={isSnowGameOpen}
+        onClose={() => setIsSnowGameOpen(false)}
+        onRewardClaimed={handleClaimStreakReward}
+        claimedRewards={claimedStreakRewards}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
+        onToast={showToast}
       />
 
       {/* Feature: 🗺️ Hải Đồ Thám Hiểm Quần Đảo Nhân Vật */}
@@ -1520,6 +1619,11 @@ export default function App() {
         longestStreak={longestStreak}
         lastVisitDate={lastVisitDate}
         historyDates={streakHistory}
+        onClaimReward={handleClaimStreakReward}
+        claimedRewards={claimedStreakRewards}
+        onToast={showToast}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
       />
 
       <ProfileModal
@@ -1530,20 +1634,21 @@ export default function App() {
         favoriteCharacterIds={activeFavoriteCharacterIds}
         bookmarks={Object.values(bookmarks)}
         allCharacters={publicCharacters}
-        unlockedAccessories={mascotSettings.unlockedAccessories}
+        claimedRewards={claimedStreakRewards}
+        streakCount={currentStreak}
         isNightMode={theme === 'dark'}
         onSelectFavoriteFilter={() => {
           setNotificationTab('favorites');
           setIsNotificationsOpen(true);
         }}
         onSelectBookmarkFilter={() => {
-          // Scroll smoothly to the bookshelf
           const el = document.getElementById('bookshelf-section');
           if (el) {
             el.scrollIntoView({ behavior: 'smooth' });
           }
         }}
         onOpenCharacterDetail={(char) => setSelectedCharacter(char)}
+        onClaimAchievementReward={handleClaimAchievementReward}
         isSfxOn={audioSettings.isSfxOn}
         sfxVolume={audioSettings.sfxVolume}
         onToast={showToast}
@@ -1559,7 +1664,7 @@ export default function App() {
         onPinNote={handlePinBoardNote}
         onHideNote={handleHideBoardNote}
         onDeleteNote={handleDeleteBoardNote}
-        isAdmin={isAdminOpen}
+        isAdmin={isAdminLoggedIn}
       />
 
       <RandomCharacterModal
@@ -1570,6 +1675,8 @@ export default function App() {
         onVote={handleVote}
         onToggleFavorite={handleToggleFavorite}
         favoriteIds={activeFavoriteCharacterIds}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
       />
 
       <AudioSettingsModal
@@ -1586,9 +1693,46 @@ export default function App() {
         sfxVolume={audioSettings.sfxVolume}
       />
 
-
       <AudioPlayer
         settings={audioSettings}
+      />
+
+      {/* Góc Ủng Hộ Yui & Hòm Thư Mùa Đông */}
+      <DonateMailboxModal
+        isOpen={isDonateMailboxOpen}
+        onClose={() => setIsDonateMailboxOpen(false)}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
+        onToast={showToast}
+      />
+
+      {/* Lầu Tuyết Họa Ký — Lưu trữ đoạn chat, fanart & phản hồi bài nhau */}
+      <MemoryGalleryModal
+        isOpen={isMemoryGalleryOpen}
+        onClose={() => setIsMemoryGalleryOpen(false)}
+        posts={memoryGalleryPosts}
+        characters={publicCharacters}
+        userProfile={userProfile}
+        isAdmin={isAdminLoggedIn}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
+        onToast={showToast}
+      />
+
+      {/* Nhặt Cánh Tuyết Rơi — Quote ngẫu hứng & đoạn viết của Yui */}
+      <WhisperQuotesModal
+        isOpen={isWhisperQuotesOpen}
+        onClose={() => setIsWhisperQuotesOpen(false)}
+        posts={whisperPosts}
+        userProfile={userProfile}
+        isAdmin={isAdminLoggedIn}
+        onRequireAdmin={() => {
+          setAdminAuthTarget('inline_unlock');
+          setIsAdminAuthOpen(true);
+        }}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
+        onToast={showToast}
       />
 
       {/* 4. Floating Back to Top Button */}

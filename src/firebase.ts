@@ -1,12 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import firebaseConfig from '../firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
 // CRITICAL: The app uses the designated firestore database instance
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+export const OWNER_ADMIN_EMAIL = 'anhthuy241084@gmail.com';
 
 export enum OperationType {
   CREATE = 'create',
@@ -36,7 +38,11 @@ export interface FirestoreErrorInfo {
 
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   const errMsg = error instanceof Error ? error.message : String(error);
-  const isQuotaOrPermission = errMsg.includes('Quota limit exceeded') || errMsg.includes('RESOURCE_EXHAUSTED') || errMsg.includes('permission-denied') || errMsg.includes('unavailable');
+  const isReadQuotaOrTransient =
+    (operationType === OperationType.GET || operationType === OperationType.LIST) &&
+    (errMsg.includes('Quota limit exceeded') ||
+      errMsg.includes('RESOURCE_EXHAUSTED') ||
+      errMsg.includes('unavailable'));
 
   const errInfo: FirestoreErrorInfo = {
     error: errMsg,
@@ -46,27 +52,23 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
       emailVerified: auth.currentUser?.emailVerified,
       isAnonymous: auth.currentUser?.isAnonymous,
       tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData?.map(provider => ({
-        providerId: provider.providerId,
-        email: provider.email,
-      })) || []
+      providerInfo:
+        auth.currentUser?.providerData?.map((provider) => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
     },
     operationType,
-    path
+    path,
   };
 
-  if (isQuotaOrPermission) {
-    console.warn('Firestore Quota / Limit Notice (using local cache/fallback):', JSON.stringify(errInfo));
-    if (operationType === OperationType.GET || operationType === OperationType.LIST) {
-      return;
-    }
-  } else {
-    console.error('Firestore Error: ', JSON.stringify(errInfo));
+  if (isReadQuotaOrTransient) {
+    console.warn('Firestore Read Notice:', JSON.stringify(errInfo));
+    return;
   }
 
-  if (operationType !== OperationType.GET && operationType !== OperationType.LIST && !isQuotaOrPermission) {
-    throw new Error(JSON.stringify(errInfo));
-  }
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
 }
 
 /**
@@ -94,10 +96,12 @@ export function sanitizeForFirestore<T>(data: T): T {
 // Connection test on boot (graceful)
 export async function testFirestoreConnection(): Promise<boolean> {
   try {
-    // Firestore handles connection and offline caching automatically via onSnapshot
+    await getDocFromServer(doc(db, 'test', 'connection'));
     return true;
   } catch (error) {
-    console.warn('Firestore connection check notice:', error);
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.error('Please check your Firebase configuration.');
+    }
     return false;
   }
 }

@@ -22,24 +22,22 @@ const DEFAULT_CONTACTS: ContactLink[] = [
     displayOrder: 0,
     createdAt: new Date().toISOString(),
   },
-  {
-    id: 'contact-ngl',
-    label: 'NGL (Gửi tin nhắn ẩn danh)',
-    value: 'https://ngl.link/yui47549',
-    display: 'ngl.link/yui47549',
-    iconType: 'ngl',
-    displayOrder: 1,
-    createdAt: new Date().toISOString(),
-  }
 ];
+
+function isAllowedContact(c: ContactLink): boolean {
+  const label = (c.label || '').toLowerCase();
+  const value = (c.value || '').toLowerCase();
+  return c.iconType !== 'ngl' && !label.includes('ngl') && !label.includes('ẩn danh') && !value.includes('ngl.link');
+}
 
 export function getLocalContacts(): ContactLink[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+      if (Array.isArray(parsed)) {
+        const filtered = parsed.filter(isAllowedContact);
+        if (filtered.length > 0) return filtered;
       }
     }
   } catch (e) {
@@ -50,7 +48,7 @@ export function getLocalContacts(): ContactLink[] {
 
 export function saveLocalContacts(contacts: ContactLink[]): void {
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts.filter(isAllowedContact)));
   } catch (e) {
     console.warn('Could not save local contacts:', e);
   }
@@ -72,7 +70,7 @@ export function subscribeContacts(
           const list: ContactLink[] = [];
           snapshot.forEach((docSnap) => {
             const data = docSnap.data();
-            list.push({
+            const item: ContactLink = {
               id: docSnap.id,
               label: data.label || '',
               value: data.value || '',
@@ -81,15 +79,16 @@ export function subscribeContacts(
               imageUrl: data.imageUrl || '',
               displayOrder: typeof data.displayOrder === 'number' ? data.displayOrder : 0,
               createdAt: data.createdAt || new Date().toISOString(),
-            });
+            };
+            if (isAllowedContact(item)) {
+              list.push(item);
+            }
           });
 
-          // Sort by displayOrder ascending, then createdAt descending
           list.sort((a, b) => (a.displayOrder - b.displayOrder) || new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           saveLocalContacts(list);
-          onData(list);
+          onData(list.length > 0 ? list : DEFAULT_CONTACTS);
         } else {
-          // If Firestore is empty, initialize with default contacts
           const localList = getLocalContacts();
           onData(localList);
         }

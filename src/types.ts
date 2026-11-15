@@ -32,7 +32,7 @@ export interface Character {
   title: string; // Tagline / Mô tả ngắn
   avatar: string; // Avatar URL / File Data URL
   tags: string[]; // Các tag / từ khóa
-  creator: string; // Tác giả (mặc định Admin)
+  creator: string; // Tác giả (mặc định Yui)
   chatUrl: string; // Link 1 (mặc định "Tiến tới Ggai")
   chatUrl2?: string; // Link 2 (tùy chọn dự phòng / bổ sung)
   chatUrlLabel?: string; // Nhãn tùy chỉnh nút link 1
@@ -253,10 +253,10 @@ export interface WelcomeLetterConfig {
 }
 
 export const DEFAULT_WELCOME_LETTER: WelcomeLetterConfig = {
-  title: '« Bến Đỗ Bình Yên · Góc Nhỏ Của Yui » ✦',
-  greeting: 'Thân gửi người lữ khách ghé lại bên bờ sóng biếc,\n\n« 沧海月明珠有泪，蓝田日暖玉生烟 »\n(Thương hải nguyệt minh châu hữu lệ, Lam điền nhật noãn ngọc sinh yên)\n*Dịch thơ: Biển biếc trăng trong ngời giọt ngọc, Lam điền nắng ấm khói trầm bay.*\n\nCảm tạ cậu đã dừng chân nơi hải trình tĩnh lặng này. Giữa biển đời muôn trùng biến ảo, nơi đây gom góp những bóng hình nhân vật được dệt nên từ ngòi bút thiết tha, những mẩu chuyện dịu dàng và từng nhịp sóng vỗ về tâm hồn lữ khách.',
-  closing: '« 愿随流水寄相思，莫道沧桑失故知 »\n(Nguyện tùy lưu thủy ký tương tư, mạc đạo thương tang thất cố tri)\n*Dịch thơ: Nguyện gửi tương tư theo dòng nước, Đừng than dâu bể lạc tri âm.*\n\nMong rằng nơi bến đỗ trong veo này, bồ sẽ tìm thấy một góc nhỏ bình yên, gác lại mọi âu lo sau cánh cửa đại dương.',
-  signature: 'Yui · Người Giữ Ngọn Hải Đăng ♡',
+  title: '« Hộp Ký Ức Mùa Đông · Góc Nhỏ Của Yui » ✦',
+  greeting: 'Thân gửi người lữ khách ghé lại bên khung cửa tuyết rơi,\n\n« 晚来天欲雪，能饮一杯无 »\n(Vãn lai thiên dục tuyết, năng ẩm nhất bôi vô)\n*Dịch thơ: Chiều muộn trời sắp đổ tuyết, có thể cùng uống một chén trà ấm không?*\n\nCảm tạ cậu đã dừng chân nơi chiếc hộp mùa đông tĩnh lặng này. Giữa những ngày gió lạnh, nơi đây gom góp những bóng hình nhân vật được dệt nên từ ngòi bút thiết tha, những mẩu chuyện dịu dàng và hơi ấm sưởi lòng người lữ khách.',
+  closing: '« 愿有岁月可回首，且以深情共白头 »\n(Nguyện hữu tuế nguyệt khả hồi thủ, thả dĩ thâm tình cộng bạch đầu)\n\nMong rằng nơi góc nhỏ phủ tuyết trong veo này, cậu sẽ tìm thấy sự bình yên, gác lại mọi âu lo sau cánh cửa mùa đông.',
+  signature: 'Yui · Người Giữ Hộp Ký Ức Mùa Đông ❄',
 };
 
 export type AvatarFrame =
@@ -364,6 +364,76 @@ export const APP_BADGES: UserBadge[] = [
   },
 ];
 
+export interface AchievementRewardDef {
+  badgeId: BadgeId;
+  giftName: string;
+  giftIcon: string;
+  accessoryId?: MascotAccessoryId;
+  accessoryLabel?: string;
+  frameId?: AvatarFrame;
+  frameLabel?: string;
+  decoration?: ProfileDecoration;
+}
+
+export const ACHIEVEMENT_REWARDS: Record<BadgeId, AchievementRewardDef> = {
+  first_visit: {
+    badgeId: 'first_visit',
+    giftName: 'Hoa Tuyết Sơ Ngộ',
+    giftIcon: '❄️',
+    frameId: 'paper',
+    frameLabel: 'Khung Giấy Tuyết',
+    decoration: 'sparkles',
+  },
+  bookmarker: {
+    badgeId: 'bookmarker',
+    giftName: 'Kẹp Trang Pha Lê',
+    giftIcon: '🔖',
+    frameId: 'ribbon',
+    frameLabel: 'Khung Ruy Băng',
+    decoration: 'ribbons',
+  },
+  collector: {
+    badgeId: 'collector',
+    giftName: 'Hộp Ký Ức Tri Âm',
+    giftIcon: '🎁',
+    frameId: 'star',
+    frameLabel: 'Khung Sao Tuyết',
+    decoration: 'stars',
+  },
+  night_owl: {
+    badgeId: 'night_owl',
+    giftName: 'Đèn Bão Đêm Đông',
+    giftIcon: '🌙',
+    frameId: 'little_cosmos',
+    frameLabel: 'Khung Đêm Ngân Hà',
+    decoration: 'stars',
+  },
+  explorer: {
+    badgeId: 'explorer',
+    giftName: 'Chìa Khóa Góc Ẩn',
+    giftIcon: '🪽',
+    frameId: 'little_angel',
+    frameLabel: 'Khung Thiên Thần',
+    decoration: 'sparkles',
+  },
+  baker: {
+    badgeId: 'baker',
+    giftName: 'Bánh Ngọt Đêm Tuyết',
+    giftIcon: '🧁',
+    frameId: 'sweet_bakery',
+    frameLabel: 'Khung Tiệm Bánh Ấm',
+    decoration: 'petals',
+  },
+  streak_master: {
+    badgeId: 'streak_master',
+    giftName: 'Vương Miện Tuyết Bền Bỉ',
+    giftIcon: '👑',
+    frameId: 'winter',
+    frameLabel: 'Khung Mùa Đông Vĩnh Cửu',
+    decoration: 'snow',
+  },
+};
+
 export interface UserProfile {
   name: string;
   bio: string;
@@ -379,6 +449,8 @@ export interface UserProfile {
   isPublic: boolean;
   selectedBadges: BadgeId[];
   unlockedBadges: BadgeId[];
+  claimedAchievements?: BadgeId[];
+  claimedGifts?: string[];
   updatedAt?: string;
 }
 
@@ -389,15 +461,19 @@ export const DEFAULT_USER_PROFILE: UserProfile = {
   avatarShape: 'circle',
   avatarZoom: 1,
   avatarFrame: 'none',
-  profileTheme: 'soft-paper',
-  decoration: 'none',
+  profileTheme: 'winter',
+  decoration: 'snow',
   favoriteTags: [],
   favoriteCharacterId: null,
   favoriteQuote: '',
   isPublic: true,
   selectedBadges: ['first_visit'],
   unlockedBadges: ['first_visit'],
-};export type FeatureStatus = 'active' | 'new' | 'updating' | 'closed';
+  claimedAchievements: [],
+  claimedGifts: [],
+};
+
+export type FeatureStatus = 'active' | 'new' | 'updating' | 'closed';
 
 export interface Feature {
   id: string;
@@ -443,10 +519,10 @@ export interface HelpCenterConfig {
 }
 
 export const DEFAULT_HELP_CENTER_CONFIG: HelpCenterConfig = {
-  mainTitle: 'Sổ Tay Trợ Giúp & Hướng Dẫn Hải Trình',
-  subTitle: 'Khám phá trọn vẹn các tính năng thú vị tại góc nhỏ của Yui',
+  mainTitle: 'Sổ Tay Trợ Giúp & Hướng Dẫn Mùa Đông',
+  subTitle: 'Khám phá trọn vẹn các tính năng thú vị tại Hộp Ký Ức Mùa Đông của Yui',
   badgeText: 'Guide & Tips',
-  announcementNote: '🌊 Mẹo: Bạn có thể kẹp bookmark nhân vật và tạo bộ sưu tập riêng trên Kệ sách trang chủ!',
+  announcementNote: '❄️ Mẹo: Bạn có thể kẹp bookmark nhân vật và tạo bộ sưu tập riêng trên Kệ sách trang chủ!',
   categories: [
     {
       id: 'cat_explore',
@@ -511,25 +587,25 @@ export const DEFAULT_HELP_CENTER_CONFIG: HelpCenterConfig = {
     {
       id: 'cat_fortune',
       key: 'fortune',
-      name: '🐚 Tiện ích & Vỏ sò',
-      icon: '🐚',
-      title: '🐚 Vỏ Sò May Mắn, Ngẫu Nhiên & Chuỗi Ghé Thăm',
-      description: 'Những trải nghiệm biển khơi mỗi ngày:',
+      name: '❄️ Tiện ích & Quẻ tuyết',
+      icon: '❄️',
+      title: '❄️ Quẻ Tuyết May Mắn, Ngẫu Nhiên & Chuỗi Ghé Thăm',
+      description: 'Những trải nghiệm mùa đông mỗi ngày:',
       items: [
         {
           id: 'item_fort_1',
-          title: 'Rút lời nhắn Vỏ Sò May Mắn',
-          desc: 'Mỗi ngày hãy ghé thăm Vỏ Sò Đại Dương trên đầu trang, chọn một vỏ sò để lắng nghe thông điệp chữa lành, màu sắc may mắn và nhân vật tương thích.',
+          title: 'Rút lời nhắn Quẻ Tuyết May Mắn',
+          desc: 'Mỗi ngày hãy ghé thăm Hộp Quẻ Mùa Đông trên đầu trang để lắng nghe thông điệp chữa lành, màu sắc may mắn và nhân vật tương thích.',
         },
         {
           id: 'item_fort_2',
-          title: 'Hôm nay gặp ai đây? (Xúc xắc ngẫu nhiên)',
-          desc: 'Nếu phân vân chưa biết trò chuyện cùng ai, hãy dùng tính năng xúc xắc ngẫu nhiên theo chủ đề để dòng hải lưu dẫn lối cho bạn.',
+          title: 'Hôm nay gặp ai đây? (Snow Random)',
+          desc: 'Nếu phân vân chưa biết trò chuyện cùng ai, hãy dùng tính năng Snow Random theo chủ đề để bông tuyết dẫn lối cho bạn.',
         },
         {
           id: 'item_fort_3',
           title: 'Chuỗi ngày ghé thăm (Streak)',
-          desc: 'Mỗi ngày ghé thăm góc nhỏ sẽ tích lũy 1 ngày chuỗi ghé thăm liên tiếp. Khám phá các mốc phần thưởng thú vị khi duy trì chuỗi ghé thăm chăm chỉ!',
+          desc: 'Mỗi ngày ghé thăm chiếc hộp sẽ tích lũy 1 ngày chuỗi ghé thăm liên tiếp. Nhận quà phụ kiện và khung hồ sơ khi đạt mốc!',
         },
       ],
     },
@@ -579,7 +655,7 @@ export const DEFAULT_HELP_CENTER_CONFIG: HelpCenterConfig = {
         {
           id: 'item_faq_3',
           title: 'Làm sao để chuyển đổi chế độ Sáng / Tối?',
-          desc: 'Nhấn vào nút biểu tượng Mặt Trời / Mặt Trăng ở góc trên thanh Header để chuyển đổi giữa hai không gian đại dương êm dịu.',
+          desc: 'Nhấn vào nút biểu tượng Ánh sáng mùa đông / Đêm tuyết ở góc trên thanh Header để chuyển đổi giữa hai không gian tuyết rơi êm dịu.',
         },
       ],
     },
@@ -638,6 +714,8 @@ export interface CreatorRequest {
   link2?: string;
   imageUrl?: string | null;
   status: 'pending_approval' | 'approved' | 'needs_revision' | 'responded' | 'rejected';
+  isPrivate?: boolean;
+  clientToken?: string;
   createdAt: string;
   adminNote?: string;
   creatorResponse?: string;
@@ -723,4 +801,79 @@ export const DEFAULT_HERO_PRESENTATION: HeroPresentationConfig = {
   blurAmount: 0,
 };
 
+export type WinterContactMethod = 'none' | 'facebook' | 'discord' | 'email' | 'other';
+
+export interface WinterLetter {
+  id: string;
+  senderName: string;
+  preferredDisplayName: string;
+  donateNote: string;
+  contactMethod: WinterContactMethod;
+  contactPlatformName: string;
+  contactValue: string;
+  message: string;
+  allowContactThanks: boolean;
+  silentGift: boolean;
+  hideIdentity: boolean;
+  allowPublicNickname: boolean;
+  isRead: boolean;
+  isThanked: boolean;
+  internalNote: string;
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+export type MemoryGalleryCategory = 'chat' | 'fanart' | 'moment';
+
+export interface MemoryGalleryReply {
+  id: string;
+  author: string;
+  isAnonymous: boolean;
+  content: string;
+  replyToAuthor?: string;
+  createdAt: string;
+  creatorToken?: string;
+}
+
+export interface MemoryGalleryPost {
+  id: string;
+  title: string;
+  category: MemoryGalleryCategory;
+  author: string;
+  isAnonymous: boolean;
+  characterName?: string;
+  content: string;
+  imageUrl?: string;
+  sourceCredit?: string;
+  likes: number;
+  replies: MemoryGalleryReply[];
+  createdAt: string;
+  creatorToken?: string;
+}
+
+export type WhisperCategory = 'quote' | 'excerpt' | 'snapshot';
+
+export interface WhisperComment {
+  id: string;
+  author: string;
+  isAnonymous: boolean;
+  content: string;
+  replyToAuthor?: string;
+  createdAt: string;
+  creatorToken?: string;
+}
+
+export interface WhisperPost {
+  id: string;
+  title: string;
+  category: WhisperCategory;
+  subtitleOrMood?: string;
+  content: string;
+  imageUrl?: string;
+  author: string;
+  likes: number;
+  comments: WhisperComment[];
+  createdAt: string;
+  updatedAt?: string;
+}
 

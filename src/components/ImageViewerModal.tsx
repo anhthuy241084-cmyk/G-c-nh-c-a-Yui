@@ -80,7 +80,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
               {characterName ? `${characterName}` : 'Ảnh Character'}
             </span>
             {images.length > 1 && (
-              <span className="text-xs font-semibold bg-[#71BFC6]/90 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-semibold bg-[#526B80]/90 px-2.5 py-1 rounded-full">
                 {currentIndex + 1} / {images.length}
               </span>
             )}
@@ -110,7 +110,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-full bg-[#71BFC6] hover:bg-[#5AA9B0] transition-colors text-white ml-2 shadow-lg cursor-pointer"
+              className="p-2 rounded-full bg-[#526B80] hover:bg-[#91A9BC] transition-colors text-white ml-2 shadow-lg cursor-pointer"
               title="Đóng chế độ xem toàn màn hình (Esc)"
             >
               <X className="w-5 h-5" />
@@ -180,7 +180,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
                   setCurrentIndex(idx);
                 }}
                 className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                  idx === currentIndex ? 'border-[#71BFC6] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'
+                  idx === currentIndex ? 'border-[#91A9BC] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'
                 }`}
               >
                 <img src={img} alt="" className="w-full h-full object-cover" />

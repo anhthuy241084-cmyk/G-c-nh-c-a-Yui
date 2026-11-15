@@ -286,27 +286,27 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 15 }}
           transition={{ duration: 0.22, ease: 'easeOut' }}
-          className="relative w-full max-w-5xl bg-white dark:bg-[#0B2530] rounded-3xl sm:rounded-4xl shadow-2xl border border-[#BFE7E8] dark:border-[#38CAD6]/30 flex flex-col max-h-[90vh] overflow-hidden"
+          className="relative w-full max-w-5xl bg-[#F7FAFD] dark:bg-[#172536] rounded-3xl sm:rounded-4xl shadow-2xl border border-[#DCE7EF] dark:border-[#43576B] flex flex-col max-h-[90vh] overflow-hidden"
         >
           {/* Top Decorative Header */}
-          <div className="px-5 sm:px-8 py-5 border-b border-[#38CAD6]/20 dark:border-[#132F3D] bg-gradient-to-r from-[#F0F9FB] via-[#E8F5F8] to-[#E0F2F5] dark:from-[#091C24] dark:via-[#0E232E] dark:to-[#132F3D] flex flex-wrap items-center justify-between gap-4">
+          <div className="px-5 sm:px-8 py-5 border-b border-[#DCE7EF] dark:border-[#43576B] bg-gradient-to-r from-[#F7FAFD] via-[#E8F1F8] to-[#DCE7EF]/80 dark:from-[#172536] dark:via-[#202F42] dark:to-[#27384D] flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#38CAD6] to-[#1B6E7D] text-white flex items-center justify-center shadow-md shadow-[#1B6E7D]/20 shrink-0">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-[#526B80] to-[#354A60] text-white flex items-center justify-center shadow-md shadow-[#172536]/20 shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg sm:text-xl font-bold font-serif text-[#14303A] dark:text-[#E4F7F9] flex items-center gap-1.5">
-                    <span>✦ Kho lệnh</span>
-                    <span className="text-xs text-[#1B6E7D] dark:text-[#48CCD6] font-sans font-normal hidden sm:inline">✦ Command Library</span>
+                  <h2 className="text-lg sm:text-xl font-bold font-serif text-[#172536] dark:text-[#E5EDF5] flex items-center gap-1.5">
+                    <span>❄️ Kho lệnh</span>
+                    <span className="text-xs text-[#526B80] dark:text-[#A9BDCE] font-sans font-normal hidden sm:inline">✦ Command Library</span>
                   </h2>
                   {isAdmin && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#38CAD6]/15 text-[#1B6E7D] dark:text-[#48CCD6] border border-[#38CAD6]/40">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] border border-[#91A9BC]/40">
                       Admin Mode
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-[#53737C] dark:text-[#88A9B3] font-serif">
+                <p className="text-xs text-[#43576B] dark:text-[#A9BDCE] font-serif">
                   Kệ thẻ lệnh & prompt mẫu được sắp xếp gọn gàng (｡･ω･｡)ﾉ♡
                 </p>
               </div>
@@ -318,7 +318,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                 <button
                   type="button"
                   onClick={handleOpenCreate}
-                  className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] hover:from-[#48CCD6] hover:to-[#38CAD6] text-white text-xs font-bold shadow-md shadow-[#1B6E7D]/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer font-serif"
+                  className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#526B80] to-[#354A60] hover:from-[#647F96] hover:to-[#43576B] text-white text-xs font-bold shadow-md shadow-[#172536]/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer font-serif"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>+ Thêm lệnh</span>
@@ -327,7 +327,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                 <button
                   type="button"
                   onClick={onOpenAdminAuth}
-                  className="px-3 py-1.5 rounded-full bg-[#E0F3F5] dark:bg-[#132F3D] hover:bg-[#D0EBF0] text-[#1B6E7D] dark:text-[#48CCD6] text-xs font-medium border border-[#38CAD6]/30 transition-colors cursor-pointer hidden sm:flex items-center gap-1 font-serif"
+                  className="px-3 py-1.5 rounded-full bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#DCE7EF] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] text-xs font-medium border border-[#91A9BC]/35 transition-colors cursor-pointer hidden sm:flex items-center gap-1 font-serif"
                   title="Đăng nhập Admin để tạo hoặc sửa lệnh"
                 >
                   <span>🔐 Đăng lệnh</span>
@@ -337,7 +337,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-full text-[#53737C] hover:text-[#14303A] dark:text-[#88A9B3] dark:hover:text-white hover:bg-[#38CAD6]/10 dark:hover:bg-[#132F3D] transition-colors cursor-pointer"
+                className="p-2 rounded-full text-[#43576B] hover:text-[#172536] dark:text-[#A9BDCE] dark:hover:text-white hover:bg-[#E8F1F8] dark:hover:bg-[#27384D] transition-colors cursor-pointer"
                 title="Đóng"
               >
                 <X className="w-5 h-5" />
@@ -346,23 +346,23 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
           </div>
 
           {/* Search Bar & Category Filter Bar */}
-          <div className="px-5 sm:px-8 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 space-y-3">
+          <div className="px-5 sm:px-8 py-3.5 border-b border-[#DCE7EF] dark:border-[#43576B] bg-white/75 dark:bg-[#202F42]/70 space-y-3">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               {/* Search Input */}
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#53737C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Search className="w-4 h-4 text-[#91A9BC] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm kiếm lệnh (tên, nội dung, category, tag)..."
-                  className="w-full pl-9 pr-8 py-2 rounded-2xl text-xs bg-white dark:bg-[#0E232E] border border-[#38CAD6]/30 text-[#14303A] dark:text-[#E4F7F9] placeholder-[#88A9B3] focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6] transition-all font-sans"
+                  className="w-full pl-9 pr-8 py-2 rounded-2xl text-xs bg-white dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-[#E5EDF5] placeholder-[#91A9BC] focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC] transition-all font-sans"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-[#53737C] hover:text-[#14303A]"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-[#91A9BC] hover:text-[#526B80]"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -371,12 +371,12 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
 
               {/* Sort Selector */}
               <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto font-serif">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#38CAD6]" />
-                <span className="text-[11px] text-[#53737C] dark:text-[#88A9B3] font-medium">Sắp xếp:</span>
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#526B80] dark:text-[#A9BDCE]" />
+                <span className="text-[11px] text-[#43576B] dark:text-[#A9BDCE] font-medium">Sắp xếp:</span>
                 <select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value as SortOption)}
-                  className="text-xs bg-white dark:bg-[#0E232E] border border-[#38CAD6]/30 text-[#14303A] dark:text-[#E4F7F9] rounded-xl px-2.5 py-1.5 focus:outline-hidden focus:ring-1 focus:ring-[#38CAD6] cursor-pointer"
+                  className="text-xs bg-white dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-[#E5EDF5] rounded-xl px-2.5 py-1.5 focus:outline-hidden focus:ring-1 focus:ring-[#91A9BC] cursor-pointer"
                 >
                   <option value="custom">Thứ tự tùy chỉnh</option>
                   <option value="newest">Mới nhất</option>
@@ -395,8 +395,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   onClick={() => setSelectedCategory('all')}
                   className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     selectedCategory === 'all'
-                      ? 'bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white shadow-xs'
-                      : 'bg-[#E0F3F5] dark:bg-[#0E232E] text-[#1B6E7D] dark:text-[#48CCD6] hover:bg-[#D0EBF0]'
+                      ? 'bg-gradient-to-r from-[#526B80] to-[#354A60] text-white shadow-xs'
+                      : 'bg-[#E8F1F8] dark:bg-[#172536] text-[#526B80] dark:text-[#A9BDCE] hover:bg-[#DCE7EF] dark:hover:bg-[#27384D]'
                   }`}
                 >
                   Tất cả ({commands.length})
@@ -410,8 +410,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                       onClick={() => setSelectedCategory(cat)}
                       className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                         selectedCategory === cat
-                          ? 'bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] text-white shadow-xs'
-                          : 'bg-[#E0F3F5] dark:bg-[#0E232E] text-[#1B6E7D] dark:text-[#48CCD6] hover:bg-[#D0EBF0]'
+                          ? 'bg-gradient-to-r from-[#526B80] to-[#354A60] text-white shadow-xs'
+                          : 'bg-[#E8F1F8] dark:bg-[#172536] text-[#526B80] dark:text-[#A9BDCE] hover:bg-[#DCE7EF] dark:hover:bg-[#27384D]'
                       }`}
                     >
                       {cat} ({count})
@@ -552,7 +552,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(cmd)}
-                              className="p-1.5 rounded-xl bg-white/70 hover:bg-white text-slate-700 hover:text-[#1B6E7D] transition-colors cursor-pointer"
+                              className="p-1.5 rounded-xl bg-white/70 hover:bg-white text-slate-700 hover:text-[#526B80] transition-colors cursor-pointer"
                               title="Chỉnh sửa lệnh"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -561,7 +561,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                             <button
                               type="button"
                               onClick={() => setCommandToDelete(cmd)}
-                              className="p-1.5 rounded-xl bg-white/70 hover:bg-white text-slate-700 hover:text-[#E07A7A] transition-colors cursor-pointer"
+                              className="p-1.5 rounded-xl bg-white/70 hover:bg-white text-slate-700 hover:text-rose-500 transition-colors cursor-pointer"
                               title="Xóa lệnh"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -579,7 +579,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="w-16 h-16 rounded-3xl bg-[#71BFC6]/15 text-[#1B6E7D] dark:text-[#7DD8DE] mx-auto flex items-center justify-center border border-[#71BFC6]/30"
+                  className="w-16 h-16 rounded-3xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#A9BDCE] mx-auto flex items-center justify-center border border-[#DCE7EF] dark:border-[#43576B]"
                 >
                   <Sparkles className="w-8 h-8 animate-pulse" />
                 </motion.div>
@@ -597,7 +597,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   <button
                     type="button"
                     onClick={handleOpenCreate}
-                    className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#8CCFD3] to-[#71BFC6] hover:brightness-105 text-white text-xs font-bold shadow-xs cursor-pointer"
+                    className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#526B80] to-[#354A60] hover:brightness-105 text-white text-xs font-bold shadow-xs cursor-pointer"
                   >
                     <Plus className="w-4 h-4" />
                     <span>+ Thêm lệnh đầu tiên</span>
@@ -711,7 +711,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleCopy(detailCommand)}
-                    className="px-6 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#8CCFD3] to-[#71BFC6] hover:brightness-105 text-white shadow-xs flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
+                    className="px-6 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#526B80] to-[#354A60] hover:brightness-110 text-white shadow-xs flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
                   >
                     {copiedId === detailCommand.id ? (
                       <>
@@ -732,7 +732,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
         </AnimatePresence>
 
         {/* ======================================================== */}
-        {/* 🎀 2. ADMIN FORM TẠO & SỬA LỆNH (TỜ GIẤY GHI CHÚ)         */}
+        {/* ❄️ 2. ADMIN FORM TẠO & SỬA LỆNH (TỜ GIẤY GHI CHÚ)         */}
         {/* ======================================================== */}
         <AnimatePresence>
           {isFormOpen && (
@@ -741,17 +741,17 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                 initial={{ opacity: 0, scale: 0.92, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                className="relative w-full max-w-4xl bg-white dark:bg-[#0E232E] rounded-3xl sm:rounded-4xl shadow-2xl border-2 border-[#38CAD6]/40 dark:border-[#38CAD6]/30 p-5 sm:p-7 flex flex-col max-h-[92vh] overflow-y-auto space-y-5 text-[#14303A] dark:text-[#E4F7F9]"
+                className="relative w-full max-w-4xl bg-[#F7FAFD] dark:bg-[#172536] rounded-3xl sm:rounded-4xl shadow-2xl border-2 border-[#DCE7EF] dark:border-[#43576B] p-5 sm:p-7 flex flex-col max-h-[92vh] overflow-y-auto space-y-5 text-[#172536] dark:text-[#E5EDF5]"
               >
                 {/* Form Top Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-[#38CAD6]/20 dark:border-[#132F3D]">
+                <div className="flex items-center justify-between pb-3 border-b border-[#DCE7EF] dark:border-[#43576B]">
                   <div className="flex items-center gap-2.5">
                     <span className="text-xl">📝</span>
                     <div>
-                      <h3 className="text-base sm:text-lg font-bold font-serif text-[#14303A] dark:text-white">
+                      <h3 className="text-base sm:text-lg font-bold font-serif text-[#172536] dark:text-white">
                         {editingCommand ? 'Chỉnh sửa lệnh' : 'Đăng lệnh mới vào Kho lệnh'}
                       </h3>
-                      <p className="text-xs text-[#53737C] dark:text-[#88A9B3]">
+                      <p className="text-xs text-[#43576B] dark:text-[#A9BDCE]">
                         Nội dung do Admin tự thiết lập, lưu trữ trực tiếp trên hệ thống
                       </p>
                     </div>
@@ -759,7 +759,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
-                    className="p-2 rounded-full text-[#53737C] hover:text-[#14303A] dark:text-[#88A9B3] dark:hover:text-white cursor-pointer"
+                    className="p-2 rounded-full text-[#91A9BC] hover:text-[#172536] dark:text-[#A9BDCE] dark:hover:text-white cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -770,21 +770,21 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   <div className="lg:col-span-7 space-y-4 font-serif">
                     {/* Tên lệnh */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200">
-                        Tên lệnh <span className="text-[#38CAD6]">*</span>
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200">
+                        Tên lệnh <span className="text-[#526B80]">*</span>
                       </label>
                       <input
                         type="text"
                         value={formName}
                         onChange={(e) => setFormName(e.target.value)}
                         placeholder="Nhập tên lệnh..."
-                        className="w-full px-3.5 py-2 rounded-xl text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6] font-sans"
+                        className="w-full px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC] font-sans"
                       />
                     </div>
 
                     {/* Mô tả ngắn */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200">
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200">
                         Mô tả ngắn
                       </label>
                       <input
@@ -792,34 +792,34 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                         value={formDescription}
                         onChange={(e) => setFormDescription(e.target.value)}
                         placeholder="Mô tả ngắn về lệnh..."
-                        className="w-full px-3.5 py-2 rounded-xl text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6] font-sans"
+                        className="w-full px-3.5 py-2 rounded-xl text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC] font-sans"
                       />
                     </div>
 
                     {/* Nội dung lệnh */}
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200">
-                        Nội dung lệnh (Prompt) <span className="text-[#38CAD6]">*</span>
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200">
+                        Nội dung lệnh (Prompt) <span className="text-[#526B80]">*</span>
                       </label>
                       <textarea
                         rows={6}
                         value={formContent}
                         onChange={(e) => setFormContent(e.target.value)}
                         placeholder="Nhập nội dung lệnh..."
-                        className="w-full px-3.5 py-2.5 rounded-xl font-mono text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6] leading-relaxed"
+                        className="w-full px-3.5 py-2.5 rounded-xl font-mono text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC] leading-relaxed"
                       />
                     </div>
 
                     {/* Category Selection / Creation */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-[#14303A] dark:text-slate-200">
+                        <label className="text-xs font-bold text-[#172536] dark:text-slate-200">
                           Danh mục (Category)
                         </label>
                         <select
                           value={formCategory}
                           onChange={(e) => setFormCategory(e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6]"
+                          className="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC]"
                         >
                           <option value="Character">Character</option>
                           <option value="Story">Story</option>
@@ -837,8 +837,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-[#14303A] dark:text-slate-200 flex items-center gap-1">
-                          <FolderPlus className="w-3 h-3 text-[#38CAD6]" />
+                        <label className="text-xs font-bold text-[#172536] dark:text-slate-200 flex items-center gap-1">
+                          <FolderPlus className="w-3 h-3 text-[#526B80] dark:text-[#A9BDCE]" />
                           <span>Hoặc tạo Category mới</span>
                         </label>
                         <input
@@ -846,15 +846,15 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                           value={formNewCategoryInput}
                           onChange={(e) => setFormNewCategoryInput(e.target.value)}
                           placeholder="Nhập tên category mới..."
-                          className="w-full px-3 py-2 rounded-xl text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#38CAD6] font-sans"
+                          className="w-full px-3 py-2 rounded-xl text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#91A9BC] font-sans"
                         />
                       </div>
                     </div>
 
                     {/* Tags */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200 flex items-center gap-1">
-                        <Tag className="w-3 h-3 text-[#38CAD6]" />
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200 flex items-center gap-1">
+                        <Tag className="w-3 h-3 text-[#526B80] dark:text-[#A9BDCE]" />
                         <span>Tag</span>
                       </label>
                       <div className="flex items-center gap-2">
@@ -869,12 +869,12 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                             }
                           }}
                           placeholder="Nhập tag và bấm Thêm..."
-                          className="flex-1 px-3 py-1.5 rounded-xl text-xs bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/30 text-[#14303A] dark:text-white font-sans"
+                          className="flex-1 px-3 py-1.5 rounded-xl text-xs bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[#172536] dark:text-white font-sans"
                         />
                         <button
                           type="button"
                           onClick={handleAddTag}
-                          className="px-3 py-1.5 rounded-xl bg-[#E0F3F5] hover:bg-[#D0EBF0] text-[#1B6E7D] dark:text-[#48CCD6] text-xs font-semibold transition-colors cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] text-xs font-semibold transition-colors cursor-pointer"
                         >
                           + Thêm
                         </button>
@@ -884,13 +884,13 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                           {formTags.map((t) => (
                             <span
                               key={t}
-                              className="px-2 py-0.5 rounded-full text-[11px] bg-[#38CAD6]/15 text-[#1B6E7D] dark:text-[#48CCD6] flex items-center gap-1 font-sans"
+                              className="px-2 py-0.5 rounded-full text-[11px] bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] border border-[#DCE7EF] dark:border-[#43576B] flex items-center gap-1 font-sans"
                             >
                               <span>#{t}</span>
                               <button
                                 type="button"
                                 onClick={() => handleRemoveTag(t)}
-                                className="hover:text-[#1B6E7D] font-bold"
+                                className="hover:text-[#172536] dark:hover:text-white font-bold"
                               >
                                 ×
                               </button>
@@ -902,8 +902,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
 
                     {/* Màu Card */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200 flex items-center gap-1">
-                        <Layers className="w-3 h-3 text-[#38CAD6]" />
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200 flex items-center gap-1">
+                        <Layers className="w-3 h-3 text-[#526B80] dark:text-[#A9BDCE]" />
                         <span>Màu Card</span>
                       </label>
                       <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
@@ -915,7 +915,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                             style={{ backgroundColor: c.hex, borderColor: c.borderHex }}
                             className={`h-9 rounded-xl border flex flex-col items-center justify-center text-[10px] font-bold text-slate-800 transition-all cursor-pointer ${
                               formColor.toLowerCase() === c.hex.toLowerCase()
-                                ? 'ring-2 ring-[#38CAD6] scale-105 shadow-sm'
+                                ? 'ring-2 ring-[#526B80] scale-105 shadow-sm'
                                 : 'hover:scale-102 opacity-85 hover:opacity-100'
                             }`}
                             title={c.name}
@@ -928,7 +928,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
 
                     {/* Decoration */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-[#14303A] dark:text-slate-200">
+                      <label className="text-xs font-bold text-[#172536] dark:text-slate-200">
                         Decoration góc thẻ
                       </label>
                       <div className="flex items-center gap-2">
@@ -939,8 +939,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                             onClick={() => setFormDecoration(decor)}
                             className={`w-10 h-10 rounded-xl text-sm font-serif transition-all cursor-pointer ${
                               formDecoration === decor
-                                ? 'bg-[#38CAD6] text-white font-bold shadow-md shadow-[#38CAD6]/25 scale-105'
-                                : 'bg-[#E0F3F5] dark:bg-[#07171F] text-[#14303A] dark:text-slate-300 hover:bg-[#D0EBF0]'
+                                ? 'bg-[#526B80] text-white font-bold shadow-md shadow-[#172536]/20 scale-105'
+                                : 'bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-slate-300 hover:bg-[#DCE7EF] dark:hover:bg-[#27384D]'
                             }`}
                           >
                             {decor}
@@ -952,8 +952,8 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
 
                   {/* Right Column: Live Preview */}
                   <div className="lg:col-span-5 space-y-3 font-serif">
-                    <div className="text-xs font-bold text-[#14303A] dark:text-slate-200 flex items-center gap-1.5">
-                      <Eye className="w-3.5 h-3.5 text-[#38CAD6]" />
+                    <div className="text-xs font-bold text-[#172536] dark:text-slate-200 flex items-center gap-1.5">
+                      <Eye className="w-3.5 h-3.5 text-[#526B80] dark:text-[#A9BDCE]" />
                       <span>Xem trước Card thực tế (Live Preview)</span>
                     </div>
 
@@ -1013,18 +1013,18 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                       );
                     })()}
 
-                    <div className="p-3.5 rounded-2xl bg-[#38CAD6]/10 border border-[#38CAD6]/30 text-[11px] text-[#1B6E7D] dark:text-[#48CCD6] leading-relaxed">
+                    <div className="p-3.5 rounded-2xl bg-[#E8F1F8]/70 dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[11px] text-[#526B80] dark:text-[#A9BDCE] leading-relaxed">
                       💡 <strong>Quy chuẩn nội dung:</strong> Toàn bộ câu lệnh và bối cảnh do Admin biên soạn. Khi người dùng bấm <em>Sao chép</em>, toàn bộ nội dung trong ô <em>Nội dung lệnh</em> sẽ được copy chuẩn xác 100%.
                     </div>
                   </div>
                 </div>
 
                 {/* Form Action Footer */}
-                <div className="pt-3 border-t border-[#38CAD6]/20 dark:border-[#132F3D] flex items-center justify-end gap-2.5 font-serif">
+                <div className="pt-3 border-t border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-end gap-2.5 font-serif">
                   <button
                     type="button"
                     onClick={() => setIsFormOpen(false)}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#E8F7F9] hover:bg-[#DDF2F5] dark:bg-[#132F3D] dark:hover:bg-[#1A3D4D] text-[#14303A] dark:text-[#E4F7F9] transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] transition-colors cursor-pointer"
                   >
                     Hủy
                   </button>
@@ -1032,7 +1032,7 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                     type="button"
                     disabled={isSaving}
                     onClick={handleSaveForm}
-                    className="px-6 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] hover:from-[#48CCD6] hover:to-[#38CAD6] text-white shadow-md shadow-[#1B6E7D]/25 flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                    className="px-6 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#526B80] to-[#354A60] hover:from-[#647F96] hover:to-[#43576B] text-white shadow-md shadow-[#172536]/20 flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                   >
                     <span>{editingCommand ? '✦ Cập nhật lệnh' : '✦ Đăng lệnh'}</span>
                   </button>
@@ -1052,18 +1052,18 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                 initial={{ scale: 0.9, opacity: 0, y: 10 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 10 }}
-                className="bg-white dark:bg-[#0E232E] rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-[#38CAD6]/30 dark:border-[#38CAD6]/20 text-center space-y-4"
+                className="bg-[#F7FAFD] dark:bg-[#172536] rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-[#DCE7EF] dark:border-[#43576B] text-center space-y-4"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] mx-auto flex items-center justify-center border border-[#38CAD6]/30">
+                <div className="w-12 h-12 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#A9BDCE] mx-auto flex items-center justify-center border border-[#DCE7EF] dark:border-[#43576B]">
                   <Trash2 className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1.5 font-serif">
-                  <h4 className="text-base font-bold text-[#14303A] dark:text-white">
+                  <h4 className="text-base font-bold text-[#172536] dark:text-white">
                     Xóa lệnh này?
                   </h4>
-                  <p className="text-xs text-[#53737C] dark:text-[#88A9B3]">
-                    Lệnh <span className="font-bold text-[#1B6E7D] dark:text-[#48CCD6]">"{commandToDelete.name}"</span> sẽ không còn xuất hiện trong Kho lệnh.
+                  <p className="text-xs text-[#43576B] dark:text-[#A9BDCE]">
+                    Lệnh <span className="font-bold text-[#526B80] dark:text-[#E5EDF5]">"{commandToDelete.name}"</span> sẽ không còn xuất hiện trong Kho lệnh.
                   </p>
                 </div>
 
@@ -1071,14 +1071,14 @@ export const CommandLibraryModal: React.FC<CommandLibraryModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setCommandToDelete(null)}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#E8F7F9] hover:bg-[#DDF2F5] dark:bg-[#132F3D] dark:hover:bg-[#1A3D4D] text-[#14303A] dark:text-[#E4F7F9] transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] transition-colors cursor-pointer"
                   >
                     Hủy
                   </button>
                   <button
                     type="button"
                     onClick={handleConfirmDelete}
-                    className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] hover:from-[#48CCD6] hover:to-[#38CAD6] text-white shadow-md shadow-[#1B6E7D]/20 transition-colors cursor-pointer"
+                    className="px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#526B80] to-[#354A60] hover:from-[#647F96] hover:to-[#43576B] text-white shadow-md shadow-[#172536]/20 transition-colors cursor-pointer"
                   >
                     Xóa
                   </button>

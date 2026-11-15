@@ -8,10 +8,43 @@ import {
   orderBy, 
   deleteDoc 
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, sanitizeForFirestore } from '../firebase';
 import { CreatorRequest } from '../types';
 
 const STORAGE_KEY = 'yui_creator_requests_local';
+const CLIENT_TOKEN_KEY = 'yui_request_client_token_v1';
+const MY_REQUEST_IDS_KEY = 'yui_my_request_ids_v1';
+
+export function getClientRequestToken(): string {
+  try {
+    let token = localStorage.getItem(CLIENT_TOKEN_KEY);
+    if (!token) {
+      token = 'usr_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem(CLIENT_TOKEN_KEY, token);
+    }
+    return token;
+  } catch {
+    return 'usr_guest';
+  }
+}
+
+export function getMySubmittedRequestIds(): string[] {
+  try {
+    const raw = localStorage.getItem(MY_REQUEST_IDS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveMySubmittedRequestId(id: string) {
+  try {
+    const ids = getMySubmittedRequestIds();
+    if (!ids.includes(id)) {
+      localStorage.setItem(MY_REQUEST_IDS_KEY, JSON.stringify([id, ...ids]));
+    }
+  } catch {}
+}
 
 // Helper to get local requests
 export function getLocalCreatorRequests(): CreatorRequest[] {
@@ -34,7 +67,6 @@ export function subscribeCreatorRequests(
   callback: (requests: CreatorRequest[]) => void,
   onError?: (err: any) => void
 ): () => void {
-  // If Firestore db is not initialized or fails, fallback to local storage
   if (!db) {
     callback(getLocalCreatorRequests());
     const handleStorageChange = () => {
@@ -74,24 +106,34 @@ export function subscribeCreatorRequests(
 
 // Create new Creator Request
 export async function createCreatorRequest(requestData: Omit<CreatorRequest, 'id'>): Promise<string> {
-  const newReq: CreatorRequest = {
+  const clientToken = requestData.clientToken || getClientRequestToken();
+  const payload: Omit<CreatorRequest, 'id'> = {
     ...requestData,
-    id: 'req_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+    isPrivate: !!requestData.isPrivate,
+    clientToken,
+  };
+
+  const localId = 'req_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+  const newReq: CreatorRequest = {
+    ...payload,
+    id: localId,
   };
 
   const local = getLocalCreatorRequests();
-  const updated = [newReq, ...local];
-  saveLocalCreatorRequests(updated);
+  saveLocalCreatorRequests([newReq, ...local]);
+  saveMySubmittedRequestId(localId);
 
   if (db) {
     try {
-      const docRef = await addDoc(collection(db, 'creatorRequests'), requestData);
+      const sanitized = sanitizeForFirestore(payload);
+      const docRef = await addDoc(collection(db, 'creatorRequests'), sanitized);
+      saveMySubmittedRequestId(docRef.id);
       return docRef.id;
     } catch (err) {
       console.warn('Failed to save creator request to Firestore, saved locally:', err);
     }
   }
-  return newReq.id;
+  return localId;
 }
 
 // Update Creator Request (Admin/User action)
@@ -102,10 +144,8 @@ export async function updateCreatorRequest(id: string, updates: Partial<CreatorR
 
   if (db) {
     try {
-      // Find doc by id or query
-      // In Firestore, if id is doc.id
       const docRef = doc(db, 'creatorRequests', id);
-      await updateDoc(docRef, updates);
+      await updateDoc(docRef, sanitizeForFirestore(updates));
     } catch (err) {
       console.warn('Failed to update creator request in Firestore:', err);
     }
@@ -126,3 +166,4 @@ export async function deleteCreatorRequest(id: string): Promise<void> {
     }
   }
 }
+

@@ -1,34 +1,70 @@
-import { 
-  collection, 
-  getDocs, 
-  doc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where,
-  getDoc,
+import {
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
   increment,
   arrayUnion,
   arrayRemove,
-  onSnapshot
+  onSnapshot,
 } from 'firebase/firestore';
 import { db, OperationType, handleFirestoreError, sanitizeForFirestore } from '../firebase';
 import { Character, CharacterComment } from '../types';
 
 const COLLECTION_NAME = 'characters';
 
-export function subscribeCharacters(onUpdate: (chars: Character[]) => void, onError: (err: any) => void) {
-  return onSnapshot(collection(db, COLLECTION_NAME), (snapshot) => {
-    const chars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Character));
-    onUpdate(chars);
-  }, onError);
+function sortCharactersNewestFirst(chars: Character[]): Character[] {
+  return [...chars].sort((a, b) => {
+    const timeA = a.createdAt ? Date.parse(a.createdAt) : 0;
+    const timeB = b.createdAt ? Date.parse(b.createdAt) : 0;
+    if (!Number.isNaN(timeA) && !Number.isNaN(timeB) && timeA !== timeB) {
+      return timeB - timeA;
+    }
+    return (b.id || '').localeCompare(a.id || '');
+  });
+}
+
+export function subscribeCharacters(
+  onUpdate: (chars: Character[]) => void,
+  onError: (err: any) => void,
+  initialFallback: Character[] = []
+) {
+  return onSnapshot(
+    collection(db, COLLECTION_NAME),
+    async (snapshot) => {
+      if (snapshot.empty && initialFallback.length > 0) {
+        try {
+          for (const char of initialFallback) {
+            const sanitized = sanitizeForFirestore(char);
+            await setDoc(doc(db, COLLECTION_NAME, char.id), sanitized, { merge: true });
+          }
+        } catch (err) {
+          console.warn('Could not auto-seed initial characters:', err);
+        }
+        onUpdate(sortCharactersNewestFirst(initialFallback));
+        return;
+      }
+
+      const chars = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() } as Character));
+      onUpdate(sortCharactersNewestFirst(chars));
+    },
+    (error) => {
+      try {
+        handleFirestoreError(error, OperationType.GET, COLLECTION_NAME);
+      } catch (err) {
+        onError(err);
+        return;
+      }
+      onError(error);
+    }
+  );
 }
 
 export async function saveCharacterToFirestore(character: Character): Promise<void> {
   try {
     const sanitizedData = sanitizeForFirestore(character);
-    await setDoc(doc(db, COLLECTION_NAME, character.id), sanitizedData);
+    await setDoc(doc(db, COLLECTION_NAME, character.id), sanitizedData, { merge: true });
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, `${COLLECTION_NAME}/${character.id}`);
   }
@@ -45,7 +81,7 @@ export async function deleteCharacterFromFirestore(id: string): Promise<void> {
 export async function voteCharacterInFirestore(characterId: string): Promise<void> {
   try {
     await updateDoc(doc(db, COLLECTION_NAME, characterId), {
-      votes: increment(1)
+      votes: increment(1),
     });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${COLLECTION_NAME}/${characterId}`);
@@ -57,7 +93,7 @@ export async function resetAllCharacterVotesInFirestore(characters: Character[])
     for (const char of characters) {
       await updateDoc(doc(db, COLLECTION_NAME, char.id), {
         votes: 0,
-        likes: 0
+        likes: 0,
       });
     }
   } catch (error) {
@@ -65,22 +101,30 @@ export async function resetAllCharacterVotesInFirestore(characters: Character[])
   }
 }
 
-export async function addCommentToCharacterInFirestore(characterId: string, comment: CharacterComment, existingComments: CharacterComment[]): Promise<void> {
+export async function addCommentToCharacterInFirestore(
+  characterId: string,
+  comment: CharacterComment,
+  _existingComments: CharacterComment[]
+): Promise<void> {
   try {
     await updateDoc(doc(db, COLLECTION_NAME, characterId), {
-      comments: arrayUnion(sanitizeForFirestore(comment))
+      comments: arrayUnion(sanitizeForFirestore(comment)),
     });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${COLLECTION_NAME}/${characterId}/comments`);
   }
 }
 
-export async function deleteCommentFromCharacterInFirestore(characterId: string, commentId: string, existingComments: CharacterComment[]): Promise<void> {
+export async function deleteCommentFromCharacterInFirestore(
+  characterId: string,
+  commentId: string,
+  existingComments: CharacterComment[]
+): Promise<void> {
   try {
-    const commentToDelete = existingComments.find(c => c.id === commentId);
+    const commentToDelete = existingComments.find((c) => c.id === commentId);
     if (!commentToDelete) return;
     await updateDoc(doc(db, COLLECTION_NAME, characterId), {
-      comments: arrayRemove(sanitizeForFirestore(commentToDelete))
+      comments: arrayRemove(sanitizeForFirestore(commentToDelete)),
     });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${COLLECTION_NAME}/${characterId}/comments`);

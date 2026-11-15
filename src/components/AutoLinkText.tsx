@@ -14,7 +14,7 @@ const URL_REGEX = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s]|www\.[^\s<]+[^<.,:;"')\]\s
 export const AutoLinkText: React.FC<AutoLinkTextProps> = ({
   text,
   className = '',
-  linkClassName = 'text-[#1B6E7D] hover:text-[#0E4B56] dark:text-[#7DD8DE] dark:hover:text-[#A9DDE2] underline decoration-[#8CCFD3]/70 hover:decoration-[#1B6E7D] font-medium hover:opacity-95 inline-flex items-center gap-0.5 break-all transition-colors',
+  linkClassName = 'text-[#526B80] hover:text-[#172536] dark:text-[#A9BDCE] dark:hover:text-white underline decoration-[#91A9BC]/70 hover:decoration-[#526B80] font-medium hover:opacity-95 inline-flex items-center gap-0.5 break-all transition-colors',
   showIcon = true,
 }) => {
   if (!text) return null;

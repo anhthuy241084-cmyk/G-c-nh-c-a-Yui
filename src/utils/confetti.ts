@@ -1,7 +1,7 @@
 import confetti from 'canvas-confetti';
 
 /**
- * Trigger celebratory confetti fireworks & ocean pearls when liking / voting for a character
+ * Trigger celebratory confetti fireworks & winter snow sparkles when liking / voting or claiming gifts
  */
 export const triggerHeartConfetti = (originX = 0.5, originY = 0.6) => {
   const count = 45;
@@ -10,18 +10,18 @@ export const triggerHeartConfetti = (originX = 0.5, originY = 0.6) => {
     disableForReducedMotion: true,
   };
 
-  // 1. Oceanic cheerful confetti blast
+  // 1. Winter Memory Box confetti blast
   confetti({
     ...defaults,
     particleCount: count,
     spread: 70,
     startVelocity: 35,
-    colors: ['#65C5CE', '#3FAAB7', '#78DCE0', '#247C8C', '#BDEBE5', '#F5F3EA', '#D8D4EE'],
+    colors: ['#91A9BC', '#526B80', '#D5E4EF', '#E8F1F8', '#F7FAFD', '#F472B6', '#C7D2FE'],
     scalar: 1.1,
     ticks: 160,
   });
 
-  // 2. Secondary delicate sea sparkle shower
+  // 2. Secondary delicate winter sparkle shower
   setTimeout(() => {
     confetti({
       ...defaults,
@@ -29,7 +29,7 @@ export const triggerHeartConfetti = (originX = 0.5, originY = 0.6) => {
       angle: 60,
       spread: 55,
       startVelocity: 28,
-      colors: ['#F2FBFC', '#65C5CE', '#3FAAB7', '#78DCE0'],
+      colors: ['#F7FAFD', '#D5E4EF', '#91A9BC', '#E5EDF5'],
       scalar: 0.9,
       ticks: 120,
     });
@@ -42,7 +42,7 @@ export const triggerHeartConfetti = (originX = 0.5, originY = 0.6) => {
       angle: 120,
       spread: 55,
       startVelocity: 28,
-      colors: ['#3FAAB7', '#BDEBE5', '#6BDDE5', '#ffffff'],
+      colors: ['#91A9BC', '#DCE7EF', '#A9BDCE', '#ffffff'],
       scalar: 0.9,
       ticks: 120,
     });
@@ -69,13 +69,13 @@ export const triggerFireworkSpread = () => {
       ...defaults,
       particleCount,
       origin: { x: Math.random() * 0.4 + 0.1, y: Math.random() * 0.4 + 0.3 },
-      colors: ['#65C5CE', '#3FAAB7', '#78DCE0', '#247C8C', '#BDEBE5'],
+      colors: ['#91A9BC', '#526B80', '#D5E4EF', '#E8F1F8', '#F7FAFD'],
     });
     confetti({
       ...defaults,
       particleCount,
       origin: { x: Math.random() * 0.4 + 0.5, y: Math.random() * 0.4 + 0.3 },
-      colors: ['#3FAAB7', '#65C5CE', '#BDEBE5', '#78DCE0', '#F5F3EA'],
+      colors: ['#91A9BC', '#A9BDCE', '#DCE7EF', '#F472B6', '#F7FAFD'],
     });
   }, 250);
 };

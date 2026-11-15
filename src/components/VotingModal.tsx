@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Heart, Trophy, Medal, Flame, CheckCircle, Sparkles } from 'lucide-react';
+import { X, Heart, Crown, Snowflake, Search, CheckCircle, Eye, Sparkles } from 'lucide-react';
 import { Character } from '../types';
 import { triggerHeartConfetti } from '../utils/confetti';
+import { triggerSfx } from '../utils/sfx';
 
 interface VotingModalProps {
   isOpen: boolean;
@@ -10,6 +11,9 @@ interface VotingModalProps {
   characters: Character[];
   onVote: (characterId: string) => void;
   votedMap?: Record<string, boolean>;
+  onSelectCharacter?: (character: Character) => void;
+  isSfxOn?: boolean;
+  sfxVolume?: number;
 }
 
 export const VotingModal: React.FC<VotingModalProps> = ({
@@ -18,218 +22,382 @@ export const VotingModal: React.FC<VotingModalProps> = ({
   characters,
   onVote,
   votedMap = {},
+  onSelectCharacter,
+  isSfxOn = true,
+  sfxVolume = 0.5,
 }) => {
   const [justVotedId, setJustVotedId] = useState<string | null>(null);
+  const [filterMode, setFilterMode] = useState<'all' | 'unvoted'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Sort published characters by vote count descending
-  const publishedCharacters = characters.filter((c) => !c.isDraft && !c.isPrivate);
-  const sortedCharacters = [...publishedCharacters].sort((a, b) => (b.votes || 0) - (a.votes || 0));
-  const totalVotes = publishedCharacters.reduce((sum, c) => sum + (c.votes || 0), 0);
+  const publishedCharacters = useMemo(
+    () => characters.filter((c) => !c.isDraft && !c.isPrivate),
+    [characters]
+  );
+
+  const sortedAll = useMemo(
+    () => [...publishedCharacters].sort((a, b) => (b.votes || 0) - (a.votes || 0)),
+    [publishedCharacters]
+  );
+
+  const totalVotes = useMemo(
+    () => publishedCharacters.reduce((sum, c) => sum + (c.votes || 0), 0),
+    [publishedCharacters]
+  );
+
+  const topVotes = Math.max(1, sortedAll[0]?.votes || 1);
+
+  const filteredList = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return sortedAll.filter((c) => {
+      if (filterMode === 'unvoted' && votedMap[c.id]) return false;
+      if (q && !c.name.toLowerCase().includes(q) && !c.title.toLowerCase().includes(q)) {
+        return false;
+      }
+      return true;
+    });
+  }, [sortedAll, filterMode, searchQuery, votedMap]);
 
   const handleVoteClick = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (votedMap[id]) {
-      // Already voted
-      return;
-    }
+    if (votedMap[id]) return;
     const originX = e.clientX ? e.clientX / window.innerWidth : 0.5;
     const originY = e.clientY ? e.clientY / window.innerHeight : 0.5;
     triggerHeartConfetti(originX, originY);
+    if (isSfxOn) triggerSfx('heart', sfxVolume);
     onVote(id);
     setJustVotedId(id);
-    setTimeout(() => {
-      setJustVotedId(null);
-    }, 1500);
+    setTimeout(() => setJustVotedId(null), 1500);
   };
+
+  // Spotlight podium order: #2 (left), #1 (elevated center), #3 (right)
+  const podiumOrder =
+    sortedAll.length >= 3
+      ? [
+          { char: sortedAll[1], rank: 2, heightClass: 'sm:mt-6' },
+          { char: sortedAll[0], rank: 1, heightClass: 'sm:mt-0' },
+          { char: sortedAll[2], rank: 3, heightClass: 'sm:mt-8' },
+        ]
+      : [];
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-[#121F32]/75 backdrop-blur-md">
           <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 15 }}
+            initial={{ scale: 0.94, opacity: 0, y: 14 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 15 }}
+            exit={{ scale: 0.94, opacity: 0, y: 14 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-[#FFFDFC] dark:bg-[#0B2530] rounded-3xl shadow-2xl border border-[#BFE7E8] dark:border-[#38CAD6]/30 text-[#49666A] dark:text-[#E9F8F8] overflow-hidden font-serif"
+            className="relative w-full max-w-4xl max-h-[92dvh] flex flex-col bg-[#F5F9FE] dark:bg-[#172538] rounded-2xl sm:rounded-[30px] shadow-2xl border border-[#D4E4F2] dark:border-[#39506B] text-[#334A60] dark:text-[#E5EFF9] overflow-hidden"
           >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[#BFE7E8]/60 dark:border-white/10 bg-[#F5FCFC]/90 dark:bg-black/20">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-[#71BFC6]/15 text-[#1B6E7D] dark:text-[#7DD8DE] border border-[#71BFC6]/30 shadow-xs">
-                  <Heart className="w-6 h-6 fill-[#71BFC6]/25" />
+            {/* Festive Starlight Header */}
+            <div className="relative flex items-center justify-between px-4 sm:px-7 py-3.5 sm:py-4 border-b border-[#DCE9F5] dark:border-[#334963] bg-gradient-to-r from-[#FFF7FA] via-[#F7FBFF] to-[#EAF3FC] dark:from-[#213148] dark:via-[#1C2C41] dark:to-[#172538]">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-rose-400 to-rose-500 text-white shadow-md shadow-rose-400/25 flex items-center justify-center shrink-0">
+                  <Heart className="w-5 h-5 fill-current" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl font-bold tracking-tight text-[#2D494C] dark:text-white">
-                      Bảng xếp hạng & Bình chọn
-                    </h3>
-                    <span className="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase text-[#1B6E7D] dark:text-[#7DD8DE] bg-[#E9F8F8] dark:bg-white/10 rounded-full border border-[#BFE7E8] dark:border-white/10">
-                      Real-time
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#63878B] dark:text-white/70">
-                    Thống kê tổng số <span className="font-bold text-[#1B6E7D] dark:text-[#7DD8DE]">{totalVotes}</span> lượt bình chọn cho các Character AI
+                <div className="min-w-0">
+                  <h3 className="text-base sm:text-xl font-bold font-serif text-[#16273B] dark:text-[#F8FBFF] truncate">
+                    Đêm Sao Bình Chọn Mùa Đông
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-[#5E7C99] dark:text-[#A4C0DA] font-serif truncate">
+                    Đã gửi trao <strong className="text-rose-600 dark:text-rose-300 tabular-nums">{totalVotes}</strong> trái tim yêu mến
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={onClose}
-                className="p-2 text-[#63878B] hover:text-[#2D494C] dark:hover:text-white rounded-full hover:bg-[#E9F8F8] dark:hover:bg-white/10 transition-colors cursor-pointer"
+                className="min-w-[40px] min-h-[40px] flex items-center justify-center p-2 text-[#64829E] hover:text-[#16273B] dark:text-[#A4C0DA] dark:hover:text-white rounded-full hover:bg-white/80 dark:hover:bg-[#2B3E57] transition-colors cursor-pointer shrink-0"
+                aria-label="Đóng"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Scrollable Leaderboard List */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
-              {sortedCharacters.length === 0 ? (
-                <div className="py-16 text-center text-[#63878B] dark:text-white/60 font-medium text-lg">
-                  Ơ, không có rồi.
+            {/* Search & Filter Strip */}
+            <div className="px-5 sm:px-7 py-3 border-b border-[#E2ECF5] dark:border-[#334963] bg-white/70 dark:bg-[#1B2B40]/80 flex flex-wrap items-center justify-between gap-2.5">
+              <div className="relative flex-1 min-w-[190px] max-w-xs">
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#7393B3]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Tìm nhân vật để thả tim..."
+                  className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-[#142233] border border-[#D4E4F2] dark:border-[#3D5470] focus:outline-none focus:border-[#6A97C2]"
+                />
+              </div>
+
+              <div className="flex items-center gap-1 bg-[#E9F2FB] dark:bg-[#142233] p-1 rounded-xl border border-[#D4E4F2] dark:border-[#39506B] text-xs font-serif">
+                <button
+                  onClick={() => setFilterMode('all')}
+                  className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+                    filterMode === 'all'
+                      ? 'bg-white dark:bg-[#243750] text-[#16273B] dark:text-white font-semibold shadow-xs'
+                      : 'text-[#5E7C99] dark:text-[#A4C0DA]'
+                  }`}
+                >
+                  Bảng xếp hạng
+                </button>
+                <button
+                  onClick={() => setFilterMode('unvoted')}
+                  className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+                    filterMode === 'unvoted'
+                      ? 'bg-white dark:bg-[#243750] text-[#16273B] dark:text-white font-semibold shadow-xs'
+                      : 'text-[#5E7C99] dark:text-[#A4C0DA]'
+                  }`}
+                >
+                  Chưa thả tim
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable Stage */}
+            <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-8 custom-scrollbar">
+              {sortedAll.length === 0 ? (
+                <div className="py-16 text-center text-[#64829E] dark:text-[#A4C0DA] font-serif">
+                  Chưa có nhân vật nào trong danh sách bình chọn.
                 </div>
               ) : (
                 <>
-                  {/* Top 3 Podium Highlights */}
-                  {sortedCharacters.length >= 3 && (
-                    <div className="grid grid-cols-3 gap-3 mb-6">
-                      {sortedCharacters.slice(0, 3).map((char, index) => {
-                        const ranks = [
-                          { title: '#1 Quán quân', bg: 'from-amber-400/20 to-amber-100/10 border-amber-400/30 text-amber-700 dark:text-amber-300', icon: Trophy },
-                          { title: '#2 Á quân 1', bg: 'from-[#CFE8F5]/50 to-[#E9F8F8]/30 border-[#8CCFD3]/40 text-[#2D494C] dark:text-[#E9F8F8]', icon: Medal },
-                          { title: '#3 Á quân 2', bg: 'from-[#F3DDE1]/40 to-[#FAF8FC]/20 border-[#F3DDE1] text-[#6B4B53] dark:text-[#F3DDE1]', icon: Medal }
-                        ];
-                        const RankIcon = ranks[index].icon;
+                  {/* Top 3 Winter Starlight Spotlight Podium */}
+                  {podiumOrder.length === 3 && filterMode === 'all' && !searchQuery && (
+                    <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start pt-1">
+                      {podiumOrder.map(({ char, rank, heightClass }) => {
+                        const isFirst = rank === 1;
+                        const isSecond = rank === 2;
+                        const isVoted = !!votedMap[char.id];
+                        const isJustVoted = justVotedId === char.id;
+                        const sharePct = totalVotes > 0 ? Math.round(((char.votes || 0) / totalVotes) * 100) : 0;
 
                         return (
-                          <div
+                          <motion.div
                             key={char.id}
-                            className={`relative p-3 rounded-2xl bg-gradient-to-b ${ranks[index].bg} border text-center flex flex-col items-center justify-between shadow-xs`}
-                          >
-                            <div className="absolute -top-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFFDFC] dark:bg-[#0B2530] shadow-xs border border-[#BFE7E8] dark:border-white/10 flex items-center gap-1">
-                              <RankIcon className="w-3 h-3 text-[#71BFC6]" />
-                              <span>#{index + 1}</span>
-                            </div>
-
-                            <img
-                              src={char.avatar}
-                              alt={char.name}
-                              className="w-14 h-14 mt-2 rounded-full object-cover border-2 border-white dark:border-slate-800 shadow-xs"
-                            />
-
-                            <div className="mt-2 text-center w-full">
-                              <p className="text-xs font-bold text-[#2D494C] dark:text-white truncate">
-                                {char.name}
-                              </p>
-                              <p className="text-[11px] font-semibold text-[#1B6E7D] dark:text-[#7DD8DE] mt-0.5 flex items-center justify-center gap-1">
-                                <Heart className="w-3 h-3 fill-[#71BFC6] text-[#71BFC6]" />
-                                {char.votes} lượt
-                              </p>
-                            </div>
-
-                            <button
-                              onClick={(e) => handleVoteClick(char.id, e)}
-                              disabled={votedMap[char.id]}
-                              className={`mt-2 w-full py-1 px-2 rounded-xl text-[11px] font-medium shadow-xs transition-transform flex items-center justify-center gap-1 cursor-pointer ${
-                                votedMap[char.id]
-                                  ? 'bg-[#E9F8F8] dark:bg-white/10 text-[#63878B] dark:text-white/60 border border-[#BFE7E8] cursor-default'
-                                  : 'bg-gradient-to-r from-[#8CCFD3] to-[#71BFC6] hover:brightness-105 text-white active:scale-95'
-                              }`}
-                            >
-                              <Heart className={`w-3 h-3 ${votedMap[char.id] ? 'fill-[#71BFC6] text-[#71BFC6]' : 'fill-current'}`} />
-                              <span>{votedMap[char.id] ? 'Đã thả tim ♡' : 'Thả tim'}</span>
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Full Ranked Table */}
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-[#63878B] dark:text-white/60 px-2 flex items-center gap-1.5">
-                      <Flame className="w-3.5 h-3.5 text-[#71BFC6]" />
-                      <span>Toàn bộ danh sách xếp hạng</span>
-                    </h4>
-
-                    {sortedCharacters.map((char, index) => (
-                      <div
-                        key={char.id}
-                        className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F5FCFC] dark:bg-white/5 border border-[#BFE7E8]/60 dark:border-white/10 hover:border-[#71BFC6] transition-all group"
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <span className={`w-6 text-center font-extrabold text-sm ${
-                            index === 0 ? 'text-amber-500' : index === 1 ? 'text-[#71BFC6]' : index === 2 ? 'text-[#6B4B53]' : 'text-[#63878B]'
-                          }`}>
-                            #{index + 1}
-                          </span>
-
-                          <img
-                            src={char.avatar}
-                            alt={char.name}
-                            className="w-10 h-10 rounded-xl object-cover border border-[#BFE7E8] dark:border-white/10"
-                          />
-
-                          <div className="min-w-0">
-                            <h5 className="text-sm font-bold text-[#2D494C] dark:text-white truncate">
-                              {char.name}
-                            </h5>
-                            <p className="text-xs text-[#63878B] dark:text-white/60 truncate font-sans">
-                              {char.title}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 shrink-0">
-                          <div className="text-right">
-                            <span className="text-sm font-bold text-[#1B6E7D] dark:text-[#7DD8DE] flex items-center gap-1 justify-end">
-                              <Heart className="w-3.5 h-3.5 fill-[#71BFC6] text-[#71BFC6]" />
-                              {char.votes}
-                            </span>
-                            <span className="text-[10px] text-[#63878B] dark:text-white/60">lượt bình chọn</span>
-                          </div>
-
-                          <button
-                            onClick={(e) => handleVoteClick(char.id, e)}
-                            disabled={votedMap[char.id]}
-                            className={`relative px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
-                              justVotedId === char.id
-                                ? 'bg-emerald-500 text-white shadow-xs'
-                                : votedMap[char.id]
-                                ? 'bg-[#E9F8F8] dark:bg-white/10 text-[#63878B] dark:text-white/60 border border-[#BFE7E8] cursor-default'
-                                : 'bg-gradient-to-r from-[#8CCFD3] to-[#71BFC6] hover:brightness-105 text-white shadow-xs active:scale-95'
+                            whileHover={{ y: -4 }}
+                            onClick={() => {
+                              if (onSelectCharacter) {
+                                onClose();
+                                onSelectCharacter(char);
+                              }
+                            }}
+                            className={`relative rounded-[24px] p-5 text-center flex flex-col items-center gap-3 border transition-all cursor-pointer overflow-hidden ${heightClass} ${
+                              isFirst
+                                ? 'bg-[#FFFDF8] dark:bg-[#223146] border-amber-300/80 dark:border-amber-400/45 shadow-[0_12px_28px_-8px_rgba(210,158,84,0.22)]'
+                                : isSecond
+                                ? 'bg-[#F8FBFF] dark:bg-[#1E2E42] border-[#B6CFE6] dark:border-[#4B688A] shadow-sm'
+                                : 'bg-[#FFF9FA] dark:bg-[#212D40] border-rose-200/80 dark:border-rose-400/30 shadow-sm'
                             }`}
                           >
-                            {justVotedId === char.id ? (
-                              <>
-                                <CheckCircle className="w-3.5 h-3.5" />
-                                <span>Đã cộng vote!</span>
-                              </>
-                            ) : votedMap[char.id] ? (
-                              <>
-                                <Heart className="w-3.5 h-3.5 fill-[#71BFC6] text-[#71BFC6]" />
-                                <span>Đã thả tim</span>
-                              </>
-                            ) : (
-                              <>
-                                <Heart className="w-3.5 h-3.5 fill-current" />
-                                <span>Thả tim</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
+                            {/* Rank Header */}
+                            <div
+                              className={`inline-flex items-center gap-1.5 text-xs font-serif font-bold ${
+                                isFirst
+                                  ? 'text-amber-600 dark:text-amber-300'
+                                  : isSecond
+                                  ? 'text-[#5380AD] dark:text-[#AED0F0]'
+                                  : 'text-rose-500 dark:text-rose-300'
+                              }`}
+                            >
+                              {isFirst ? (
+                                <Crown className="w-4 h-4 fill-amber-400/35" />
+                              ) : (
+                                <Snowflake className="w-3.5 h-3.5" />
+                              )}
+                              <span>Hạng {rank}</span>
+                            </div>
+
+                            {/* Framed Portrait */}
+                            <div
+                              className={`relative rounded-full p-1 ${
+                                isFirst
+                                  ? 'bg-amber-100 dark:bg-amber-900/40 border border-amber-300/80'
+                                  : isSecond
+                                  ? 'bg-[#E5F0FA] dark:bg-[#293F59] border border-[#AFCBE5]'
+                                  : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200'
+                              }`}
+                            >
+                              <img
+                                src={char.avatar}
+                                alt={char.name}
+                                referrerPolicy="no-referrer"
+                                className={`${
+                                  isFirst ? 'w-20 h-20' : 'w-16 h-16'
+                                } rounded-full object-cover object-top border-2 border-white dark:border-[#18273A]`}
+                              />
+                            </div>
+
+                            {/* Name & Count */}
+                            <div className="w-full space-y-0.5">
+                              <h4 className="text-base font-bold font-display text-[#203850] dark:text-[#F8FBFF] truncate">
+                                {char.name}
+                              </h4>
+                              <p className="text-xs text-[#5E7C99] dark:text-[#A4C0DA] tabular-nums">
+                                <strong className="text-rose-600 dark:text-rose-300">{char.votes || 0}</strong> tim · {sharePct}%
+                              </p>
+                            </div>
+
+                            {/* Floating +1 animation */}
+                            <AnimatePresence>
+                              {isJustVoted && (
+                                <motion.span
+                                  initial={{ opacity: 1, y: 0, scale: 0.9 }}
+                                  animate={{ opacity: 0, y: -32, scale: 1.25 }}
+                                  exit={{ opacity: 0 }}
+                                  className="absolute top-12 right-5 text-sm font-bold text-rose-500 pointer-events-none"
+                                >
+                                  +1 ♥
+                                </motion.span>
+                              )}
+                            </AnimatePresence>
+
+                            {/* Warm Vote Button */}
+                            <button
+                              onClick={(e) => handleVoteClick(char.id, e)}
+                              disabled={isVoted}
+                              className={`w-full py-2 px-3 rounded-xl text-xs font-serif font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
+                                isVoted
+                                  ? 'bg-[#EAF2FA] dark:bg-[#172538] text-[#6B87A3] dark:text-[#8CA9C7] cursor-default'
+                                  : 'bg-rose-500 hover:bg-rose-600 text-white shadow-xs'
+                              }`}
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${isVoted ? 'fill-rose-300/60' : 'fill-current'}`} />
+                              <span>{isVoted ? 'Đã thả tim' : 'Thả tim ngay'}</span>
+                            </button>
+                          </motion.div>
+                        );
+                      })}
+                    </section>
+                  )}
+
+                  {/* Full Visual 2-Column Ballot Gallery */}
+                  <section className="space-y-3">
+                    <div className="flex items-center justify-between text-xs font-serif font-semibold text-[#5E7C99] dark:text-[#A4C0DA] px-1">
+                      <span>Tất cả gương mặt ({filteredList.length})</span>
+                      <span>1 trái tim / mỗi nhân vật</span>
+                    </div>
+
+                    {filteredList.length === 0 ? (
+                      <div className="py-10 text-center text-xs text-[#7393B3] font-serif">
+                        Không tìm thấy nhân vật phù hợp.
                       </div>
-                    ))}
-                  </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        {filteredList.map((char) => {
+                          const globalRank = sortedAll.findIndex((c) => c.id === char.id) + 1;
+                          const progressPct = Math.round(((char.votes || 0) / topVotes) * 100);
+                          const isVoted = !!votedMap[char.id];
+                          const isJustVoted = justVotedId === char.id;
+
+                          return (
+                            <div
+                              key={char.id}
+                              className="group relative p-3.5 rounded-2xl bg-white dark:bg-[#1E2F44] border border-[#DCE9F5] dark:border-[#344B66] hover:border-[#8AB3D6] dark:hover:border-[#6A97C2] shadow-xs hover:shadow-md transition-all flex items-center gap-3.5"
+                            >
+                              {/* Portrait Thumbnail (Unobstructed) */}
+                              <div className="shrink-0 flex flex-col items-center gap-1">
+                                <img
+                                  src={char.avatar}
+                                  alt={char.name}
+                                  referrerPolicy="no-referrer"
+                                  className="w-16 h-16 rounded-2xl object-cover object-top border border-[#D4E4F2] dark:border-[#3D5470]"
+                                />
+                              </div>
+
+                              {/* Character Details + Ratio Bar */}
+                              <div className="flex-1 min-w-0 space-y-1.5">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-1.5">
+                                      <span
+                                        className={`text-[11px] font-mono tabular-nums font-bold shrink-0 ${
+                                          globalRank === 1
+                                            ? 'text-amber-600 dark:text-amber-300'
+                                            : globalRank === 2
+                                            ? 'text-[#5380AD] dark:text-[#9AC0E3]'
+                                            : globalRank === 3
+                                            ? 'text-rose-500 dark:text-rose-300'
+                                            : 'text-[#6A8BA8]'
+                                        }`}
+                                      >
+                                        #{globalRank}
+                                      </span>
+                                      <h5 className="text-sm font-bold font-display text-[#203850] dark:text-[#F8FBFF] truncate">
+                                        {char.name}
+                                      </h5>
+                                    </div>
+                                    <p className="text-[11px] text-[#5E7C99] dark:text-[#A4C0DA] truncate">
+                                      {char.title}
+                                    </p>
+                                  </div>
+                                  {onSelectCharacter && (
+                                    <button
+                                      onClick={() => {
+                                        onClose();
+                                        onSelectCharacter(char);
+                                      }}
+                                      title="Xem hồ sơ nhân vật"
+                                      className="p-1.5 rounded-lg text-[#6A8BA8] hover:text-[#16273B] dark:hover:text-white hover:bg-[#EAF2FA] dark:hover:bg-[#2B3F59] transition-colors shrink-0 cursor-pointer"
+                                    >
+                                      <Eye className="w-3.5 h-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Rose-Sky Progress Bar */}
+                                <div className="h-1.5 w-full rounded-full bg-[#EDF4FC] dark:bg-[#142233] overflow-hidden">
+                                  <div
+                                    className="h-full rounded-full bg-gradient-to-r from-rose-300 via-rose-400 to-[#6A97C2] transition-all duration-500"
+                                    style={{ width: `${Math.max(4, progressPct)}%` }}
+                                  />
+                                </div>
+
+                                <div className="flex items-center justify-between gap-2 pt-0.5">
+                                  <span className="text-xs font-bold tabular-nums text-rose-600 dark:text-rose-300 inline-flex items-center gap-1">
+                                    <Heart className="w-3.5 h-3.5 fill-rose-400/50" />
+                                    {char.votes || 0} tim
+                                  </span>
+
+                                  <button
+                                    onClick={(e) => handleVoteClick(char.id, e)}
+                                    disabled={isVoted}
+                                    className={`px-3 py-1 rounded-xl text-xs font-serif font-bold flex items-center gap-1 transition-all cursor-pointer active:scale-95 ${
+                                      isJustVoted
+                                        ? 'bg-emerald-500 text-white'
+                                        : isVoted
+                                        ? 'bg-[#EAF2FA] dark:bg-[#142233] text-[#6B87A3] dark:text-[#8CA9C7] cursor-default'
+                                        : 'bg-rose-500 hover:bg-rose-600 text-white shadow-xs'
+                                    }`}
+                                  >
+                                    {isJustVoted ? (
+                                      <>
+                                        <CheckCircle className="w-3.5 h-3.5" />
+                                        <span>Đã gửi!</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Heart className={`w-3.5 h-3.5 ${isVoted ? 'fill-rose-300/60' : 'fill-current'}`} />
+                                        <span>{isVoted ? 'Đã thả tim' : 'Thả tim'}</span>
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </section>
                 </>
               )}
             </div>
 
-            {/* Footer Note */}
-            <div className="p-4 border-t border-[#BFE7E8]/60 dark:border-white/10 bg-[#F5FCFC]/90 dark:bg-black/20 text-center">
-              <p className="text-xs text-[#63878B] dark:text-white/70 flex items-center justify-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-[#71BFC6]" />
-                <span>Số lượt bình chọn được cập nhật tức thì theo thời gian thực. Cảm ơn bạn đã bình chọn!</span>
+            {/* Footer */}
+            <div className="px-5 py-3.5 border-t border-[#DCE9F5] dark:border-[#334963] bg-white/85 dark:bg-[#1B2B40]/90 text-center">
+              <p className="text-xs text-[#5E7C99] dark:text-[#A4C0DA] font-serif flex items-center justify-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+                <span>Cập nhật trực tiếp · Mỗi lượt thả tim là một ngọn nến ấm giữa mùa đông</span>
               </p>
             </div>
           </motion.div>

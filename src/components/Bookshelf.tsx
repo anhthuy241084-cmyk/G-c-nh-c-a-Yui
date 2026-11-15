@@ -74,30 +74,30 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
   };
 
   return (
-    <div id="bookshelf-section" className="p-6 sm:p-8 rounded-3xl bg-white/80 dark:bg-[#202F42]/80 backdrop-blur-md border border-[#DCE7EF] dark:border-[#43576B] shadow-sm space-y-5 relative overflow-hidden text-[#526B80] dark:text-[#E5EDF5]">
+    <div id="bookshelf-section" className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/88 dark:bg-[#192638]/88 backdrop-blur-md border border-[#D4E6F6] dark:border-[#314660] shadow-[0_6px_20px_-6px_rgba(74,116,162,0.1)] space-y-3.5 sm:space-y-5 relative overflow-hidden text-[#263E57] dark:text-[#E7F0FA]">
       {/* Shelf Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCE7EF] dark:border-[#43576B] pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 border-b border-[#E3EFFA] dark:border-[#2C3F56] pb-3 sm:pb-4">
         <div>
-          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#526B80] dark:text-[#E5EDF5] flex items-center gap-2 font-serif">
-            <span className="text-[#91A9BC]">❄</span>
+          <h3 className="text-base sm:text-xl font-bold tracking-tight text-[#203850] dark:text-[#F5FAFF] flex items-center gap-2 font-display">
+            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-[#5380AD] dark:text-[#9AC0E3]" />
             <span>Kệ sách của mình</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#E8F1F8] dark:bg-[#172536] text-[#526B80] dark:text-[#E5EDF5] font-semibold ml-1">
-              {validBookmarks.length}
+            <span className="text-xs font-sans font-semibold text-[#5380AD] dark:text-[#9AC0E3] tabular-nums">
+              ({validBookmarks.length})
             </span>
           </h3>
-          <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] mt-1 font-serif italic">
+          <p className="text-[11px] sm:text-xs text-[#6484A3] dark:text-[#A4C0DA] mt-0.5 sm:mt-1 font-serif italic">
             &ldquo;Nơi cất giữ những dấu trang kỷ niệm giữa mùa đông yên bình ♡&rdquo;
           </p>
         </div>
 
         {/* Sorting Controls */}
-        <div className="flex items-center gap-1.5 bg-[#F7FAFD] dark:bg-[#172536] p-1 rounded-2xl border border-[#DCE7EF] dark:border-[#43576B] text-xs font-serif">
+        <div className="flex items-center gap-1 max-w-full overflow-x-auto bg-[#F2F8FE] dark:bg-[#142030] p-1 rounded-2xl border border-[#D4E6F6] dark:border-[#314660] text-xs font-serif">
           <button
             onClick={() => setSortOption('newest')}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+            className={`px-2.5 py-1.5 sm:py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 ${
               sortOption === 'newest'
                 ? 'btn-winter-primary shadow-xs'
-                : 'text-[#91A9BC] hover:text-[#526B80]'
+                : 'text-[#6484A3] hover:text-[#203850] dark:hover:text-white'
             }`}
             title="Mới đánh dấu"
           >
@@ -110,7 +110,7 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
             className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
               sortOption === 'oldest'
                 ? 'btn-winter-primary shadow-xs'
-                : 'text-[#91A9BC] hover:text-[#526B80]'
+                : 'text-[#6484A3] hover:text-[#203850] dark:hover:text-white'
             }`}
             title="Cũ nhất"
           >
@@ -122,7 +122,7 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
             className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
               sortOption === 'az'
                 ? 'btn-winter-primary shadow-xs'
-                : 'text-[#91A9BC] hover:text-[#526B80]'
+                : 'text-[#6484A3] hover:text-[#203850] dark:hover:text-white'
             }`}
             title="A–Z"
           >
@@ -135,7 +135,7 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
             className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
               sortOption === 'reading'
                 ? 'btn-winter-primary shadow-xs'
-                : 'text-[#91A9BC] hover:text-[#526B80]'
+                : 'text-[#6484A3] hover:text-[#203850] dark:hover:text-white'
             }`}
             title="Đang đọc (Ưu tiên character có tiến độ Story)"
           >
@@ -148,15 +148,15 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
       {/* Bookshelf Container Display */}
       {validBookmarks.length === 0 ? (
         /* Empty Shelf State */
-        <div className="py-10 text-center space-y-2">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[#E8F1F8] dark:bg-[#172536] border-2 border-dashed border-[#91A9BC]/40 flex items-center justify-center text-2xl text-[#91A9BC]">
-            📖
+        <div className="py-5 sm:py-10 text-center space-y-2">
+          <div className="w-11 h-11 sm:w-14 sm:h-14 mx-auto rounded-2xl bg-[#EEF6FD] dark:bg-[#1E2E42] border border-dashed border-[#A6C8E8] flex items-center justify-center text-[#5380AD] dark:text-[#9AC0E3]">
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <p className="text-xs sm:text-sm font-bold font-serif text-[#526B80] dark:text-[#E5EDF5] pt-1">
+          <p className="text-xs sm:text-sm font-bold font-serif text-[#203850] dark:text-[#E5EDF5] pt-0.5">
             Kệ sách vẫn còn trống...
           </p>
-          <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE] font-serif italic">
-            &ldquo;Đặt một chiếc bookmark vào đây nhé ♡&rdquo;
+          <p className="text-[11px] sm:text-xs text-[#6484A3] dark:text-[#A4C0DA] font-serif italic">
+            &ldquo;Nhấn biểu tượng dấu trang ở mỗi nhân vật để cất vào đây nhé ♡&rdquo;
           </p>
         </div>
       ) : (
@@ -181,13 +181,13 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
                     exit={{ opacity: 0, scale: 0.9, y: 15 }}
                     whileHover={{ y: -6, scale: 1.02 }}
                     transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                    className="group relative p-3.5 rounded-2xl ocean-card shadow-sm flex flex-col justify-between h-36 select-none cursor-pointer"
+                    className="group relative p-3.5 rounded-2xl bg-[#F7FAFD]/95 dark:bg-[#172536]/95 border border-[#DCE7EF] dark:border-[#43576B] shadow-sm flex flex-col justify-between h-36 select-none cursor-pointer hover:border-[#91A9BC] transition-colors"
                     onClick={() => onSelectCharacter(char, false)}
                   >
                     {/* Top Bookmark Ribbon Tab */}
-                    <div className="flex items-center justify-between gap-1 border-b border-[#65C5CE]/20 dark:border-[#12343C] pb-1.5">
-                      <span className="text-xs font-bold font-serif flex items-center gap-1 truncate text-[#247C8C] dark:text-[#78DCE0]">
-                        <span>{bm.tailDecor || '✦'}</span>
+                    <div className="flex items-center justify-between gap-1 border-b border-[#DCE7EF] dark:border-[#43576B] pb-1.5">
+                      <span className="text-xs font-bold font-serif flex items-center gap-1 truncate text-[#526B80] dark:text-[#E5EDF5]">
+                        <span>{bm.tailDecor || '❄'}</span>
                         <span className="truncate">{char.name}</span>
                       </span>
 
@@ -197,10 +197,10 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
                           e.stopPropagation();
                           onRemoveBookmark(char.id);
                         }}
-                        className="opacity-0 group-hover:opacity-100 p-1 text-[#6B858A] hover:text-red-500 transition-opacity cursor-pointer"
+                        className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 p-1 text-[#91A9BC] hover:text-red-500 transition-opacity cursor-pointer"
                         title="Bỏ kẹp bookmark"
                       >
-                        <Trash2 className="w-3 h-3" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
@@ -209,24 +209,24 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
                       <img
                         src={char.avatar}
                         alt={char.name}
-                        className="w-9 h-9 rounded-xl object-cover border border-white/60 dark:border-[#102F38] shadow-xs shrink-0"
+                        className="w-9 h-9 rounded-xl object-cover border border-[#DCE7EF] dark:border-[#43576B] shadow-xs shrink-0"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="text-[10px] text-[#6B858A] dark:text-[#8FB6BC] truncate line-clamp-2 leading-tight">
+                        <p className="text-[10px] text-[#91A9BC] dark:text-[#A9BDCE] truncate line-clamp-2 leading-tight">
                           {char.title}
                         </p>
                       </div>
                     </div>
 
                     {/* Bottom Progress or Story Action */}
-                    <div className="pt-1 border-t border-[#65C5CE]/20 dark:border-[#12343C] flex items-center justify-between text-[10px] font-semibold">
+                    <div className="pt-1 border-t border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-between text-[10px] font-semibold">
                       {hasStory ? (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             onSelectCharacter(char, true);
                           }}
-                          className="text-[#3FAAB7] dark:text-[#78DCE0] hover:underline flex items-center gap-1 font-serif font-bold cursor-pointer"
+                          className="text-[#526B80] dark:text-[#A9BDCE] hover:underline flex items-center gap-1 font-serif font-bold cursor-pointer"
                           title={progress > 0 ? `Tiếp tục đọc (${progress}%)` : 'Đọc Story'}
                         >
                           <BookOpen className="w-3 h-3" />
@@ -235,21 +235,21 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
                           </span>
                         </button>
                       ) : (
-                        <span className="opacity-60 text-[9px] font-serif text-[#6B858A] dark:text-[#8FB6BC]">
-                          ♡ Character
+                        <span className="opacity-65 text-[9px] font-serif text-[#91A9BC] dark:text-[#A9BDCE]">
+                          ❄ Character
                         </span>
                       )}
 
                       {/* Manual Reorder Buttons */}
                       {validBookmarks.length > 1 && (
-                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-0.5 transition-opacity">
+                        <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex items-center gap-0.5 transition-opacity">
                           <button
                             disabled={idx === 0}
                             onClick={(e) => {
                               e.stopPropagation();
                               handleMove(idx, 'left');
                             }}
-                            className="p-0.5 rounded hover:bg-[#DDF1F3] dark:hover:bg-[#143943] disabled:opacity-20 cursor-pointer"
+                            className="p-0.5 rounded hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] disabled:opacity-20 cursor-pointer"
                             title="Chuyển sang trái"
                           >
                             <ArrowLeft className="w-3 h-3" />
@@ -260,7 +260,7 @@ export const Bookshelf: React.FC<BookshelfProps> = ({
                               e.stopPropagation();
                               handleMove(idx, 'right');
                             }}
-                            className="p-0.5 rounded hover:bg-[#DDF1F3] dark:hover:bg-[#143943] disabled:opacity-20 cursor-pointer"
+                            className="p-0.5 rounded hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] disabled:opacity-20 cursor-pointer"
                             title="Chuyển sang phải"
                           >
                             <ArrowRight className="w-3 h-3" />

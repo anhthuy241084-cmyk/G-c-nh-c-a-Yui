@@ -1,40 +1,203 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // Global Helpers
     function isSignedIn() { return request.auth != null; }
-    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function isValidId(id) { return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
+    function isOwnerAdmin() {
+      return isSignedIn()
+        && request.auth.token.email == 'anhthuy241084@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
 
-    // Character validation
-    function isValidCharacter(data) {
-      return data.name is string && data.name.size() > 0 && data.name.size() <= 100
-          && data.title is string && data.title.size() <= 200
-          && data.tags is list && data.tags.size() <= 20;
+    // Character validation (aligned with firebase-blueprint.json bounds)
+    function isValidCharacter(data, characterId) {
+      return isValidId(characterId)
+          && data.keys().hasAll(['id', 'name', 'title', 'tags'])
+          && data.id is string && data.id == characterId
+          && data.name is string && data.name.size() >= 1 && data.name.size() <= 150
+          && data.title is string && data.title.size() <= 1500
+          && data.tags is list && data.tags.size() <= 30
+          && (data.tags.size() == 0 || data.tags[0] is string)
+          && (!('avatar' in data) || (data.avatar is string && data.avatar.size() <= 900000))
+          && (!('creator' in data) || (data.creator is string && data.creator.size() <= 100))
+          && (!('chatUrl' in data) || (data.chatUrl is string && data.chatUrl.size() <= 2000))
+          && (!('chatUrl2' in data) || (data.chatUrl2 is string && data.chatUrl2.size() <= 2000))
+          && (!('notes' in data) || (data.notes is string && data.notes.size() <= 10000))
+          && (!('story' in data) || (data.story is string && data.story.size() <= 300000))
+          && (!('firstMessage' in data) || (data.firstMessage is string && data.firstMessage.size() <= 50000));
+    }
+
+    // MemoryGalleryPost validation (Lầu Tuyết Họa Ký)
+    function isValidMemoryGalleryPost(data, postId) {
+      return isValidId(postId)
+          && data.keys().hasAll(['id', 'title', 'category', 'author', 'isAnonymous', 'likes', 'replies', 'createdAt'])
+          && data.keys().hasOnly([
+            'id', 'title', 'category', 'author', 'isAnonymous',
+            'characterName', 'content', 'imageUrl', 'sourceCredit',
+            'likes', 'replies', 'createdAt', 'creatorToken'
+          ])
+          && data.id is string && data.id == postId
+          && data.title is string && data.title.size() >= 1 && data.title.size() <= 180
+          && data.category in ['chat', 'fanart', 'moment']
+          && data.author is string && data.author.size() >= 1 && data.author.size() <= 80
+          && data.isAnonymous is bool
+          && data.likes is number && data.likes >= 0
+          && data.replies is list && data.replies.size() <= 200
+          && data.createdAt is string && data.createdAt.size() <= 64
+          && (!('characterName' in data) || (data.characterName is string && data.characterName.size() <= 120))
+          && (!('content' in data) || (data.content is string && data.content.size() <= 20000))
+          && (!('imageUrl' in data) || (data.imageUrl is string && data.imageUrl.size() <= 900000))
+          && (!('sourceCredit' in data) || (data.sourceCredit is string && data.sourceCredit.size() <= 200))
+          && (!('creatorToken' in data) || (data.creatorToken is string && data.creatorToken.size() <= 120));
+    }
+
+    // WhisperPost validation (Nhặt Cánh Tuyết Rơi)
+    function isValidWhisperPost(data, postId) {
+      return isValidId(postId)
+          && data.keys().hasAll(['id', 'title', 'category', 'content', 'author', 'likes', 'comments', 'createdAt'])
+          && data.keys().hasOnly([
+            'id', 'title', 'category', 'subtitleOrMood', 'content',
+            'imageUrl', 'author', 'likes', 'comments', 'createdAt', 'updatedAt'
+          ])
+          && data.id is string && data.id == postId
+          && data.title is string && data.title.size() >= 1 && data.title.size() <= 180
+          && data.category in ['quote', 'excerpt', 'snapshot']
+          && data.content is string && data.content.size() >= 1 && data.content.size() <= 30000
+          && data.author is string && data.author.size() >= 1 && data.author.size() <= 80
+          && data.likes is number && data.likes >= 0
+          && data.comments is list && data.comments.size() <= 250
+          && data.createdAt is string && data.createdAt.size() <= 64
+          && (!('subtitleOrMood' in data) || (data.subtitleOrMood is string && data.subtitleOrMood.size() <= 160))
+          && (!('imageUrl' in data) || (data.imageUrl is string && data.imageUrl.size() <= 900000))
+          && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 64));
+    }
+
+    // WinterLetter Create Validation Blueprint
+    function isValidWinterLetterCreate(data, letterId) {
+      return data.keys().hasAll([
+          'id', 'senderName', 'preferredDisplayName', 'donateNote',
+          'contactMethod', 'contactPlatformName', 'contactValue', 'message',
+          'allowContactThanks', 'silentGift', 'hideIdentity', 'allowPublicNickname',
+          'isRead', 'isThanked', 'internalNote', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'senderName', 'preferredDisplayName', 'donateNote',
+          'contactMethod', 'contactPlatformName', 'contactValue', 'message',
+          'allowContactThanks', 'silentGift', 'hideIdentity', 'allowPublicNickname',
+          'isRead', 'isThanked', 'internalNote', 'createdAt', 'updatedAt'
+        ])
+        && data.id is string && data.id == letterId
+        && data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 80
+        && data.preferredDisplayName is string && data.preferredDisplayName.size() <= 80
+        && data.donateNote is string && data.donateNote.size() <= 160
+        && data.contactMethod in ['none', 'facebook', 'discord', 'email', 'other']
+        && data.contactPlatformName is string && data.contactPlatformName.size() <= 60
+        && data.contactValue is string && data.contactValue.size() <= 200
+        && data.message is string && data.message.size() <= 10000
+        && data.allowContactThanks is bool
+        && data.silentGift is bool
+        && data.hideIdentity is bool
+        && data.allowPublicNickname is bool
+        && (!data.allowContactThanks || (data.contactMethod != 'none' && data.contactValue.size() > 0))
+        && data.isRead == false
+        && data.isThanked == false
+        && data.internalNote is string && data.internalNote == ''
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    // WinterLetter Update Validation Blueprint (Owner Admin only)
+    function isValidWinterLetterUpdate(data, prev) {
+      return data.id == prev.id
+        && data.senderName == prev.senderName
+        && data.preferredDisplayName == prev.preferredDisplayName
+        && data.donateNote == prev.donateNote
+        && data.contactMethod == prev.contactMethod
+        && data.contactPlatformName == prev.contactPlatformName
+        && data.contactValue == prev.contactValue
+        && data.message == prev.message
+        && data.allowContactThanks == prev.allowContactThanks
+        && data.silentGift == prev.silentGift
+        && data.hideIdentity == prev.hideIdentity
+        && data.allowPublicNickname == prev.allowPublicNickname
+        && data.createdAt == prev.createdAt
+        && data.isRead is bool
+        && data.isThanked is bool
+        && data.internalNote is string && data.internalNote.size() <= 2000
+        && data.updatedAt == request.time
+        && data.diff(prev).affectedKeys().hasOnly(['isRead', 'isThanked', 'internalNote', 'updatedAt']);
+    }
+
+    // Private Winter Mailbox (Hòm Thư Mùa Đông) — strictly owner-readable, visitor-creatable
+    match /winterLetters/{letterId} {
+      allow get: if isOwnerAdmin() && isValidId(letterId);
+      allow list: if isOwnerAdmin();
+      allow create: if isValidId(letterId) && isValidWinterLetterCreate(incoming(), letterId);
+      allow update: if isOwnerAdmin() && isValidId(letterId) && isValidWinterLetterUpdate(incoming(), existing());
+      allow delete: if isOwnerAdmin() && isValidId(letterId);
+    }
+
+    // Lầu Tuyết Họa Ký (Chat logs, Fanart & Moments archive)
+    match /memoryGalleryPosts/{postId} {
+      allow get, list: if true;
+      allow create: if isValidMemoryGalleryPost(incoming(), postId);
+      allow update: if isValidMemoryGalleryPost(incoming(), postId);
+      allow delete: if isValidId(postId);
+    }
+
+    // Nhặt Cánh Tuyết Rơi (Admin-curated quotes, excerpts, and images + community comments)
+    match /whispersOfSnow/{postId} {
+      allow get, list: if true;
+      allow create: if isValidWhisperPost(incoming(), postId);
+      allow update: if isValidWhisperPost(incoming(), postId);
+      allow delete: if isValidId(postId);
     }
 
     match /appSettings/{document=**} {
-      allow read: if true;
+      allow read, write: if true;
     }
 
     match /wishingBottles/{document=**} {
-      allow read: if true;
+      allow read, write: if true;
     }
 
     match /notifications/{document=**} {
-      allow read: if true;
+      allow read, write: if true;
     }
 
     match /boardNotes/{document=**} {
-      allow read: if true;
+      allow read, write: if true;
+    }
+
+    match /commands/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /contacts/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /features/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /creatorRequests/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /suggestedAvatars/{document=**} {
+      allow read, write: if true;
     }
 
     match /characters/{characterId} {
       allow get: if true;
       allow list: if true;
-      allow write: if true;
+      allow create, update: if isValidCharacter(incoming(), characterId);
+      allow delete: if isValidId(characterId);
     }
 
     match /{document=**} {
@@ -42,4 +205,3 @@ service cloud.firestore {
     }
   }
 }
-

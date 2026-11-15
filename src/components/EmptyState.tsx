@@ -111,30 +111,23 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col items-center justify-center p-8 my-6 text-center bg-white/70 dark:bg-slate-900/70 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 shadow-sm max-w-md mx-auto space-y-4 select-none"
+      className="flex flex-col items-center justify-center p-8 my-6 text-center bg-white/90 dark:bg-[#192638]/90 rounded-3xl border border-dashed border-[#C7DDF2] dark:border-[#344A63] shadow-sm max-w-md mx-auto space-y-4 select-none"
     >
       {/* Animated Icon Illustration */}
       <motion.div
-        animate={{ y: [-4, 4, -4], rotate: [-2, 2, -2] }}
-        transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-        className="relative w-16 h-16 rounded-2xl bg-rose-50 dark:bg-slate-800 border border-rose-100 dark:border-slate-700 flex items-center justify-center shadow-md"
+        animate={{ y: [-4, 4, -4] }}
+        transition={{ repeat: Infinity, duration: 3.2, ease: 'easeInOut' }}
+        className="relative w-16 h-16 rounded-2xl bg-[#EEF6FD] dark:bg-[#223349] border border-[#D4E6F6] dark:border-[#344A63] flex items-center justify-center shadow-sm"
       >
         {config.icon}
-        <motion.span
-          animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.5, 1, 0.5] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute -top-2 -right-2 text-xs"
-        >
-          ✦
-        </motion.span>
       </motion.div>
 
       {/* Title & Subtitle */}
       <div className="space-y-1">
-        <h3 className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-100 leading-snug">
+        <h3 className="text-sm md:text-base font-bold font-display text-[#203850] dark:text-white leading-snug">
           {config.title}
         </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
+        <p className="text-xs text-[#6484A3] dark:text-[#A4C0DA] max-w-xs mx-auto leading-relaxed font-serif">
           {config.subtitle}
         </p>
       </div>
@@ -142,10 +135,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {/* Action Button */}
       {onAction && (
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           onClick={onAction}
-          className="px-5 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold shadow-md shadow-rose-500/20 flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="px-5 py-2.5 rounded-2xl bg-[#5380AD] hover:bg-[#44709D] text-white text-xs font-serif font-bold shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           {config.actionIcon}
           <span>{config.actionLabel}</span>

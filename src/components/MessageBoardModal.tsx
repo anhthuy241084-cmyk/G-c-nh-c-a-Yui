@@ -695,7 +695,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                     setIsFormOpen(true);
                     triggerSfx('pop');
                   }}
-                  className="px-5 py-2.5 rounded-full bg-pink-400 hover:bg-pink-500 text-white text-xs font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                  className="px-5 py-2.5 rounded-full btn-winter-primary text-white text-xs font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>＋ Để lại một lời nhắn</span>
@@ -771,17 +771,17 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="w-full max-w-md bg-white dark:bg-slate-900 border border-pink-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative text-slate-900 dark:text-slate-100"
+                className="w-full max-w-md bg-[#F7FAFD] dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] rounded-3xl p-6 shadow-2xl relative text-[#172536] dark:text-[#E5EDF5]"
               >
-                <div className="flex items-center justify-between border-b border-pink-100 dark:border-slate-800 pb-3 mb-4">
-                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span className="text-pink-400">♡</span>
+                <div className="flex items-center justify-between border-b border-[#DCE7EF] dark:border-[#43576B] pb-3 mb-4">
+                  <h3 className="text-base font-extrabold text-[#172536] dark:text-white flex items-center gap-1.5 font-serif">
+                    <span className="text-[#91A9BC]">❄️</span>
                     <span>Tạo lời nhắn mới</span>
-                    <span className="text-pink-400">♡</span>
+                    <span className="text-[#91A9BC]">❄️</span>
                   </h3>
                   <button
                     onClick={() => setIsFormOpen(false)}
-                    className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                    className="p-1.5 rounded-full text-[#91A9BC] hover:text-[#526B80] hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -790,8 +790,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 <form onSubmit={handleSubmitNewNote} className="space-y-4">
                   {/* Name Input */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Tên người nhắn <span className="text-pink-400">*</span>
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1">
+                      Tên người nhắn <span className="text-[#526B80]">*</span>
                     </label>
                     <input
                       type="text"
@@ -802,14 +802,14 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         setFormError('');
                       }}
                       placeholder="Nhập tên của bạn..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-pink-200/80 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-pink-300 text-slate-900 dark:text-white"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-xs focus:outline-none focus:ring-2 focus:ring-[#91A9BC] text-[#172536] dark:text-white"
                     />
                   </div>
 
                   {/* Content Input */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Nội dung lời nhắn <span className="text-pink-400">*</span>
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1">
+                      Nội dung lời nhắn <span className="text-[#526B80]">*</span>
                     </label>
                     <textarea
                       rows={4}
@@ -819,32 +819,32 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         setFormError('');
                       }}
                       placeholder="Viết một điều gì đó ở đây..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-pink-200/80 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-pink-300 text-slate-900 dark:text-white leading-relaxed resize-none"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-xs focus:outline-none focus:ring-2 focus:ring-[#91A9BC] text-[#172536] dark:text-white leading-relaxed resize-none"
                     />
-                    <p className="text-[10px] text-right text-slate-400 mt-1">
+                    <p className="text-[10px] text-right text-[#91A9BC] mt-1">
                       {contentInput.length} ký tự (không giới hạn)
                     </p>
                   </div>
 
                   {/* Image Attachment Section */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1.5">
                       Ảnh đính kèm (không bắt buộc)
                     </label>
                     
                     {imagePreview ? (
-                      <div className="relative rounded-2xl overflow-hidden border border-pink-200 bg-pink-50/50 p-2 flex items-center gap-3">
+                      <div className="relative rounded-2xl overflow-hidden border border-[#DCE7EF] dark:border-[#43576B] bg-[#E8F1F8]/60 dark:bg-[#202F42] p-2 flex items-center gap-3">
                         <img
                           src={imagePreview}
                           alt="Preview"
-                          className="w-16 h-16 object-cover rounded-xl border border-pink-200 shadow-xs cursor-pointer hover:opacity-95 transition-opacity"
+                          className="w-16 h-16 object-cover rounded-xl border border-[#DCE7EF] dark:border-[#43576B] shadow-xs cursor-pointer hover:opacity-95 transition-opacity"
                           onClick={() => setZoomedImageUrl(imagePreview)}
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
-                            Đã đính kèm ảnh ♡
+                          <p className="text-xs font-semibold text-[#526B80] dark:text-[#E5EDF5] truncate">
+                            Đã đính kèm ảnh ❄️
                           </p>
-                          <p className="text-[10px] text-slate-400">Nhấn vào ảnh để xem lớn</p>
+                          <p className="text-[10px] text-[#91A9BC]">Nhấn vào ảnh để xem lớn</p>
                         </div>
                         <button
                           type="button"
@@ -852,7 +852,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                             setImagePreview('');
                             if (fileInputRef.current) fileInputRef.current.value = '';
                           }}
-                          className="p-1.5 rounded-xl bg-[#E0F3F5] text-[#1B6E7D] dark:text-[#48CCD6] hover:bg-[#D0EBF0] text-xs font-bold transition-colors cursor-pointer"
+                          className="p-1.5 rounded-xl bg-[#E8F1F8] text-[#526B80] dark:bg-[#27384D] dark:text-[#E5EDF5] hover:bg-[#DCE7EF] dark:hover:bg-[#354A60] text-xs font-bold transition-colors cursor-pointer"
                           title="Gỡ ảnh"
                         >
                           <X className="w-4 h-4" />
@@ -882,7 +882,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="px-4 py-2.5 rounded-2xl bg-pink-100/70 hover:bg-pink-200/80 dark:bg-slate-800 dark:hover:bg-slate-700 text-pink-600 dark:text-pink-300 border border-pink-200 dark:border-slate-700 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
+                          className="px-4 py-2.5 rounded-2xl bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] border border-[#DCE7EF] dark:border-[#43576B] text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
                         >
                           <Plus className="w-4 h-4" />
                           <span>＋ Thêm ảnh</span>
@@ -893,7 +893,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
 
                   {/* Paper Style Selector */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1.5">
                       Màu giấy dán
                     </label>
                     <div className="grid grid-cols-5 gap-1.5">
@@ -906,7 +906,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                             paper.bgLight
                           } ${paper.borderLight} ${
                             selectedPaper === paper.id
-                              ? 'ring-2 ring-pink-400 scale-105 shadow-xs'
+                              ? 'ring-2 ring-[#526B80] scale-105 shadow-xs'
                               : 'opacity-80 hover:opacity-100'
                           }`}
                         >
@@ -921,7 +921,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
 
                   {/* Error Message */}
                   {formError && (
-                    <p className="text-xs text-pink-500 font-medium bg-pink-50 dark:bg-pink-950/50 p-2 rounded-xl border border-pink-200 text-center">
+                    <p className="text-xs text-rose-500 font-medium bg-rose-50 dark:bg-rose-950/40 p-2 rounded-xl border border-rose-200 dark:border-rose-900/50 text-center">
                       {formError}
                     </p>
                   )}
@@ -930,9 +930,9 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-2.5 rounded-2xl bg-pink-400 hover:bg-pink-500 text-white text-xs font-extrabold shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full py-2.5 rounded-2xl btn-winter-primary text-white text-xs font-extrabold shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <span>♡ Để lại lời nhắn</span>
+                      <span>❄️ Để lại lời nhắn</span>
                       <Send className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -950,25 +950,25 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 initial={{ opacity: 0, scale: 0.92, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 15 }}
-                className="w-full max-w-md bg-white dark:bg-slate-900 border border-pink-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative text-slate-900 dark:text-slate-100"
+                className="w-full max-w-md bg-[#F7FAFD] dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] rounded-3xl p-6 shadow-2xl relative text-[#172536] dark:text-[#E5EDF5]"
               >
-                <div className="flex items-center justify-between border-b border-pink-100 dark:border-slate-800 pb-3 mb-4">
+                <div className="flex items-center justify-between border-b border-[#DCE7EF] dark:border-[#43576B] pb-3 mb-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-500 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-full bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] flex items-center justify-center">
                       <Edit3 className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
+                      <h3 className="text-sm font-extrabold text-[#172536] dark:text-white">
                         Chỉnh sửa lời nhắn
                       </h3>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                      <p className="text-[10px] text-[#91A9BC] dark:text-[#A9BDCE]">
                         Cập nhật nội dung hoặc màu giấy dán
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setEditingNote(null)}
-                    className="p-1.5 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                    className="p-1.5 rounded-full text-[#91A9BC] hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] cursor-pointer"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -977,8 +977,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 <form onSubmit={handleSubmitEdit} className="space-y-4">
                   {/* Name Input */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Tên người nhắn <span className="text-pink-400">*</span>
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1">
+                      Tên người nhắn <span className="text-[#526B80]">*</span>
                     </label>
                     <input
                       type="text"
@@ -989,14 +989,14 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         setEditError('');
                       }}
                       placeholder="Nhập tên..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-pink-200/80 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-pink-300 text-slate-900 dark:text-white"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-xs focus:outline-none focus:ring-2 focus:ring-[#91A9BC] text-[#172536] dark:text-white"
                     />
                   </div>
 
                   {/* Content Input */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Nội dung lời nhắn <span className="text-pink-400">*</span>
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1">
+                      Nội dung lời nhắn <span className="text-[#526B80]">*</span>
                     </label>
                     <textarea
                       rows={4}
@@ -1007,16 +1007,16 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         setEditError('');
                       }}
                       placeholder="Nội dung lời nhắn..."
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-pink-200/80 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-pink-300 text-slate-900 dark:text-white leading-relaxed resize-none"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-xs focus:outline-none focus:ring-2 focus:ring-[#91A9BC] text-[#172536] dark:text-white leading-relaxed resize-none"
                     />
-                    <p className="text-[10px] text-right text-slate-400 mt-1">
+                    <p className="text-[10px] text-right text-[#91A9BC] mt-1">
                       {editContent.length}/280 ký tự
                     </p>
                   </div>
 
                   {/* Paper Style Selector */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                    <label className="block text-xs font-bold text-[#43576B] dark:text-[#A9BDCE] mb-1.5">
                       Màu giấy dán
                     </label>
                     <div className="grid grid-cols-5 gap-1.5">
@@ -1029,7 +1029,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                             paper.bgLight
                           } ${paper.borderLight} ${
                             editPaper === paper.id
-                              ? 'ring-2 ring-pink-400 scale-105 shadow-xs'
+                              ? 'ring-2 ring-[#526B80] scale-105 shadow-xs'
                               : 'opacity-80 hover:opacity-100'
                           }`}
                         >
@@ -1044,7 +1044,7 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
 
                   {/* Error Message */}
                   {editError && (
-                    <p className="text-xs text-pink-500 font-medium bg-pink-50 dark:bg-pink-950/50 p-2 rounded-xl border border-pink-200 text-center">
+                    <p className="text-xs text-rose-500 font-medium bg-rose-50 dark:bg-rose-950/40 p-2 rounded-xl border border-rose-200 dark:border-rose-900/50 text-center">
                       {editError}
                     </p>
                   )}
@@ -1054,16 +1054,16 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setEditingNote(null)}
-                      className="flex-1 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
+                      className="flex-1 py-2.5 rounded-2xl bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] text-xs font-bold transition-all cursor-pointer"
                     >
                       Hủy bỏ
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-2.5 rounded-2xl bg-pink-400 hover:bg-pink-500 text-white text-xs font-extrabold shadow-md hover:shadow-lg active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="flex-1 py-2.5 rounded-2xl btn-winter-primary text-white text-xs font-extrabold shadow-md hover:shadow-lg active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Check className="w-3.5 h-3.5" />
-                      <span>Lưu thay đổi ♡</span>
+                      <span>Lưu thay đổi ❄️</span>
                     </button>
                   </div>
                 </form>
@@ -1080,21 +1080,21 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 initial={{ opacity: 0, scale: 0.92, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 15 }}
-                className="w-full max-w-sm bg-white dark:bg-[#0E232E] border border-[#38CAD6]/30 dark:border-[#38CAD6]/20 rounded-3xl p-6 shadow-2xl relative text-[#14303A] dark:text-[#E4F7F9] text-center"
+                className="w-full max-w-sm bg-[#F7FAFD] dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] rounded-3xl p-6 shadow-2xl relative text-[#172536] dark:text-[#E5EDF5] text-center"
               >
-                <div className="w-12 h-12 rounded-full bg-[#E0F3F5] dark:bg-[#091D26] text-[#1B6E7D] dark:text-[#48CCD6] mx-auto flex items-center justify-center mb-3">
+                <div className="w-12 h-12 rounded-full bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#A9BDCE] mx-auto flex items-center justify-center mb-3">
                   <Trash2 className="w-6 h-6 stroke-[2]" />
                 </div>
 
-                <h3 className="text-base font-extrabold text-[#14303A] dark:text-white mb-1 font-serif">
+                <h3 className="text-base font-extrabold text-[#172536] dark:text-white mb-1 font-serif">
                   Xóa lời nhắn của bạn?
                 </h3>
-                <p className="text-xs text-[#53737C] dark:text-[#88A9B3] mb-4 leading-relaxed font-serif">
-                  Bạn có chắc muốn xóa lời nhắn của “<strong className="text-[#14303A] dark:text-[#E4F7F9]">{deleteConfirmNote.author}</strong>” không? Hành động này sẽ gỡ lời nhắn khỏi bảng tin ♡
+                <p className="text-xs text-[#43576B] dark:text-[#A9BDCE] mb-4 leading-relaxed font-serif">
+                  Bạn có chắc muốn xóa lời nhắn của “<strong className="text-[#172536] dark:text-[#E5EDF5]">{deleteConfirmNote.author}</strong>” không? Hành động này sẽ gỡ lời nhắn khỏi bảng tin ❄️
                 </p>
 
                 {/* Preview Snippet */}
-                <div className="p-3 rounded-2xl bg-[#F2FBFC] dark:bg-[#07171F] border border-[#38CAD6]/20 dark:border-[#132F3D] text-left mb-4 text-xs font-serif italic text-[#53737C] dark:text-[#88A9B3] line-clamp-3">
+                <div className="p-3 rounded-2xl bg-[#E8F1F8]/70 dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-left mb-4 text-xs font-serif italic text-[#43576B] dark:text-[#A9BDCE] line-clamp-3">
                   “{deleteConfirmNote.content}”
                 </div>
 
@@ -1102,14 +1102,14 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setDeleteConfirmNote(null)}
-                    className="flex-1 py-2.5 rounded-2xl bg-[#E8F7F9] hover:bg-[#DDF2F5] dark:bg-[#132F3D] dark:hover:bg-[#1A3D4D] text-[#14303A] dark:text-[#E4F7F9] text-xs font-bold transition-all cursor-pointer"
+                    className="flex-1 py-2.5 rounded-2xl bg-[#E8F1F8] hover:bg-[#DCE7EF] dark:bg-[#202F42] dark:hover:bg-[#27384D] text-[#172536] dark:text-[#E5EDF5] text-xs font-bold transition-all cursor-pointer"
                   >
                     Hủy giữ lại
                   </button>
                   <button
                     type="button"
                     onClick={handleConfirmDelete}
-                    className="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-[#38CAD6] to-[#1B6E7D] hover:from-[#48CCD6] hover:to-[#38CAD6] text-white text-xs font-extrabold shadow-md shadow-[#1B6E7D]/20 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-[#526B80] to-[#354A60] hover:from-[#647F96] hover:to-[#43576B] text-white text-xs font-extrabold shadow-md shadow-[#172536]/20 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>Xác nhận xóa</span>
@@ -1128,29 +1128,29 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                 initial={{ opacity: 0, scale: 0.92, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 15 }}
-                className="w-full max-w-sm bg-white dark:bg-slate-900 border border-pink-200 dark:border-pink-900/60 rounded-3xl p-6 shadow-2xl relative text-slate-900 dark:text-slate-100 overflow-hidden"
+                className="w-full max-w-sm bg-[#F7FAFD] dark:bg-[#172536] border border-[#DCE7EF] dark:border-[#43576B] rounded-3xl p-6 shadow-2xl relative text-[#172536] dark:text-[#E5EDF5] overflow-hidden"
               >
                 {/* Close button */}
                 <button
                   onClick={() => setAdminAuthPrompt({ isOpen: false, noteId: null, action: 'pin' })}
-                  className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="absolute top-4 right-4 p-1.5 rounded-full text-[#91A9BC] hover:text-[#526B80] dark:hover:text-white hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
 
                 <div className="space-y-4 text-center">
-                  <div className="w-12 h-12 mx-auto rounded-2xl bg-pink-50 dark:bg-pink-950/60 text-pink-500 border border-pink-200 dark:border-pink-800 flex items-center justify-center shadow-xs">
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#526B80] dark:text-[#E5EDF5] border border-[#DCE7EF] dark:border-[#43576B] flex items-center justify-center shadow-xs">
                     <Lock className="w-5 h-5 stroke-[2.2]" />
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center justify-center gap-1.5">
-                      <span className="text-pink-400 text-xs">୨୧</span>
+                    <h3 className="text-base font-extrabold text-[#172536] dark:text-white flex items-center justify-center gap-1.5 font-serif">
+                      <span className="text-[#91A9BC] text-xs">❄️</span>
                       <span>Xác nhận Quản trị viên</span>
-                      <span className="text-pink-400 text-xs">୨୧</span>
+                      <span className="text-[#91A9BC] text-xs">❄️</span>
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">
-                      Vui lòng nhập mật khẩu quản trị để ghim lời nhắn lên bảng ♡
+                    <p className="text-xs text-[#43576B] dark:text-[#A9BDCE] leading-snug">
+                      Vui lòng nhập mật khẩu quản trị để ghim lời nhắn lên bảng ❄️
                     </p>
                   </div>
 
@@ -1162,8 +1162,8 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                         transition={{ duration: 0.35 }}
                         className="relative"
                       >
-                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                          <KeyRound className="w-4 h-4 text-pink-400" />
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#91A9BC]">
+                          <KeyRound className="w-4 h-4 text-[#526B80] dark:text-[#A9BDCE]" />
                         </div>
                         <input
                           ref={passwordInputRef}
@@ -1174,12 +1174,12 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                             if (adminAuthError) setAdminAuthError('');
                           }}
                           placeholder="Nhập mật khẩu..."
-                          className="w-full pl-10 pr-10 py-2.5 bg-pink-50/40 dark:bg-slate-800/80 border border-pink-200/80 dark:border-slate-700 rounded-2xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-400/20"
+                          className="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] rounded-2xl text-xs text-[#172536] dark:text-white placeholder:text-[#91A9BC] focus:outline-none focus:border-[#526B80] focus:ring-2 focus:ring-[#91A9BC]/30"
                         />
                         <button
                           type="button"
                           onClick={() => setShowAdminPassword(!showAdminPassword)}
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-pink-500 transition-colors cursor-pointer"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#91A9BC] hover:text-[#526B80] transition-colors cursor-pointer"
                           title={showAdminPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                         >
                           {showAdminPassword ? (
@@ -1192,14 +1192,14 @@ export const MessageBoardModal: React.FC<MessageBoardModalProps> = ({
                     </div>
 
                     {adminAuthError && (
-                      <p className="text-xs text-pink-500 font-bold bg-pink-50 dark:bg-pink-950/60 p-2 rounded-xl border border-pink-200 text-center">
+                      <p className="text-xs text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/50 p-2 rounded-xl border border-rose-200 dark:border-rose-900/50 text-center">
                         {adminAuthError}
                       </p>
                     )}
 
                     <button
                       type="submit"
-                      className="w-full py-2.5 rounded-2xl bg-pink-400 hover:bg-pink-500 active:scale-[0.98] text-white text-xs font-extrabold shadow-md shadow-pink-200/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full py-2.5 rounded-2xl btn-winter-primary active:scale-[0.98] text-white text-xs font-extrabold shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Unlock className="w-3.5 h-3.5" />
                       <span>Xác nhận & Ghim</span>
@@ -1290,7 +1290,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
         scale: 1.02,
         rotate: 0,
         boxShadow:
-          '0 20px 25px -5px rgba(244, 114, 182, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          '0 20px 25px -5px rgba(145, 169, 188, 0.25), 0 10px 10px -5px rgba(23, 37, 54, 0.06)',
       }}
       whileTap={{ y: -2, scale: 1.01 }}
       transition={{
@@ -1300,18 +1300,18 @@ const NoteCard: React.FC<NoteCardProps> = ({
         rotate: { duration: 0.65, ease: 'easeInOut', delay: 0.2 },
       }}
       className={`relative p-5 rounded-2xl border ${paper.bgLight} ${paper.bgDark} ${paper.borderLight} ${paper.borderDark} ${paper.textLight} ${paper.textDark} shadow-sm transition-all flex flex-col justify-between min-h-[180px] select-none ${
-        note.isHidden ? 'opacity-50 ring-2 ring-pink-300' : ''
+        note.isHidden ? 'opacity-50 ring-2 ring-[#91A9BC]' : ''
       }`}
     >
       {/* Top Decoration: Tape / Push Pin / Ribbon */}
       <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
         {note.decoration === 'pin' ? (
-          <div className="w-5 h-5 rounded-full bg-pink-400 shadow-md border-2 border-white flex items-center justify-center text-[10px] text-white font-extrabold">
+          <div className="w-5 h-5 rounded-full bg-[#526B80] shadow-md border-2 border-white flex items-center justify-center text-[10px] text-white font-extrabold">
             📌
           </div>
         ) : note.decoration === 'ribbon' || note.isPinned ? (
-          <div className="px-2.5 py-0.5 rounded-full bg-pink-400 text-white text-[10px] font-bold shadow-xs flex items-center gap-1 border border-white">
-            <span>୨୧</span>
+          <div className="px-2.5 py-0.5 rounded-full bg-[#526B80] text-white text-[10px] font-bold shadow-xs flex items-center gap-1 border border-white">
+            <span>❄️</span>
           </div>
         ) : (
           <div
@@ -1322,24 +1322,24 @@ const NoteCard: React.FC<NoteCardProps> = ({
 
       {/* Admin Hidden Badge */}
       {note.isHidden && (
-        <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-pink-400 text-white text-[9px] font-bold">
+        <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-[#526B80] text-white text-[9px] font-bold">
           [Đã ẩn]
         </div>
       )}
 
       {/* Card Header & Author */}
       <div className="pt-1">
-        <div className="flex items-center justify-between gap-2 border-b border-pink-200/50 dark:border-white/10 pb-2 mb-2.5">
+        <div className="flex items-center justify-between gap-2 border-b border-[#DCE7EF]/70 dark:border-white/10 pb-2 mb-2.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="font-extrabold text-sm tracking-tight flex items-center gap-1 truncate">
-              {note.isPinned && <span className="text-pink-400 text-xs shrink-0">୨୧</span>}
+              {note.isPinned && <span className="text-[#526B80] dark:text-[#A9BDCE] text-xs shrink-0">❄️</span>}
               <span className="truncate">{note.author}</span>
             </span>
 
             {/* "My Note" Badge */}
             {isOwner && (
-              <span className="shrink-0 text-[9px] font-bold text-pink-600 dark:text-pink-300 bg-pink-100/90 dark:bg-pink-950/80 px-1.5 py-0.5 rounded-full border border-pink-200/80 dark:border-pink-800/80 flex items-center gap-0.5">
-                <span>♡ Của bạn</span>
+              <span className="shrink-0 text-[9px] font-bold text-[#526B80] dark:text-[#E5EDF5] bg-[#E8F1F8] dark:bg-[#202F42] px-1.5 py-0.5 rounded-full border border-[#DCE7EF] dark:border-[#43576B] flex items-center gap-0.5">
+                <span>❄️ Của bạn</span>
               </span>
             )}
           </div>
@@ -1349,7 +1349,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
               {formatRelativeTime(note.createdAt)}
             </span>
             {note.updatedAt && (
-              <span className="text-[9px] text-pink-400 opacity-80" title="Đã chỉnh sửa">
+              <span className="text-[9px] text-[#91A9BC] opacity-80" title="Đã chỉnh sửa">
                 (đã sửa)
               </span>
             )}
@@ -1368,7 +1368,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
               src={note.imageUrl}
               alt="Attached note visual"
               onClick={() => onZoomImage(note.imageUrl!)}
-              className="w-full max-h-48 object-cover rounded-xl border border-pink-200/80 shadow-xs cursor-pointer hover:opacity-95 hover:scale-[1.01] transition-all"
+              className="w-full max-h-48 object-cover rounded-xl border border-[#DCE7EF] dark:border-[#43576B] shadow-xs cursor-pointer hover:opacity-95 hover:scale-[1.01] transition-all"
               title="Nhấn để phóng to ảnh"
             />
           </div>
@@ -1376,14 +1376,14 @@ const NoteCard: React.FC<NoteCardProps> = ({
       </div>
 
       {/* Card Footer: Likes & Action Tools (Edit & Delete for Owner & Admin) */}
-      <div className="pt-4 border-t border-pink-200/50 dark:border-white/10 flex items-center justify-between gap-2 mt-2">
+      <div className="pt-4 border-t border-[#DCE7EF]/70 dark:border-white/10 flex items-center justify-between gap-2 mt-2">
         {/* Like Button */}
         <button
           onClick={onLike}
           className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all active:scale-90 cursor-pointer ${
             isLiked
-              ? 'bg-pink-400 text-white shadow-xs'
-              : 'bg-black/5 dark:bg-white/10 hover:bg-pink-100 dark:hover:bg-pink-950/60 text-slate-700 dark:text-slate-200'
+              ? 'bg-[#526B80] text-white shadow-xs'
+              : 'bg-black/5 dark:bg-white/10 hover:bg-[#E8F1F8] dark:hover:bg-[#202F42] text-slate-700 dark:text-slate-200'
           }`}
           title="Thả tim cho lời nhắn này"
         >
@@ -1402,7 +1402,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
           {isOwner && (
             <button
               onClick={onEdit}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#E0F3F5] dark:bg-[#132F3D] hover:bg-[#D0EBF0] text-[#1B6E7D] dark:text-[#48CCD6] text-[11px] font-bold transition-colors cursor-pointer border border-[#38CAD6]/40 active:scale-95"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#E8F1F8] dark:bg-[#202F42] hover:bg-[#DCE7EF] dark:hover:bg-[#27384D] text-[#526B80] dark:text-[#E5EDF5] text-[11px] font-bold transition-colors cursor-pointer border border-[#DCE7EF] dark:border-[#43576B] active:scale-95"
               title="Chỉnh sửa lời nhắn của bạn"
             >
               <Edit3 className="w-3 h-3" />
@@ -1414,7 +1414,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
           {isOwner && (
             <button
               onClick={onDelete}
-              className="p-1.5 rounded-lg hover:bg-[#1B6E7D] hover:text-white text-[#1B6E7D] dark:text-[#48CCD6] opacity-80 hover:opacity-100 text-xs transition-colors cursor-pointer active:scale-95"
+              className="p-1.5 rounded-lg hover:bg-[#526B80] hover:text-white text-[#526B80] dark:text-[#A9BDCE] opacity-80 hover:opacity-100 text-xs transition-colors cursor-pointer active:scale-95"
               title="Xóa lời nhắn của bạn"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -1426,8 +1426,8 @@ const NoteCard: React.FC<NoteCardProps> = ({
             onClick={onPin}
             className={`p-1.5 rounded-lg text-xs transition-all active:scale-90 cursor-pointer ${
               note.isPinned
-                ? 'bg-[#38CAD6] text-white shadow-xs'
-                : 'hover:bg-[#E0F3F5] dark:hover:bg-white/10 opacity-70 hover:opacity-100 text-slate-600 dark:text-slate-300'
+                ? 'bg-[#526B80] text-white shadow-xs'
+                : 'hover:bg-[#E8F1F8] dark:hover:bg-white/10 opacity-70 hover:opacity-100 text-slate-600 dark:text-slate-300'
             }`}
             title={note.isPinned ? 'Bỏ ghim lời nhắn (Admin)' : 'Ghim lời nhắn lên đầu (Admin)'}
           >
@@ -1438,11 +1438,11 @@ const NoteCard: React.FC<NoteCardProps> = ({
           {isAdmin && (
             <button
               onClick={onHide}
-              className="p-1.5 rounded-lg hover:bg-pink-100 dark:hover:bg-white/10 opacity-70 hover:opacity-100 text-xs transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg hover:bg-[#E8F1F8] dark:hover:bg-white/10 opacity-70 hover:opacity-100 text-xs transition-colors cursor-pointer"
               title={note.isHidden ? 'Hiện lời nhắn' : 'Ẩn lời nhắn'}
             >
               {note.isHidden ? (
-                <Eye className="w-3.5 h-3.5 text-pink-500" />
+                <Eye className="w-3.5 h-3.5 text-[#526B80] dark:text-[#A9BDCE]" />
               ) : (
                 <EyeOff className="w-3.5 h-3.5" />
               )}

@@ -15,8 +15,8 @@ const WISHING_BOTTLES_COLLECTION = 'wishingBottles';
 export const SEED_WISHING_BOTTLES: WishingBottle[] = [
   {
     id: 'bottle_seed_1',
-    author: 'Người Giữ Đèn Hải Đăng',
-    message: 'Mong rằng những ngày tháng sắp tới của bạn sẽ êm đềm như một buổi hoàng hôn trên biển, dẫu có sóng gió thì bến đỗ bình yên vẫn luôn chờ đón bạn.',
+    author: 'Người Giữ Đèn Đêm Tuyết',
+    message: 'Mong rằng những ngày tháng sắp tới của bạn sẽ êm đềm như một buổi chiều tuyết rơi nhẹ ngoài khung cửa, dẫu có gió lạnh thì góc ấm bình yên vẫn luôn chờ đón bạn.',
     bottleStyle: 'crystal',
     seal: 'star',
     tag: 'Chữa lành',
@@ -27,7 +27,7 @@ export const SEED_WISHING_BOTTLES: WishingBottle[] = [
   },
   {
     id: 'bottle_seed_2',
-    author: 'Hải Âu Phiêu Lãng',
+    author: 'Bông Tuyết Phiêu Lãng',
     message: 'Gửi một chút can đảm đến người đang đọc được dòng này: Bạn đã làm rất tốt rồi, hãy tự thưởng cho mình một tách trà ấm và nụ cười thật tươi nhé! ♡',
     bottleStyle: 'azure',
     seal: 'heart',
@@ -39,8 +39,8 @@ export const SEED_WISHING_BOTTLES: WishingBottle[] = [
   },
   {
     id: 'bottle_seed_3',
-    author: 'Ngọc Trai Biển Sâu',
-    message: 'Ước nguyện cho tất cả ước mơ đang ấp ủ trong lòng bạn sẽ sớm nở hoa rực rỡ và lấp lánh như viên ngọc quý dưới ánh bình minh! ✦',
+    author: 'Pha Lê Tuyết Trắng',
+    message: 'Ước nguyện cho tất cả ước mơ đang ấp ủ trong lòng bạn sẽ sớm nở hoa rực rỡ và lấp lánh như tinh thể tuyết dưới ánh nắng mai! ✦',
     bottleStyle: 'pearl',
     seal: 'shell',
     tag: 'Ước nguyện',
@@ -52,7 +52,7 @@ export const SEED_WISHING_BOTTLES: WishingBottle[] = [
   {
     id: 'bottle_seed_4',
     author: 'Lữ Khách Đêm Trăng',
-    message: 'Mỗi khi nhìn lên bầu trời đêm hay ngắm nhìn mặt biển bao la, hãy nhớ rằng luôn có một góc nhỏ dịu êm này sẵn sàng lắng nghe bạn.',
+    message: 'Mỗi khi nhìn lên bầu trời đêm đông hay ngắm nhìn từng bông tuyết khẽ rơi, hãy nhớ rằng luôn có một góc nhỏ dịu êm này sẵn sàng lắng nghe bạn.',
     bottleStyle: 'luminous',
     seal: 'wave',
     tag: 'Tâm sự',

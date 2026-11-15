@@ -61,6 +61,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
+  const visibleContacts = contacts.filter((c) => {
+    const label = (c.label || '').toLowerCase();
+    const val = (c.value || '').toLowerCase();
+    return c.iconType !== 'ngl' && !label.includes('ngl') && !label.includes('ẩn danh') && !val.includes('ngl.link');
+  });
+
   return (
     <>
       <AnimatePresence>
@@ -76,16 +82,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               {/* Top Title */}
               <div className="flex items-center justify-between pb-4 border-b border-[#DCE7EF] dark:border-[#43576B] shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#91A9BC] dark:text-[#A9BDCE] border border-[#DCE7EF] dark:border-[#43576B]">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] text-[#4E7AA5] dark:text-[#A8CDF0] border border-[#DCE7EF] dark:border-[#43576B]">
                     <span className="text-xl">❄</span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold tracking-tight text-[#526B80] dark:text-[#E5EDF5] font-serif">
+                    <h3 className="text-lg font-bold tracking-tight text-[#16273B] dark:text-[#E5EDF5] font-serif">
                       Thông tin liên hệ
                     </h3>
-                    <p className="text-xs text-[#91A9BC] dark:text-[#A9BDCE]">
-                      Kênh truyền thông &amp; gửi lời nhắn mùa đông
+                    <p className="text-xs text-[#64829E] dark:text-[#A9BDCE] font-serif">
+                      Kết nối cùng Yui &amp; góc nhỏ mùa đông
                     </p>
                   </div>
                 </div>
@@ -100,12 +106,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               {/* Content List */}
               <div className="mt-5 space-y-4 overflow-y-auto pr-1 flex-1 custom-scrollbar">
-                {contacts.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-[#91A9BC] font-serif">
+                {visibleContacts.length === 0 ? (
+                  <div className="py-8 text-center text-sm text-[#64829E] dark:text-[#A9BDCE] font-serif">
                     Chưa có liên kết nào được thiết lập.
                   </div>
                 ) : (
-                  contacts.map((c) => {
+                  visibleContacts.map((c) => {
                     const IconComponent = getContactIcon(c.iconType);
                     const colorStyle = getContactColor(c.iconType);
                     return (
@@ -183,14 +189,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   className="w-full py-3 px-4 rounded-2xl btn-winter-primary text-white text-xs font-bold font-serif flex items-center justify-center gap-2 shadow-md shadow-[#91A9BC]/25 transition-transform active:scale-95 cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>♡ Gửi đơn đến Creator</span>
+                  <span>Gửi Request đến Yui</span>
                 </button>
               </div>
 
               {/* Note Footer */}
               <div className="mt-3 p-3 rounded-2xl bg-[#E8F1F8] dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-center shrink-0">
-                <p className="text-xs text-[#526B80] dark:text-[#E5EDF5] font-serif font-medium">
-                  ❄ Mọi thắc mắc, yêu cầu Character hoặc góp ý xin hãy nhắn về Page, NGL hoặc gửi đơn nhé!
+                <p className="text-xs text-[#526B80] dark:text-[#E5EDF5] font-serif italic">
+                  &ldquo;Hẹn nhau ở cuối mùa đông, nơi tuyết chưa tan.&rdquo; ❄
                 </p>
               </div>
             </motion.div>
