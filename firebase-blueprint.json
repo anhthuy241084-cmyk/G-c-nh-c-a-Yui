@@ -104,6 +104,50 @@
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "title", "category", "content", "author", "likes", "comments", "createdAt"]
+    },
+    "SecretLetter": {
+      "title": "SecretLetter",
+      "description": "Anonymous unlimited-length letter readable exclusively by owner admin",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "maxLength": 300 },
+        "penName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "mood": { "type": "string", "enum": ["confession", "wish", "feedback", "memory", "secret"] },
+        "content": { "type": "string", "minLength": 1 },
+        "chunkCount": { "type": "number" },
+        "totalLength": { "type": "number" },
+        "isRead": { "type": "boolean" },
+        "isStarred": { "type": "boolean" },
+        "adminNote": { "type": "string", "maxLength": 5000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "title",
+        "penName",
+        "mood",
+        "content",
+        "chunkCount",
+        "totalLength",
+        "isRead",
+        "isStarred",
+        "adminNote",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SecretLetterChunk": {
+      "title": "SecretLetterChunk",
+      "description": "Overflow text chunk for unlimited-length anonymous letters",
+      "type": "object",
+      "properties": {
+        "index": { "type": "number" },
+        "text": { "type": "string", "minLength": 1 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["index", "text", "createdAt"]
     }
   },
   "firestore": {
@@ -122,6 +166,14 @@
     "/whispersOfSnow/{postId}": {
       "schema": { "$ref": "#/entities/WhisperPost" },
       "description": "Curated quotes, short writings, and images shared by admin with comments"
+    },
+    "/secretLetters/{letterId}": {
+      "schema": { "$ref": "#/entities/SecretLetter" },
+      "description": "Anonymous unlimited-length letters readable exclusively by owner admin"
+    },
+    "/secretLetters/{letterId}/chunks/{chunkId}": {
+      "schema": { "$ref": "#/entities/SecretLetterChunk" },
+      "description": "Overflow content chunks for very long anonymous letters"
     }
   }
 }

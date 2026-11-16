@@ -45,6 +45,7 @@ import { SnowCursorEffect } from './components/SnowCursorEffect';
 import { DonateMailboxModal } from './components/DonateMailboxModal';
 import { MemoryGalleryModal } from './components/MemoryGalleryModal';
 import { WhisperQuotesModal } from './components/WhisperQuotesModal';
+import { SecretLetterModal } from './components/SecretLetterModal';
 import { triggerSfx } from './utils/sfx';
 import { triggerHeartConfetti } from './utils/confetti';
 import { testFirestoreConnection } from './firebase';
@@ -173,7 +174,9 @@ export default function App() {
   const [isDonateMailboxOpen, setIsDonateMailboxOpen] = useState(false);
   const [isMemoryGalleryOpen, setIsMemoryGalleryOpen] = useState(false);
   const [isWhisperQuotesOpen, setIsWhisperQuotesOpen] = useState(false);
-  const [adminAuthTarget, setAdminAuthTarget] = useState<'admin_panel' | 'inline_unlock'>('admin_panel');
+  const [isSecretLetterOpen, setIsSecretLetterOpen] = useState(false);
+  const [adminInitialTab, setAdminInitialTab] = useState<'list' | 'secretLetters'>('list');
+  const [adminAuthTarget, setAdminAuthTarget] = useState<'admin_panel' | 'inline_unlock' | 'secret_letters'>('admin_panel');
 
   // Wishing Bottles state (Hải Lưu & Chai Ước Nguyện)
   const [wishingBottles, setWishingBottles] = useState<WishingBottle[]>([]);
@@ -1226,6 +1229,7 @@ export default function App() {
           onOpenContact={() => setIsContactOpen(true)}
           onOpenVoting={() => setIsVotingOpen(true)}
           onOpenAdmin={() => {
+            setAdminInitialTab('list');
             setAdminAuthTarget('admin_panel');
             if (isAdminLoggedIn) {
               setIsAdminOpen(true);
@@ -1261,6 +1265,7 @@ export default function App() {
           onOpenDonateMailbox={() => setIsDonateMailboxOpen(true)}
           onOpenMemoryGallery={() => setIsMemoryGalleryOpen(true)}
           onOpenWhisperQuotes={() => setIsWhisperQuotesOpen(true)}
+          onOpenSecretLetter={() => setIsSecretLetterOpen(true)}
         />
 
         {/* Main Content Area */}
@@ -1298,6 +1303,7 @@ export default function App() {
             onOpenVoting={() => setIsVotingOpen(true)}
             onOpenMessageBoard={() => setIsMessageBoardOpen(true)}
             onOpenSnowGame={() => setIsSnowGameOpen(true)}
+            onOpenSecretLetter={() => setIsSecretLetterOpen(true)}
             audioSettings={audioSettings}
             onUpdateAudioSettings={handleUpdateAudioSettings}
           />
@@ -1500,6 +1506,10 @@ export default function App() {
         onSuccess={() => {
           setIsAdminLoggedIn(true);
           if (adminAuthTarget === 'admin_panel') {
+            setAdminInitialTab('list');
+            setIsAdminOpen(true);
+          } else if (adminAuthTarget === 'secret_letters') {
+            setAdminInitialTab('secretLetters');
             setIsAdminOpen(true);
           } else {
             showToast('✨ Đã xác thực quyền Quản trị viên (Yui)!');
@@ -1511,6 +1521,7 @@ export default function App() {
       <AdminModal
         isOpen={isAdminOpen}
         onClose={() => setIsAdminOpen(false)}
+        initialTab={adminInitialTab}
         characters={characters}
         onAddCharacter={handleAddCharacter}
         onEditCharacter={handleEditCharacter}
@@ -1729,6 +1740,24 @@ export default function App() {
         onRequireAdmin={() => {
           setAdminAuthTarget('inline_unlock');
           setIsAdminAuthOpen(true);
+        }}
+        isSfxOn={audioSettings.isSfxOn}
+        sfxVolume={audioSettings.sfxVolume}
+        onToast={showToast}
+      />
+
+      {/* Tâm Thư Đêm Tuyết — Gửi thư ẩn danh không giới hạn ký tự, chỉ Quản trị viên đọc được */}
+      <SecretLetterModal
+        isOpen={isSecretLetterOpen}
+        onClose={() => setIsSecretLetterOpen(false)}
+        onOpenAdminInbox={() => {
+          if (isAdminLoggedIn) {
+            setAdminInitialTab('secretLetters');
+            setIsAdminOpen(true);
+          } else {
+            setAdminAuthTarget('secret_letters');
+            setIsAdminAuthOpen(true);
+          }
         }}
         isSfxOn={audioSettings.isSfxOn}
         sfxVolume={audioSettings.sfxVolume}

@@ -877,3 +877,26 @@ export interface WhisperPost {
   updatedAt?: string;
 }
 
+export type SecretLetterMood = 'confession' | 'wish' | 'feedback' | 'memory' | 'secret';
+
+export interface SecretLetter {
+  id: string;
+  title: string;
+  penName: string;
+  mood: SecretLetterMood;
+  content: string;
+  chunkCount: number;
+  totalLength: number;
+  isRead: boolean;
+  isStarred: boolean;
+  adminNote: string;
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+export interface SecretLetterChunk {
+  index: number;
+  text: string;
+  createdAt?: any;
+}
+

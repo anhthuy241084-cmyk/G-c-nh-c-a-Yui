@@ -132,6 +132,59 @@ service cloud.firestore {
         && data.diff(prev).affectedKeys().hasOnly(['isRead', 'isThanked', 'internalNote', 'updatedAt']);
     }
 
+    // SecretLetter (Tâm Thư Đêm Tuyết) — anonymous unlimited-length letters, strictly owner-admin readable
+    function isValidSecretLetterCreate(data, letterId) {
+      return data.keys().hasAll([
+          'id', 'title', 'penName', 'mood', 'content',
+          'chunkCount', 'totalLength', 'isRead', 'isStarred',
+          'adminNote', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'title', 'penName', 'mood', 'content',
+          'chunkCount', 'totalLength', 'isRead', 'isStarred',
+          'adminNote', 'createdAt', 'updatedAt'
+        ])
+        && data.id is string && data.id == letterId
+        && data.title is string && data.title.size() <= 300
+        && data.penName is string && data.penName.size() >= 1 && data.penName.size() <= 120
+        && data.mood in ['confession', 'wish', 'feedback', 'memory', 'secret']
+        && data.content is string && data.content.size() >= 1 && data.content.size() <= 750000
+        && data.chunkCount is int && data.chunkCount >= 0 && data.chunkCount <= 100
+        && data.totalLength is int && data.totalLength >= 1
+        && data.isRead == false
+        && data.isStarred == false
+        && data.adminNote is string && data.adminNote == ''
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidSecretLetterUpdate(data, prev) {
+      return data.id == prev.id
+        && data.title == prev.title
+        && data.penName == prev.penName
+        && data.mood == prev.mood
+        && data.content == prev.content
+        && data.chunkCount == prev.chunkCount
+        && data.totalLength == prev.totalLength
+        && data.createdAt == prev.createdAt
+        && data.isRead is bool
+        && data.isStarred is bool
+        && data.adminNote is string && data.adminNote.size() <= 5000
+        && data.updatedAt == request.time
+        && data.diff(prev).affectedKeys().hasOnly(['isRead', 'isStarred', 'adminNote', 'updatedAt']);
+    }
+
+    function isValidSecretLetterChunkCreate(data, letterId, chunkId) {
+      return isValidId(letterId)
+        && isValidId(chunkId)
+        && data.keys().hasAll(['index', 'text', 'createdAt'])
+        && data.keys().hasOnly(['index', 'text', 'createdAt'])
+        && data.index is int && data.index >= 0 && data.index <= 100
+        && data.text is string && data.text.size() >= 1 && data.text.size() <= 750000
+        && data.createdAt == request.time
+        && existsAfter(/databases/$(database)/documents/secretLetters/$(letterId));
+    }
+
     // Private Winter Mailbox (Hòm Thư Mùa Đông) — strictly owner-readable, visitor-creatable
     match /winterLetters/{letterId} {
       allow get: if isOwnerAdmin() && isValidId(letterId);
@@ -139,6 +192,21 @@ service cloud.firestore {
       allow create: if isValidId(letterId) && isValidWinterLetterCreate(incoming(), letterId);
       allow update: if isOwnerAdmin() && isValidId(letterId) && isValidWinterLetterUpdate(incoming(), existing());
       allow delete: if isOwnerAdmin() && isValidId(letterId);
+    }
+
+    match /secretLetters/{letterId} {
+      allow get: if isOwnerAdmin() && isValidId(letterId);
+      allow list: if isOwnerAdmin();
+      allow create: if isValidId(letterId) && isValidSecretLetterCreate(incoming(), letterId);
+      allow update: if isOwnerAdmin() && isValidId(letterId) && isValidSecretLetterUpdate(incoming(), existing());
+      allow delete: if isOwnerAdmin() && isValidId(letterId);
+
+      match /chunks/{chunkId} {
+        allow get, list: if isOwnerAdmin() && isValidId(letterId);
+        allow create: if isValidSecretLetterChunkCreate(incoming(), letterId, chunkId);
+        allow update: if false;
+        allow delete: if isOwnerAdmin() && isValidId(letterId) && isValidId(chunkId);
+      }
     }
 
     // Lầu Tuyết Họa Ký (Chat logs, Fanart & Moments archive)

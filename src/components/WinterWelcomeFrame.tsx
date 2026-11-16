@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Send, Dices, Mail, Trophy, Flame, Snowflake, MessageSquare } from 'lucide-react';
+import { Send, Dices, Mail, Trophy, Flame, Snowflake, MessageSquare, Feather } from 'lucide-react';
 import { AudioSettings, Character, GenreTag } from '../types';
 
 interface WinterWelcomeFrameProps {
@@ -15,6 +15,7 @@ interface WinterWelcomeFrameProps {
   onOpenVoting?: () => void;
   onOpenMessageBoard?: () => void;
   onOpenSnowGame?: () => void;
+  onOpenSecretLetter?: () => void;
   streakCount?: number;
   onOpenStreak?: () => void;
   audioSettings?: AudioSettings;
@@ -56,6 +57,7 @@ export const WinterWelcomeFrame: React.FC<WinterWelcomeFrameProps> = ({
   onOpenVoting,
   onOpenMessageBoard,
   onOpenSnowGame,
+  onOpenSecretLetter,
   streakCount = 1,
   onOpenStreak,
 }) => {
@@ -120,6 +122,16 @@ export const WinterWelcomeFrame: React.FC<WinterWelcomeFrameProps> = ({
           icon: <Mail className="w-4 h-4" />,
           tone: 'blush' as const,
           onClick: onOpenDonateMailbox,
+        }
+      : null,
+    onOpenSecretLetter
+      ? {
+          id: 'secretLetter',
+          label: 'Tâm Thư Đêm Tuyết',
+          sub: 'Thư ẩn danh không giới hạn',
+          icon: <Feather className="w-4 h-4" />,
+          tone: 'sky' as const,
+          onClick: onOpenSecretLetter,
         }
       : null,
   ].filter(Boolean) as Array<{
@@ -210,8 +222,8 @@ export const WinterWelcomeFrame: React.FC<WinterWelcomeFrameProps> = ({
           </div>
         </div>
 
-        {/* Mobile: Single Horizontal Swipeable Charm Strip | Desktop: 6-col Grid */}
-        <div className="relative z-10 flex sm:grid sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3 overflow-x-auto snap-x snap-mandatory pb-1.5 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0 custom-scrollbar">
+        {/* Mobile: Single Horizontal Swipeable Charm Strip | Tablet: Centered wrap | Desktop: 7-col Grid */}
+        <div className="relative z-10 flex sm:flex-wrap sm:justify-center lg:grid lg:grid-cols-7 gap-2.5 sm:gap-3 overflow-x-auto sm:overflow-visible snap-x snap-mandatory pb-1.5 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0 custom-scrollbar">
           {charms.map((item) => {
             const isPrimary = item.tone === 'primary';
             const isBlush = item.tone === 'blush';
@@ -221,7 +233,7 @@ export const WinterWelcomeFrame: React.FC<WinterWelcomeFrameProps> = ({
                 key={item.id}
                 type="button"
                 onClick={item.onClick}
-                className={`group flex flex-col items-center text-center min-w-[114px] sm:min-w-0 shrink-0 snap-start px-3 py-2.5 sm:py-3.5 rounded-[18px] sm:rounded-[20px] transition-all duration-200 hover:-translate-y-1 cursor-pointer ${
+                className={`group flex flex-col items-center text-center min-w-[114px] sm:min-w-0 sm:w-[calc(25%-0.6rem)] lg:w-auto shrink-0 snap-start px-3 py-2.5 sm:py-3.5 rounded-[18px] sm:rounded-[20px] transition-all duration-200 hover:-translate-y-1 cursor-pointer ${
                   isPrimary
                     ? 'bg-[#5380AD] hover:bg-[#44709D] text-white border border-[#6E9AC4] shadow-[0_8px_20px_-6px_rgba(74,116,162,0.38)]'
                     : isBlush

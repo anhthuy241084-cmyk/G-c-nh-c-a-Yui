@@ -26,12 +26,14 @@ import {
   Snowflake,
   Cloud,
   Copy,
+  Feather,
 } from 'lucide-react';
 import { Character, PRESET_TAGS, CreatorRequest, ContactLink } from '../types';
 import { compressImageFile } from '../utils/imageCompressor';
 import { subscribeCreatorRequests, updateCreatorRequest, deleteCreatorRequest } from '../services/creatorRequestService';
 import { SuggestedAvatar, subscribeSuggestedAvatars, addSuggestedAvatar, deleteSuggestedAvatar, clearAllSuggestedAvatars } from '../services/suggestedAvatarService';
 import { WinterMailboxAdmin } from './WinterMailboxAdmin';
+import { SecretLettersAdmin } from './SecretLettersAdmin';
 
 interface AdminModalProps {
   isOpen: boolean;
@@ -49,6 +51,7 @@ interface AdminModalProps {
   onSaveContact?: (contact: ContactLink) => Promise<void>;
   onDeleteContact?: (id: string) => Promise<void>;
   onReorderContacts?: (contacts: ContactLink[]) => Promise<void>;
+  initialTab?: 'list' | 'create' | 'edit' | 'notify' | 'requests' | 'avatars' | 'contacts' | 'winterMailbox' | 'secretLetters';
 }
 
 export const AdminModal: React.FC<AdminModalProps> = ({
@@ -66,8 +69,15 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   contacts = [],
   onSaveContact,
   onDeleteContact,
+  initialTab,
 }) => {
-  const [activeTab, setActiveTab] = useState<'list' | 'create' | 'edit' | 'notify' | 'requests' | 'avatars' | 'contacts' | 'winterMailbox'>('list');
+  const [activeTab, setActiveTab] = useState<'list' | 'create' | 'edit' | 'notify' | 'requests' | 'avatars' | 'contacts' | 'winterMailbox' | 'secretLetters'>('list');
+
+  useEffect(() => {
+    if (isOpen && initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
   const [editingContact, setEditingContact] = useState<ContactLink | null>(null);
   const [isCreatingContact, setIsCreatingContact] = useState(false);
   const [contactLabel, setContactLabel] = useState('');
@@ -904,6 +914,18 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 >
                   <Mail className="w-3.5 h-3.5" />
                   <span>Hòm Thư Mùa Đông</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('secretLetters')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    activeTab === 'secretLetters'
+                      ? 'bg-gradient-to-r from-[#6392BE] to-[#4E7AA5] text-white shadow-sm'
+                      : 'bg-white dark:bg-[#23374F] text-[#36597A] dark:text-[#CFE1F2] border border-[#DCE9F5] dark:border-[#39506B] hover:bg-[#EAF3FC]'
+                  }`}
+                >
+                  <Feather className="w-3.5 h-3.5" />
+                  <span>Tâm Thư Đêm Tuyết</span>
                 </button>
 
                 {onOpenCommandLibrary && (
@@ -2142,6 +2164,10 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               {activeTab === 'winterMailbox' && (
                 <WinterMailboxAdmin onToast={onToast} />
+              )}
+
+              {activeTab === 'secretLetters' && (
+                <SecretLettersAdmin onToast={onToast} />
               )}
 
             </div>

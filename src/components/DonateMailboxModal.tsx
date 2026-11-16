@@ -13,6 +13,7 @@ import {
   Loader2,
   Home,
   ZoomIn,
+  Download,
   ShieldCheck,
 } from 'lucide-react';
 import { WinterContactMethod } from '../types';
@@ -31,7 +32,7 @@ interface DonateMailboxModalProps {
   onToast?: (msg: string) => void;
 }
 
-const QR_CARD_SRC = '/assets/aistudio/Thi_p_QR_m_a___ng_pastel_d__th__ng_0fc6f10.png';
+const QR_CARD_SRC = '/assets/aistudio/Thi_p_QR_m_a___ng_pastel_d__th__ng_0fc61f10.png';
 
 const CONTACT_METHODS: {
   id: Exclude<WinterContactMethod, 'none'>;
@@ -364,11 +365,11 @@ export const DonateMailboxModal: React.FC<DonateMailboxModalProps> = ({
           <div className="flex-1 overflow-y-auto custom-scrollbar px-4 sm:px-8 py-7 space-y-10">
             {/* SECTION 1: QR DONATE & THANK-YOU MESSAGE */}
             <section className="space-y-6">
-              <div className="relative mx-auto max-w-sm rounded-[28px] p-3 bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] shadow-[0_14px_40px_-10px_rgba(82,107,128,0.22)]">
+              <div className="mx-auto max-w-sm space-y-3">
                 <button
                   type="button"
                   onClick={() => setIsQrZoomed(true)}
-                  className="group relative block w-full overflow-hidden rounded-[20px] cursor-zoom-in focus:outline-none"
+                  className="block w-full overflow-hidden rounded-xl border border-[#DCE7EF] dark:border-[#43576B] shadow-[0_14px_40px_-10px_rgba(82,107,128,0.22)] cursor-zoom-in focus:outline-none"
                   title="Nhấn để phóng to mã QR"
                 >
                   <img
@@ -376,11 +377,26 @@ export const DonateMailboxModal: React.FC<DonateMailboxModalProps> = ({
                     alt="Thiệp QR ủng hộ Yui mùa đông pastel"
                     className="w-full h-auto object-contain block"
                   />
-                  <span className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-xl bg-[#172536]/75 text-white text-[10px] font-serif flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-xs">
-                    <ZoomIn className="w-3 h-3" />
-                    <span>Phóng to</span>
-                  </span>
                 </button>
+
+                <div className="flex items-center justify-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsQrZoomed(true)}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[11px] sm:text-xs font-serif font-semibold text-[#526B80] dark:text-[#D5E4EF] hover:border-[#91A9BC] transition-colors cursor-pointer"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                    <span>Phóng to QR</span>
+                  </button>
+                  <a
+                    href={QR_CARD_SRC}
+                    download="QR_Ung_Ho_Yui.png"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#202F42] border border-[#DCE7EF] dark:border-[#43576B] text-[11px] sm:text-xs font-serif font-semibold text-[#526B80] dark:text-[#D5E4EF] hover:border-[#91A9BC] transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Tải ảnh QR gốc</span>
+                  </a>
+                </div>
               </div>
 
               {/* Exact Thank-You Message Below QR */}
@@ -778,19 +794,21 @@ export const DonateMailboxModal: React.FC<DonateMailboxModalProps> = ({
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.9 }}
-                className="relative max-w-lg w-full bg-white rounded-3xl p-3 shadow-2xl"
+                className="relative max-w-lg w-full shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
+                  type="button"
                   onClick={() => setIsQrZoomed(false)}
-                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#172536] text-white flex items-center justify-center shadow-lg cursor-pointer"
+                  aria-label="Đóng ảnh QR"
+                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[#172536] text-white flex items-center justify-center shadow-lg cursor-pointer z-10"
                 >
                   <X className="w-4 h-4" />
                 </button>
                 <img
                   src={QR_CARD_SRC}
                   alt="Thiệp QR ủng hộ Yui"
-                  className="w-full h-auto rounded-2xl block"
+                  className="w-full h-auto object-contain rounded-xl block"
                 />
               </motion.div>
             </motion.div>

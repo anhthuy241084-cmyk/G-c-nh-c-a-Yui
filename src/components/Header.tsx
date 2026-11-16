@@ -18,6 +18,7 @@ import {
   User,
   Palette,
   Feather,
+  Lock,
 } from 'lucide-react';
 import { ThemeMode, UserProfile } from '../types';
 import { triggerSfx } from '../utils/sfx';
@@ -55,6 +56,7 @@ interface HeaderProps {
   onOpenDonateMailbox?: () => void;
   onOpenMemoryGallery?: () => void;
   onOpenWhisperQuotes?: () => void;
+  onOpenSecretLetter?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -79,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDonateMailbox,
   onOpenMemoryGallery,
   onOpenWhisperQuotes,
+  onOpenSecretLetter,
   bookmarkCount = 0,
   favoriteCount = 0,
 }) => {
@@ -521,6 +524,26 @@ export const Header: React.FC<HeaderProps> = ({
                           </p>
                           <p className="text-[11px] text-[#64829E] truncate">
                             Quote ngẫu hứng, đoạn viết &amp; ảnh của Yui
+                          </p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-[#7393B3]" />
+                      </button>
+                    )}
+
+                    {onOpenSecretLetter && (
+                      <button
+                        onClick={() => handleMenuItemClick(onOpenSecretLetter)}
+                        className="w-full min-h-[44px] p-2.5 rounded-2xl hover:bg-[#EAF3FC] dark:hover:bg-[#21334A] flex items-center gap-3 text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-[#EAF3FC] dark:bg-[#21334A] text-[#4E7AA5] dark:text-[#A4C0DA] flex items-center justify-center shrink-0">
+                          <Lock className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold font-serif text-[#1D3550] dark:text-[#E5EFF9]">
+                            Tâm Thư Đêm Tuyết
+                          </p>
+                          <p className="text-[11px] text-[#64829E] truncate">
+                            Gửi thư ẩn danh không giới hạn chữ (chỉ Yui đọc)
                           </p>
                         </div>
                         <ChevronRight className="w-4 h-4 text-[#7393B3]" />
